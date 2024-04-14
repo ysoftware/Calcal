@@ -10,42 +10,96 @@ import SwiftUI
 
 class InputViewModel: ObservableObject {
     
+    let mockData = [
+        ("Sosis", "70g"),
+        ("More sosis", "50g"),
+        ("Kashkavalcheese", "20g"),
+        ("Banica", "70g"),
+        ("Cappuccino", "1 cup"),
+    ]
+
     private var onProvideInput: ((EntryEntity.Item) -> Void)?
     
-    @Published var autocompleteSuggestions: [QuickItemPresenter] = []
-    @Published var popularEntries: [QuickItemPresenter] = []
-    @Published var text: String = ""
+    private(set) var selectedAutocompleteIndex: Int?
+    private(set) var autocompleteSuggestions: [AutocompleteItemPresenter] = []
+    private(set) var popularEntries: [QuickItemPresenter] = []
+    private(set) var text: String = ""
     
     func onTextChange(newText: String) {
         self.text = newText
-        
-        // todo: calculate autocomplete
-        autocompleteSuggestions = [
-            .init(title: "Sosis", onAcceptItem: { }),
-            .init(title: "More sosis", onAcceptItem: { }),
-            .init(title: "Kashkavalcheese", onAcceptItem: { }),
-            .init(title: "Banica", onAcceptItem: { }),
-            .init(title: "Cappuccino", onAcceptItem: { }),
-        ]
-            .filter {
-                $0.title.lowercased().contains(newText.lowercased())
-            }
+        self.selectedAutocompleteIndex = nil
+        self.refreshAutocompleteItems()
+        updateView()
     }
     
     func setupExternalActions(onProvideInput: @escaping (EntryEntity.Item) -> Void) {
         self.onProvideInput = onProvideInput
     }
     
+    func onArrowDownPress() {
+        DispatchQueue.main.async { [self] in
+            if autocompleteSuggestions.isEmpty {
+                self.selectedAutocompleteIndex = nil
+            } else if let selectedAutocompleteIndex,
+                        selectedAutocompleteIndex < autocompleteSuggestions.count - 1 {
+                self.selectedAutocompleteIndex = selectedAutocompleteIndex + 1
+            } else {
+                self.selectedAutocompleteIndex = 0
+            }
+            refreshAutocompleteItems()
+            updateView()
+        }
+    }
+    
+    func onArrowUpPress() {
+        DispatchQueue.main.async { [self] in
+            if autocompleteSuggestions.isEmpty {
+                self.selectedAutocompleteIndex = nil
+            } else if let selectedAutocompleteIndex,
+                      selectedAutocompleteIndex > 0 {
+                self.selectedAutocompleteIndex = selectedAutocompleteIndex - 1
+            } else {
+                self.selectedAutocompleteIndex = autocompleteSuggestions.count - 1
+            }
+            refreshAutocompleteItems()
+            updateView()
+        }
+    }
+    
     func setupInitialState() {
-        text = ""
+        self.text = ""
+        self.selectedAutocompleteIndex = nil
+        self.refreshAutocompleteItems()
         
-        // todo: calculate top entries
-        popularEntries = [
-            .init(title: "Sosis, 70g", onAcceptItem: { }),
-            .init(title: "More sosis, 50g", onAcceptItem: { }),
-            .init(title: "Kashkavalcheese, 20g", onAcceptItem: { }),
-            .init(title: "Banica, 70g", onAcceptItem: { }),
-            .init(title: "Cappuccino, 1 cup", onAcceptItem: { }),
-        ]
+        self.popularEntries = mockData
+            .map { value in
+                QuickItemPresenter(
+                    title: "\(value.0), \(value.1)",
+                    onAcceptItem: { }
+                )
+            }
+        
+        updateView()
+    }
+    
+    private func refreshAutocompleteItems() {
+        // todo: make items dynamic
+        // todo: carefully update selection on list change
+        
+        self.autocompleteSuggestions = mockData.enumerated()
+            .map { index, value in
+                AutocompleteItemPresenter(
+                    title: value.0,
+                    isSelected: index == self.selectedAutocompleteIndex,
+                    onAcceptItem: { }
+                )
+            }
+            .filter {
+                $0.title.lowercased().contains(text.lowercased())
+            }
+    }
+    
+    private func updateView() {
+        objectWillChange.send()
     }
 }
