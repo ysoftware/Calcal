@@ -8,7 +8,7 @@
 import Foundation
 
 struct EntryEntity {
-    let date: Date
+    let date: String
     let sections: [Section]
 }
 
