@@ -34,12 +34,17 @@ class MainViewModel: ObservableObject {
         openInputButton = ButtonPresenter(
             title: "Add",
             action: { [weak self] in
-                guard let self else { return }
-                
-                self.openWindow?(WindowId.input)
-                self.inputViewModel.setupInitialState()
+                self?.openInput()
             }
         )
+    }
+    
+    private func openInput() {
+        openWindow?(WindowId.input)
+        inputViewModel.setupExternalActions(onProvideInput: { [weak self] item in
+            // todo: accept item
+        })
+        inputViewModel.setupInitialState()
     }
 }
 

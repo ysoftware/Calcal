@@ -41,7 +41,6 @@ struct CalcalApp: App {
         
         Window("Add shit", id: WindowId.input) {
             InputView(viewModel: inputViewModel)
-                .frame(width: 350, height: 100)
         }
         .windowResizability(.contentSize)
     }
