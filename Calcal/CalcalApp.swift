@@ -9,9 +9,45 @@ import SwiftUI
 
 @main
 struct CalcalApp: App {
-    var body: some Scene {
-        WindowGroup {
-            ContentView()
-        }
+    @Environment(\.openWindow) private var openWindow
+    @Environment(\.dismissWindow) private var dismissWindow
+    
+    @State var inputViewModel: InputViewModel
+    @State var mainViewModel: MainViewModel
+    
+    init() {
+        let inputViewModel = InputViewModel()
+        
+        let mainViewModel = MainViewModel(
+            inputViewModel: inputViewModel
+        )
+        
+        self._inputViewModel = State(initialValue: inputViewModel)
+        self._mainViewModel = State(initialValue: mainViewModel)
     }
+    
+    var body: some Scene {
+        Window("Calcal", id: WindowId.main) {
+            MainView(viewModel: mainViewModel)
+                .onAppear {
+                    mainViewModel.setupExternalActions(
+                        openWindow: { openWindow(id: $0) },
+                        dismissWindow: { dismissWindow(id: $0) }
+                    )
+                    mainViewModel.setupInitialState()
+                }
+        }
+        .defaultSize(width: 350, height: 600)
+        
+        Window("Add shit", id: WindowId.input) {
+            InputView(viewModel: inputViewModel)
+                .frame(width: 350, height: 100)
+        }
+        .windowResizability(.contentSize)
+    }
+}
+
+enum WindowId {
+    static let main = "main"
+    static let input = "input"
 }
