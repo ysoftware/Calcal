@@ -9,9 +9,10 @@ import SwiftUI
 
 class MainViewModel: ObservableObject {
     
+    private let model = Model()
     private let inputViewModel: InputViewModel
-    private var openWindow: ((String) -> Void)?
-    private var dismissWindow: ((String) -> Void)?
+    private var openWindow: ((WindowId) -> Void)?
+    private var dismissWindow: ((WindowId) -> Void)?
     
     private var selectedEntryIndex: Int = 0
     private var entries: [EntryEntity] = []
@@ -27,26 +28,28 @@ class MainViewModel: ObservableObject {
     }
     
     func setupExternalActions(
-        openWindow: @escaping (String) -> Void,
-        dismissWindow: @escaping (String) -> Void
+        openWindow: @escaping (WindowId) -> Void,
+        dismissWindow: @escaping (WindowId) -> Void
     ) {
         self.openWindow = openWindow
         self.dismissWindow = dismissWindow
     }
     
     func setupInitialState() {
-        self.entries = mockEntries
-        self.selectedEntryIndex = max(0, entries.count - 1)
-        
-        updateSelectedEntry()
-        
         openInputButton = ButtonPresenter(
             title: "Add",
             action: { [weak self] in
                 self?.openInput()
             }
         )
+        fetchEntries()
+    }
+    
+    private func fetchEntries() {
+        self.entries = model.getAllEntries()
+        self.selectedEntryIndex = max(0, entries.count - 1)
         
+        updateSelectedEntry()
         updateView()
     }
     
@@ -67,7 +70,7 @@ class MainViewModel: ObservableObject {
                 sectionCalories += item.calories
             }
             
-            entryText.append("\(section.title) - \(sectionCalories.formatted(.number.rounded())) kcal\n\(itemsText)\n")
+            entryText.append("\(section.id.rawValue.uppercased()) - \(sectionCalories.formatted(.number.rounded())) kcal\n\(itemsText)\n")
             totalCalories += sectionCalories
         }
         
@@ -100,127 +103,30 @@ class MainViewModel: ObservableObject {
                 return "\(item.quantity.formatted(.number.rounded()))kg"
             }
             return "\((item.quantity*1000).formatted(.number.rounded()))g"
-        case .tablespoon:
-            return "\(item.quantity.formatted(.number.rounded())) tbsp"
         }
     }
     
     private func openInput() {
         openWindow?(WindowId.input)
         inputViewModel.setupExternalActions(onProvideInput: { [weak self] item in
-            // todo: accept item
+            guard let self else { return }
+            assert(entries.count > selectedEntryIndex)
+            
+            let entry = self.entries[selectedEntryIndex]
+            
+            // todo: fix this
+            let sectionId: EntryEntity.SectionId = entry.sections.last?.id ?? .breakfast
+            self.model.appendItemToLastEntry(item: item, sectionId: sectionId)
+            self.dismissWindow?(.input)
+            self.fetchEntries()
         })
         inputViewModel.setupInitialState()
     }
     
     private func updateView() {
-        objectWillChange.send()
+        DispatchQueue.main.async { [self] in
+            objectWillChange.send()
+        }
     }
 }
 
-
-let mockEntries = [
-    EntryEntity(
-        date: "12 April 2024",
-        sections: [
-            EntryEntity.Section(
-                title: "Breakfast",
-                items: [
-                    EntryEntity.Item(
-                        title: "Cappuccino",
-                        quantity: 1,
-                        measurement: .cup,
-                        calories: 45
-                    )
-                ]
-            ),
-            EntryEntity.Section(
-                title: "Lunch",
-                items: [
-                    EntryEntity.Item(
-                        title: "Fried egg",
-                        quantity: 2,
-                        measurement: .piece,
-                        calories: 180
-                    ),
-                    EntryEntity.Item(
-                        title: "Sucuk",
-                        quantity: 0.010,
-                        measurement: .kilogramm,
-                        calories: 30
-                    ),
-                    EntryEntity.Item(
-                        title: "Cheese",
-                        quantity: 0.030,
-                        measurement: .kilogramm,
-                        calories: 120
-                    ),
-                    EntryEntity.Item(
-                        title: "Jam",
-                        quantity: 0.020,
-                        measurement: .kilogramm,
-                        calories: 56
-                    ),
-                    EntryEntity.Item(
-                        title: "Bread",
-                        quantity: 0.045,
-                        measurement: .kilogramm,
-                        calories: 119
-                    )
-                ]
-            ),
-            EntryEntity.Section(
-                title: "Snacky",
-                items: [
-                    EntryEntity.Item(
-                        title: "Cappuccino",
-                        quantity: 1,
-                        measurement: .cup,
-                        calories: 45
-                    ),
-                    EntryEntity.Item(
-                        title: "Cheese",
-                        quantity: 0.020,
-                        measurement: .kilogramm,
-                        calories: 80
-                    ),
-                    EntryEntity.Item(
-                        title: "Jam",
-                        quantity: 0.020,
-                        measurement: .kilogramm,
-                        calories: 56
-                    ),
-                    EntryEntity.Item(
-                        title: "Bread",
-                        quantity: 0.045,
-                        measurement: .kilogramm,
-                        calories: 119
-                    )
-                ]
-            ),
-            EntryEntity.Section(
-                title: "Dinner",
-                items: [
-                    EntryEntity.Item(
-                        title: "Salami cheese baguette",
-                        quantity: 1,
-                        measurement: .piece,
-                        calories: 300
-                    ),
-                    EntryEntity.Item(
-                        title: "m&m's",
-                        quantity: 0.045,
-                        measurement: .kilogramm,
-                        calories: 236
-                    ),
-                    EntryEntity.Item(
-                        title: "Snickers",
-                        quantity: 0.050,
-                        measurement: .kilogramm,
-                        calories: 244
-                    )
-                ]
-            )
-        ]
-    )
-]

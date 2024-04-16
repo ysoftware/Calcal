@@ -27,26 +27,26 @@ struct CalcalApp: App {
     }
     
     var body: some Scene {
-        Window("Calcal", id: WindowId.main) {
+        Window("Calcal", id: WindowId.main.rawValue) {
             MainView(viewModel: mainViewModel)
                 .onAppear {
                     mainViewModel.setupExternalActions(
-                        openWindow: { openWindow(id: $0) },
-                        dismissWindow: { dismissWindow(id: $0) }
+                        openWindow: { openWindow(id: $0.rawValue) },
+                        dismissWindow: { dismissWindow(id: $0.rawValue) }
                     )
                     mainViewModel.setupInitialState()
                 }
         }
         .defaultSize(width: 350, height: 600)
         
-        Window("Add shit", id: WindowId.input) {
+        Window("Add shit", id: WindowId.input.rawValue) {
             InputView(viewModel: inputViewModel)
         }
         .windowResizability(.contentSize)
     }
 }
 
-enum WindowId {
-    static let main = "main"
-    static let input = "input"
+enum WindowId: String {
+    case main
+    case input
 }

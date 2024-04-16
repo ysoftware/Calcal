@@ -19,11 +19,18 @@ class InputViewModel: ObservableObject {
     ]
 
     private var onProvideInput: ((EntryEntity.Item) -> Void)?
+        
+    private var name: String?
+    private var quantity: Float?
+    private var quantityMeasurement: EntryEntity.QuantityMeasurement?
+    private var calories: Float?
     
+    private(set) var state: InputViewState = .name
     private(set) var selectedAutocompleteIndex: Int?
     private(set) var autocompleteSuggestions: [AutocompleteItemPresenter] = []
     private(set) var popularEntries: [QuickItemPresenter] = []
     private(set) var text: String = ""
+    
     
     func onTextChange(newText: String) {
         self.text = newText
@@ -36,37 +43,8 @@ class InputViewModel: ObservableObject {
         self.onProvideInput = onProvideInput
     }
     
-    func onArrowDownPress() {
-        DispatchQueue.main.async { [self] in
-            if autocompleteSuggestions.isEmpty {
-                self.selectedAutocompleteIndex = nil
-            } else if let selectedAutocompleteIndex,
-                        selectedAutocompleteIndex < autocompleteSuggestions.count - 1 {
-                self.selectedAutocompleteIndex = selectedAutocompleteIndex + 1
-            } else {
-                self.selectedAutocompleteIndex = 0
-            }
-            refreshAutocompleteItems()
-            updateView()
-        }
-    }
-    
-    func onArrowUpPress() {
-        DispatchQueue.main.async { [self] in
-            if autocompleteSuggestions.isEmpty {
-                self.selectedAutocompleteIndex = nil
-            } else if let selectedAutocompleteIndex,
-                      selectedAutocompleteIndex > 0 {
-                self.selectedAutocompleteIndex = selectedAutocompleteIndex - 1
-            } else {
-                self.selectedAutocompleteIndex = autocompleteSuggestions.count - 1
-            }
-            refreshAutocompleteItems()
-            updateView()
-        }
-    }
-    
     func setupInitialState() {
+        self.state = .name
         self.text = ""
         self.selectedAutocompleteIndex = nil
         self.refreshAutocompleteItems()
@@ -100,6 +78,117 @@ class InputViewModel: ObservableObject {
     }
     
     private func updateView() {
-        objectWillChange.send()
+        DispatchQueue.main.async { [self] in
+            objectWillChange.send()
+        }
+    }
+    
+    func onArrowDownPress() {
+        if autocompleteSuggestions.isEmpty {
+            self.selectedAutocompleteIndex = nil
+        } else if let selectedAutocompleteIndex,
+                  selectedAutocompleteIndex < autocompleteSuggestions.count - 1 {
+            self.selectedAutocompleteIndex = selectedAutocompleteIndex + 1
+        } else {
+            self.selectedAutocompleteIndex = 0
+        }
+        refreshAutocompleteItems()
+        updateView()
+    }
+    
+    func onArrowUpPress() {
+        if autocompleteSuggestions.isEmpty {
+            self.selectedAutocompleteIndex = nil
+        } else if let selectedAutocompleteIndex,
+                  selectedAutocompleteIndex > 0 {
+            self.selectedAutocompleteIndex = selectedAutocompleteIndex - 1
+        } else {
+            self.selectedAutocompleteIndex = autocompleteSuggestions.count - 1
+        }
+        refreshAutocompleteItems()
+        updateView()
+    }
+    
+    func onEnterPress() {
+        switch state {
+        case .name:
+            if text.count > 1 {
+                self.name = text
+                self.text = ""
+                state = .quantity
+            } else {
+                // error
+                print("Error: incorrect name: '\(text)'")
+            }
+        case .quantity:
+            if let (quantityValue, measurement) = getQuantity(text: text) {
+                self.text = ""
+                self.quantity = quantityValue
+                self.quantityMeasurement = measurement
+                
+                if hasCaloricInformation {
+                    createItem()
+                } else {
+                    state = .calories
+                }
+            } else {
+                // error
+                print("Error: incorrect quantity: '\(text)'")
+            }
+        case .calories:
+            if let calorieValue = text.floatValue {
+                self.calories = calorieValue
+                self.text = ""
+                createItem()
+            } else {
+                // error
+                print("Error: incorrect calories: '\(text)'")
+            }
+        }
+        
+        updateView()
+    }
+    
+    private func createItem() {
+        guard let name,
+              let quantity,
+              let quantityMeasurement,
+              let calories,
+              let onProvideInput
+        else { return }
+        let item = EntryEntity.Item(
+            title: name,
+            quantity: quantity,
+            measurement: quantityMeasurement,
+            calories: calories
+        )
+        onProvideInput(item) // dismisses window
+    }
+    
+    private var hasCaloricInformation: Bool {
+        false // todo: implement
+    }
+    
+    private func getQuantity(text: String) -> (Float, EntryEntity.QuantityMeasurement)? {
+        if let quantityValue = text.floatValue {
+            return (quantityValue, .piece)
+        }
+        
+        for measurement in EntryEntity.QuantityMeasurement.allCases {
+            let acceptableValues = switch measurement {
+            case .liter: ["l", "liter", "litre", "ml", "millilitre", "milliliter"]
+            case .kilogramm: ["kg", "kilogram", "g", "gr", "gram"]
+            case .cup: ["cup"]
+            case .piece: ["piece", "part"]
+            }
+            
+            for value in acceptableValues {
+                guard text.hasSuffix(value) else { continue }
+                let textWithoutSuffix = String(text.dropLast(value.count)).trimmingCharacters(in: .whitespaces)
+                guard let quantityValue = textWithoutSuffix.floatValue else { return nil }
+                return (quantityValue, measurement)
+            }
+        }
+        return nil
     }
 }

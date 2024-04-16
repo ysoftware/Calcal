@@ -7,6 +7,12 @@
 
 import SwiftUI
 
+enum InputViewState {
+    case name
+    case quantity
+    case calories
+}
+
 struct QuickItemPresenter {
     let title: String
     let onAcceptItem: () -> Void
@@ -22,18 +28,24 @@ struct AutocompleteItemPresenter {
 struct InputView: View {
     @ObservedObject var viewModel: InputViewModel
     
-    @State private var text: String = "hello mate"
+    @State private var text: String = ""
     
     var body: some View {
         Group {
             VStack(spacing: 10) {
-                TextField("Search...", text: $text)
+                Text(stateText)
+                
+                TextField(stateText, text: $text)
                     .onKeyPress(.downArrow, action: {
                         viewModel.onArrowDownPress()
                         return .handled
                     })
                     .onKeyPress(.upArrow, action: {
                         viewModel.onArrowUpPress()
+                        return .handled
+                    })
+                    .onKeyPress(.return, action: {
+                        viewModel.onEnterPress()
                         return .handled
                     })
                     .textFieldStyle(.plain)
@@ -61,9 +73,9 @@ struct InputView: View {
                 Spacer()
             }
             .padding()
-            .opacity(viewModel.text.isEmpty ? 0 : 1)
+            .opacity(isShowingSuggestions ? 0 : 1)
             
-            if viewModel.text.isEmpty {
+            if isShowingSuggestions {
                 ScrollView(.vertical) {
                     VStack {
                         ForEach(viewModel.popularEntries.swiftUIEnumerated, id: \.0) { _, item in
@@ -79,5 +91,20 @@ struct InputView: View {
         .frame(width: 350)
         .frame(minHeight: 100)
         .fixedSize(horizontal: false, vertical: true)
+    }
+    
+    private var isShowingSuggestions: Bool {
+        text.isEmpty && viewModel.state == .name
+    }
+    
+    private var stateText: String {
+        switch viewModel.state {
+        case .name:
+            return "Name"
+        case .quantity:
+            return "Quantity"
+        case .calories:
+            return "Calories"
+        }
     }
 }

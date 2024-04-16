@@ -16,3 +16,10 @@ extension Array {
         [(Int, Element)](zip(indices, self))
     }
 }
+
+extension String {
+    var floatValue: Float? {
+        guard !self.isEmpty else { return nil }
+        return Float(self.replacingOccurrences(of: ",", with: "."))
+    }
+}
