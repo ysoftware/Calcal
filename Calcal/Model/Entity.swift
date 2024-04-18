@@ -7,32 +7,32 @@
 
 import Foundation
 
-struct EntryEntity {
+struct EntryEntity: Equatable {
     let date: String
     var sections: [Section]
 }
 
 extension EntryEntity {
-    struct Section {
+    struct Section: Equatable {
         let id: SectionId
         var items: [Item]
     }
     
-    struct Item {
+    struct Item: Equatable {
         let title: String
         let quantity: Float
         let measurement: QuantityMeasurement
         let calories: Float
     }
     
-    enum QuantityMeasurement: CaseIterable {
-        case piece
+    enum QuantityMeasurement: CaseIterable, Equatable {
+        case portion
         case liter
         case kilogramm
         case cup
     }
     
-    enum SectionId: String {
+    enum SectionId: String, Equatable {
         case breakfast
         case brunch
         case lunch

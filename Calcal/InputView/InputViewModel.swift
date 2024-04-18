@@ -121,7 +121,7 @@ class InputViewModel: ObservableObject {
                 print("Error: incorrect name: '\(text)'")
             }
         case .quantity:
-            if let (quantityValue, measurement) = getQuantity(text: text) {
+            if let (quantityValue, measurement) = Parser.getQuantity(text: text) {
                 self.text = ""
                 self.quantity = quantityValue
                 self.quantityMeasurement = measurement
@@ -167,28 +167,5 @@ class InputViewModel: ObservableObject {
     
     private var hasCaloricInformation: Bool {
         false // todo: implement
-    }
-    
-    private func getQuantity(text: String) -> (Float, EntryEntity.QuantityMeasurement)? {
-        if let quantityValue = text.floatValue {
-            return (quantityValue, .piece)
-        }
-        
-        for measurement in EntryEntity.QuantityMeasurement.allCases {
-            let acceptableValues = switch measurement {
-            case .liter: ["l", "liter", "litre", "ml", "millilitre", "milliliter"]
-            case .kilogramm: ["kg", "kilogram", "g", "gr", "gram"]
-            case .cup: ["cup"]
-            case .piece: ["piece", "part"]
-            }
-            
-            for value in acceptableValues {
-                guard text.hasSuffix(value) else { continue }
-                let textWithoutSuffix = String(text.dropLast(value.count)).trimmingCharacters(in: .whitespaces)
-                guard let quantityValue = textWithoutSuffix.floatValue else { return nil }
-                return (quantityValue, measurement)
-            }
-        }
-        return nil
     }
 }

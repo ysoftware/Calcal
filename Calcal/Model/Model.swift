@@ -53,7 +53,7 @@ var mockEntries = [
                     EntryEntity.Item(
                         title: "Fried egg",
                         quantity: 2,
-                        measurement: .piece,
+                        measurement: .portion,
                         calories: 180
                     ),
                     EntryEntity.Item(
@@ -117,7 +117,7 @@ var mockEntries = [
                     EntryEntity.Item(
                         title: "Salami cheese baguette",
                         quantity: 1,
-                        measurement: .piece,
+                        measurement: .portion,
                         calories: 300
                     ),
                     EntryEntity.Item(

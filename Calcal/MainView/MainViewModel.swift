@@ -83,7 +83,7 @@ class MainViewModel: ObservableObject {
     
     private func measurementDisplayValue(item: EntryEntity.Item) -> String {
         switch item.measurement {
-        case .piece:
+        case .portion:
             if item.quantity == 1 {
                 return "1"
             }

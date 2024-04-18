@@ -7,6 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		CC4EAC9F2BD1A03D00DF94ED /* Parser.swift in Sources */ = {isa = PBXBuildFile; fileRef = CC4EAC9E2BD1A03D00DF94ED /* Parser.swift */; };
+		CC4EACA72BD1A90E00DF94ED /* CalcalTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = CC4EACA62BD1A90E00DF94ED /* CalcalTests.swift */; };
 		CCFE26102BCBEEB50032FD48 /* CalcalApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = CCFE260F2BCBEEB50032FD48 /* CalcalApp.swift */; };
 		CCFE26122BCBEEB50032FD48 /* MainView.swift in Sources */ = {isa = PBXBuildFile; fileRef = CCFE26112BCBEEB50032FD48 /* MainView.swift */; };
 		CCFE26142BCBEEB50032FD48 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = CCFE26132BCBEEB50032FD48 /* Assets.xcassets */; };
@@ -21,7 +23,20 @@
 		CCFE26312BCEE2310032FD48 /* Model.swift in Sources */ = {isa = PBXBuildFile; fileRef = CCFE26302BCEE2310032FD48 /* Model.swift */; };
 /* End PBXBuildFile section */
 
+/* Begin PBXContainerItemProxy section */
+		CC4EACA82BD1A90E00DF94ED /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = CCFE26042BCBEEB50032FD48 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = CCFE260B2BCBEEB50032FD48;
+			remoteInfo = Calcal;
+		};
+/* End PBXContainerItemProxy section */
+
 /* Begin PBXFileReference section */
+		CC4EAC9E2BD1A03D00DF94ED /* Parser.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Parser.swift; sourceTree = "<group>"; };
+		CC4EACA42BD1A90E00DF94ED /* CalcalTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = CalcalTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		CC4EACA62BD1A90E00DF94ED /* CalcalTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CalcalTests.swift; sourceTree = "<group>"; };
 		CCFE260C2BCBEEB50032FD48 /* Calcal.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Calcal.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		CCFE260F2BCBEEB50032FD48 /* CalcalApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CalcalApp.swift; sourceTree = "<group>"; };
 		CCFE26112BCBEEB50032FD48 /* MainView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainView.swift; sourceTree = "<group>"; };
@@ -39,6 +54,13 @@
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
+		CC4EACA12BD1A90E00DF94ED /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		CCFE26092BCBEEB50032FD48 /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
@@ -49,10 +71,19 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		CC4EACA52BD1A90E00DF94ED /* CalcalTests */ = {
+			isa = PBXGroup;
+			children = (
+				CC4EACA62BD1A90E00DF94ED /* CalcalTests.swift */,
+			);
+			path = CalcalTests;
+			sourceTree = "<group>";
+		};
 		CCFE26032BCBEEB50032FD48 = {
 			isa = PBXGroup;
 			children = (
 				CCFE260E2BCBEEB50032FD48 /* Calcal */,
+				CC4EACA52BD1A90E00DF94ED /* CalcalTests */,
 				CCFE260D2BCBEEB50032FD48 /* Products */,
 			);
 			sourceTree = "<group>";
@@ -61,6 +92,7 @@
 			isa = PBXGroup;
 			children = (
 				CCFE260C2BCBEEB50032FD48 /* Calcal.app */,
+				CC4EACA42BD1A90E00DF94ED /* CalcalTests.xctest */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -121,6 +153,7 @@
 			children = (
 				CCFE262C2BCC49D80032FD48 /* Entity.swift */,
 				CCFE26302BCEE2310032FD48 /* Model.swift */,
+				CC4EAC9E2BD1A03D00DF94ED /* Parser.swift */,
 			);
 			path = Model;
 			sourceTree = "<group>";
@@ -128,6 +161,24 @@
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
+		CC4EACA32BD1A90E00DF94ED /* CalcalTests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = CC4EACAA2BD1A90E00DF94ED /* Build configuration list for PBXNativeTarget "CalcalTests" */;
+			buildPhases = (
+				CC4EACA02BD1A90E00DF94ED /* Sources */,
+				CC4EACA12BD1A90E00DF94ED /* Frameworks */,
+				CC4EACA22BD1A90E00DF94ED /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				CC4EACA92BD1A90E00DF94ED /* PBXTargetDependency */,
+			);
+			name = CalcalTests;
+			productName = CalcalTests;
+			productReference = CC4EACA42BD1A90E00DF94ED /* CalcalTests.xctest */;
+			productType = "com.apple.product-type.bundle.unit-test";
+		};
 		CCFE260B2BCBEEB50032FD48 /* Calcal */ = {
 			isa = PBXNativeTarget;
 			buildConfigurationList = CCFE261B2BCBEEB50032FD48 /* Build configuration list for PBXNativeTarget "Calcal" */;
@@ -152,9 +203,13 @@
 			isa = PBXProject;
 			attributes = {
 				BuildIndependentTargetsInParallel = 1;
-				LastSwiftUpdateCheck = 1500;
+				LastSwiftUpdateCheck = 1530;
 				LastUpgradeCheck = 1500;
 				TargetAttributes = {
+					CC4EACA32BD1A90E00DF94ED = {
+						CreatedOnToolsVersion = 15.3;
+						TestTargetID = CCFE260B2BCBEEB50032FD48;
+					};
 					CCFE260B2BCBEEB50032FD48 = {
 						CreatedOnToolsVersion = 15.0.1;
 					};
@@ -174,11 +229,19 @@
 			projectRoot = "";
 			targets = (
 				CCFE260B2BCBEEB50032FD48 /* Calcal */,
+				CC4EACA32BD1A90E00DF94ED /* CalcalTests */,
 			);
 		};
 /* End PBXProject section */
 
 /* Begin PBXResourcesBuildPhase section */
+		CC4EACA22BD1A90E00DF94ED /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		CCFE260A2BCBEEB50032FD48 /* Resources */ = {
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
@@ -191,11 +254,20 @@
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
+		CC4EACA02BD1A90E00DF94ED /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				CC4EACA72BD1A90E00DF94ED /* CalcalTests.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		CCFE26082BCBEEB50032FD48 /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
 				CCFE26122BCBEEB50032FD48 /* MainView.swift in Sources */,
+				CC4EAC9F2BD1A03D00DF94ED /* Parser.swift in Sources */,
 				CCFE262F2BCC4E380032FD48 /* Extensions.swift in Sources */,
 				CCFE26282BCC12FC0032FD48 /* ButtonView.swift in Sources */,
 				CCFE26102BCBEEB50032FD48 /* CalcalApp.swift in Sources */,
@@ -210,7 +282,59 @@
 		};
 /* End PBXSourcesBuildPhase section */
 
+/* Begin PBXTargetDependency section */
+		CC4EACA92BD1A90E00DF94ED /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = CCFE260B2BCBEEB50032FD48 /* Calcal */;
+			targetProxy = CC4EACA82BD1A90E00DF94ED /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
+
 /* Begin XCBuildConfiguration section */
+		CC4EACAB2BD1A90E00DF94ED /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = S422Q897FZ;
+				GENERATE_INFOPLIST_FILE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 17.4;
+				MACOSX_DEPLOYMENT_TARGET = 14.4;
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.ysoftware.CalcalTests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = auto;
+				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator macosx";
+				SWIFT_EMIT_LOC_STRINGS = NO;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/Calcal.app/$(BUNDLE_EXECUTABLE_FOLDER_PATH)/Calcal";
+			};
+			name = Debug;
+		};
+		CC4EACAC2BD1A90E00DF94ED /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = S422Q897FZ;
+				GENERATE_INFOPLIST_FILE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 17.4;
+				MACOSX_DEPLOYMENT_TARGET = 14.4;
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.ysoftware.CalcalTests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = auto;
+				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator macosx";
+				SWIFT_EMIT_LOC_STRINGS = NO;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/Calcal.app/$(BUNDLE_EXECUTABLE_FOLDER_PATH)/Calcal";
+			};
+			name = Release;
+		};
 		CCFE26192BCBEEB50032FD48 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
@@ -404,6 +528,15 @@
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
+		CC4EACAA2BD1A90E00DF94ED /* Build configuration list for PBXNativeTarget "CalcalTests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				CC4EACAB2BD1A90E00DF94ED /* Debug */,
+				CC4EACAC2BD1A90E00DF94ED /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
 		CCFE26072BCBEEB50032FD48 /* Build configuration list for PBXProject "Calcal" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
