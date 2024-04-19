@@ -158,7 +158,7 @@ class MainViewModel: ObservableObject {
         case .liter:
             if item.quantity > 0.5 {
                 return "\(item.quantity.formatted(.number.rounded())) l"
-            }   
+            }
             return "\((item.quantity*1000).formatted(.number.rounded())) ml"
         case .kilogramm:
             if item.quantity > 0.5 {

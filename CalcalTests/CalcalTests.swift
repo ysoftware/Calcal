@@ -109,6 +109,37 @@ Breakfast - 45 kcal
         XCTAssertEqual(expectation, result)
     }
     
+    func testOptionalQuantity() throws {
+        let parser = Parser(text: """
+Date: 19 April 2024
+
+Breakfast - 45 kcal
+- Cappuccino, 45 kcal
+""")
+        let result = try parser.parse()
+        
+        let expectation = [
+            EntryEntity(
+                date: "19 April 2024",
+                sections: [
+                    EntryEntity.Section(
+                        id: .breakfast,
+                        items: [
+                            EntryEntity.Item(
+                                title: "Cappuccino",
+                                quantity: 1,
+                                measurement: .portion,
+                                calories: 45
+                            )
+                        ]
+                    )
+                ]
+            )
+        ]
+        
+        XCTAssertEqual(expectation, result)
+    }
+    
     func testGramsMilliliters() throws {
         let parser = Parser(text: """
 Date: 19 April 2024

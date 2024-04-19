@@ -16,6 +16,7 @@ class Parser {
         case expectedFoodItem
         case expectedCalorieValue
         case invalidQuantity
+        case invalidCaloriesMissingKcal
         case invalidCalories
     }
 
@@ -129,15 +130,30 @@ class Parser {
                     let itemName = String(textRemainder[i..<itemNameSeparator]).trimmingCharacters(in: .whitespaces)
                     advanceIfPossible(after: itemNameSeparator)
                     
-                    // TODO: count commas in line to see if we have quantity
-                    // TODO: make this optional
-                    eatWhitespaces()
-                    guard let itemQuantitySeparator = textRemainder.firstIndex(of: ",") else {
-                        printErrorPosition()
-                        throw Error.expectedCalorieValue
+                    let quantityValue: Float, measurement: EntryEntity.QuantityMeasurement
+                    let itemEndOfLine = textRemainder.firstIndex(of: "\n") ?? endIndex
+                    let commasCount = textRemainder[i..<itemEndOfLine].filter { $0 == "," }.count
+                    if commasCount > 0 { // optionally parse quantity
+                        eatWhitespaces()
+                        guard let itemQuantitySeparator = textRemainder.firstIndex(of: ",") else {
+                            printErrorPosition()
+                            throw Error.expectedCalorieValue
+                        }
+                        let itemQuantityString = String(textRemainder[i..<itemQuantitySeparator]).trimmingCharacters(in: .whitespaces)
+                        advanceIfPossible(after: itemQuantitySeparator)
+                        
+                        // finalise item
+                        guard let (_quantityValue, _measurement) = Self.getQuantity(text: itemQuantityString)
+                        else {
+                            printErrorPosition()
+                            throw Error.invalidQuantity
+                        }
+                        quantityValue = _quantityValue
+                        measurement = _measurement
+                    } else {
+                        quantityValue = 1
+                        measurement = .portion
                     }
-                    let itemQuantityString = String(textRemainder[i..<itemQuantitySeparator]).trimmingCharacters(in: .whitespaces)
-                    advanceIfPossible(after: itemQuantitySeparator)
                     
                     eatWhitespaces()
                     let itemNewLine = textRemainder.firstIndex(of: "\n") ?? endIndex
@@ -148,13 +164,6 @@ class Parser {
                     }
                     itemCalorieString = String(itemCalorieString.dropLast(" kcal".count))
                     advanceIfPossible(after: itemNewLine)
-                    
-                    // finalise item
-                    guard let (quantityValue, measurement) = Self.getQuantity(text: itemQuantityString)
-                    else { 
-                        printErrorPosition()
-                        throw Error.invalidQuantity
-                    }
                     
                     guard let caloriesValue = itemCalorieString.floatValue else {
                         printErrorPosition()
