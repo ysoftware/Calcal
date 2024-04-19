@@ -35,6 +35,12 @@ class Parser {
         initialText[i..<endIndex]
     }
     
+    private func eatWhitespacesAndNewlines() {
+        while (endIndex > i && textRemainder[i].isWhitespace) {
+            advanceIfPossible(after: i)
+        }
+    }
+    
     private func eatWhitespaces() {
         while (endIndex > i && textRemainder[i].isWhitespace && !textRemainder[i].isNewline) {
             advanceIfPossible(after: i)
@@ -57,7 +63,7 @@ class Parser {
         var entries: [EntryEntity] = []
             
         while (endIndex > i) {
-            eatWhitespaces()
+            eatWhitespacesAndNewlines()
             guard textRemainder[i..<endIndex].starts(with: "Date: "),
                   let indexAfterDate = textRemainder.firstIndex(of: " ")
             else {
@@ -205,6 +211,8 @@ class Parser {
                 sections: sections
             )
             entries.append(entry)
+            
+            eatWhitespacesAndNewlines()
         }
         
         return entries

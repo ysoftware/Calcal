@@ -8,6 +8,18 @@
 import Foundation
 
 class Model {
+    
+    private var data: [EntryEntity] = []
+    
+    init() {
+        guard let url = Bundle.main.url(forResource: "data", withExtension: "txt"),
+              let contents = try? String(contentsOf: url, encoding: .utf8),
+              let entities = try? Parser(text: contents).parse()
+        else { return }
+        
+        self.data = entities
+    }
+    
     func appendItemToLastEntry(item: EntryEntity.Item, sectionId: EntryEntity.SectionId) {
         guard var entry = getAllEntries().last else { return }
         
@@ -23,16 +35,14 @@ class Model {
     }
     
     func addOrUpdateEntry(entry: EntryEntity) {
-        if let entryIndex = mockEntries.firstIndex(where: { $0.date == entry.date }) {
-            mockEntries[entryIndex] = entry
+        if let entryIndex = data.firstIndex(where: { $0.date == entry.date }) {
+            data[entryIndex] = entry
         } else {
-            mockEntries.append(entry)
+            data.append(entry)
         }
     }
     
     func getAllEntries() -> [EntryEntity] {
-        mockEntries
+        data
     }
 }
-
-var mockEntries: [EntryEntity] = []

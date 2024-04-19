@@ -34,6 +34,7 @@ Date: 20 April 2024
 Breakfast - 45 kcal
 - Cappuccino, 1, 45 kcal
 
+Total: 12345 kcal
 """)
     
         let result = try parser.parse()
