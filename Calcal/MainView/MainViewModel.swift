@@ -154,17 +154,17 @@ class MainViewModel: ObservableObject {
             if item.quantity == 1 {
                 return "1 cup"
             }
-            return "\(item.quantity.formatted(.number.rounded()))) cups"
+            return "\(item.quantity.formatted(.number.rounded())) cups"
         case .liter:
             if item.quantity > 0.5 {
-                return "\(item.quantity.formatted(.number.rounded()))l"
-            }
-            return "\((item.quantity*100).formatted(.number.rounded())))ml"
+                return "\(item.quantity.formatted(.number.rounded())) l"
+            }   
+            return "\((item.quantity*1000).formatted(.number.rounded())) ml"
         case .kilogramm:
             if item.quantity > 0.5 {
-                return "\(item.quantity.formatted(.number.rounded()))kg"
+                return "\(item.quantity.formatted(.number.rounded())) kg"
             }
-            return "\((item.quantity*1000).formatted(.number.rounded()))g"
+            return "\((item.quantity*1000).formatted(.number.rounded())) g"
         }
     }
     
