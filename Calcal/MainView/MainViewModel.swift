@@ -43,6 +43,29 @@ class MainViewModel: ObservableObject {
             }
         )
         fetchEntries()
+        
+        NSEvent.addLocalMonitorForEvents(matching: .keyDown, handler: { [weak self] event in
+            guard let self,
+                  event.modifierFlags.contains(.command),
+                  event.charactersIgnoringModifiers == "v",
+                  let pasteboardString = NSPasteboard.general.string(forType: .string)
+            else { return event }
+            
+            do {
+                let parser = Parser(text: pasteboardString)
+                let entries = try parser.parse()
+                
+                for entry in entries {
+                    self.dismissWindow?(.input)
+                    self.model.addOrUpdateEntry(entry: entry)
+                    self.fetchEntries()
+                }
+                return nil
+            } catch {
+                print(error)
+                return event
+            }
+        })
     }
     
     private func fetchEntries() {
