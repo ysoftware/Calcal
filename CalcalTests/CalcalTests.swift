@@ -108,6 +108,72 @@ Breakfast - 45 kcal
         
         XCTAssertEqual(expectation, result)
     }
+    
+    func testGramsMilliliters() throws {
+        let parser = Parser(text: """
+Date: 19 April 2024
+
+Breakfast - 227 kcal
+- Chocolate Cookies, 30g, 150 kcal
+- Chocolate Cookies, 30 gram, 150 kcal
+- Chocolate Cookies, 30gr, 150 kcal
+- Orange Juice, 220ml, 77 kcal
+- Orange Juice, 220 milliliter, 77 kcal
+- Orange Juice, 220 millilitre, 77 kcal
+""")
+        let result = try parser.parse()
+        
+        let expectation = [
+            EntryEntity(
+                date: "19 April 2024",
+                sections: [
+                    EntryEntity.Section(
+                        id: .breakfast,
+                        items: [
+                            EntryEntity.Item(
+                                title: "Chocolate Cookies",
+                                quantity: 0.030,
+                                measurement: .kilogramm,
+                                calories: 150
+                            ),
+                            EntryEntity.Item(
+                                title: "Chocolate Cookies",
+                                quantity: 0.030,
+                                measurement: .kilogramm,
+                                calories: 150
+                            ),
+                            EntryEntity.Item(
+                                title: "Chocolate Cookies",
+                                quantity: 0.030,
+                                measurement: .kilogramm,
+                                calories: 150
+                            ),
+                            EntryEntity.Item(
+                                title: "Orange Juice",
+                                quantity: 0.220,
+                                measurement: .liter,
+                                calories: 77
+                            ),
+                            EntryEntity.Item(
+                                title: "Orange Juice",
+                                quantity: 0.220,
+                                measurement: .liter,
+                                calories: 77
+                            ),
+                            EntryEntity.Item(
+                                title: "Orange Juice",
+                                quantity: 0.220,
+                                measurement: .liter,
+                                calories: 77
+                            )
+                        ]
+                    )
+                ]
+            )
+        ]
+        
+        XCTAssertEqual(expectation, result)
+    }
 }
 
 extension EntryEntity: CustomStringConvertible {

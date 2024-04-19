@@ -207,6 +207,7 @@ class Parser {
         }
         
         for measurement in EntryEntity.QuantityMeasurement.allCases {
+            
             let acceptableValues = switch measurement {
             case .liter: ["milliliter", "millilitre", "liter", "litre", "ml", "l"]
             case .kilogramm: ["kilogram", "gram", "kg", "gr", "g"]
@@ -214,11 +215,16 @@ class Parser {
             case .portion: ["portion", "part"]
             }
             
+            let subdivisionValues = [
+                "gram", "gr", "g", "milliliter", "millilitre", "ml"
+            ]
+            
             for value in acceptableValues {
                 guard text.hasSuffix(value) else { continue }
                 let textWithoutSuffix = String(text.dropLast(value.count)).trimmingCharacters(in: .whitespaces)
                 guard let quantityValue = textWithoutSuffix.floatValue else { return nil }
-                return (quantityValue, measurement)
+                let subdivision: Float = subdivisionValues.contains(value) ? 1000.0 : 1
+                return (quantityValue / subdivision, measurement)
             }
         }
         return nil
