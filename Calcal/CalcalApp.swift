@@ -16,10 +16,12 @@ struct CalcalApp: App {
     @State var mainViewModel: MainViewModel
     
     init() {
-        let inputViewModel = InputViewModel()
+        let model = Model()
+        let inputViewModel = InputViewModel(model: model)
         
         let mainViewModel = MainViewModel(
-            inputViewModel: inputViewModel
+            inputViewModel: inputViewModel,
+            model: model
         )
         
         self._inputViewModel = State(initialValue: inputViewModel)

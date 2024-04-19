@@ -10,16 +10,9 @@ import SwiftUI
 
 class InputViewModel: ObservableObject {
     
-    let mockData = [
-        ("Sosis", "70g"),
-        ("More sosis", "50g"),
-        ("Kashkavalcheese", "20g"),
-        ("Banica", "70g"),
-        ("Cappuccino", "1 cup"),
-    ]
-
-    private var onProvideInput: ((EntryEntity.Item) -> Void)?
-        
+    private let model: Model
+    private var completeInput: ((EntryEntity.Item?) -> Void)?
+    
     private var name: String?
     private var quantity: Float?
     private var quantityMeasurement: EntryEntity.QuantityMeasurement?
@@ -31,45 +24,72 @@ class InputViewModel: ObservableObject {
     private(set) var popularEntries: [QuickItemPresenter] = []
     private(set) var text: String = ""
     
+    init(model: Model) {
+        self.model = model
+    }
     
     func onTextChange(newText: String) {
         self.text = newText
         self.selectedAutocompleteIndex = nil
-        self.refreshAutocompleteItems()
-        updateView()
-    }
-    
-    func setupExternalActions(onProvideInput: @escaping (EntryEntity.Item) -> Void) {
-        self.onProvideInput = onProvideInput
+        updatePresenter()
     }
     
     func setupInitialState() {
+        
+    }
+    
+    func setup(completeInput: @escaping (EntryEntity.Item?) -> Void) {
+        self.completeInput = completeInput
+    
         self.state = .name
         self.text = ""
         self.selectedAutocompleteIndex = nil
-        self.refreshAutocompleteItems()
         
-        self.popularEntries = mockData
-            .map { value in
-                QuickItemPresenter(
-                    title: "\(value.0), \(value.1)",
-                    onAcceptItem: { }
-                )
-            }
+        let allEntries = model.getAllEntries()
         
-        updateView()
+        // todo: compile a list of frequently added items
+        self.popularEntries = Array(
+            allEntries
+                .flatMap { $0.sections }
+                .flatMap { $0.items }
+                .prefix(10)
+                .map { item in
+                    QuickItemPresenter(
+                        title: "\(item.title), \(item.quantity) \(item.measurement) \(item.calories) kcal",
+                        onAcceptItem: { [weak self] in
+                            self?.completeInput?(item)
+                        }
+                    )
+                }
+        )
+        
+        updatePresenter()
+    }
+
+    private func updatePresenter() {
+        DispatchQueue.main.async { [self] in
+            refreshAutocompleteItems()
+            objectWillChange.send()
+        }
     }
     
     private func refreshAutocompleteItems() {
-        // todo: make items dynamic
         // todo: carefully update selection on list change
         
-        self.autocompleteSuggestions = mockData.enumerated()
-            .map { index, value in
+        let allEntries = model.getAllEntries()
+        
+        // todo: cache this unfiltered list
+        self.autocompleteSuggestions = allEntries
+            .flatMap { $0.sections }
+            .flatMap { $0.items }
+            .enumerated()
+            .map { index, item in
                 AutocompleteItemPresenter(
-                    title: value.0,
+                    title: item.title,
                     isSelected: index == self.selectedAutocompleteIndex,
-                    onAcceptItem: { }
+                    onAcceptItem: { 
+                        // todo: implement
+                    }
                 )
             }
             .filter {
@@ -77,10 +97,8 @@ class InputViewModel: ObservableObject {
             }
     }
     
-    private func updateView() {
-        DispatchQueue.main.async { [self] in
-            objectWillChange.send()
-        }
+    func onEscapePress() {
+        completeInput?(nil)
     }
     
     func onArrowDownPress() {
@@ -92,8 +110,7 @@ class InputViewModel: ObservableObject {
         } else {
             self.selectedAutocompleteIndex = 0
         }
-        refreshAutocompleteItems()
-        updateView()
+        updatePresenter()
     }
     
     func onArrowUpPress() {
@@ -105,8 +122,7 @@ class InputViewModel: ObservableObject {
         } else {
             self.selectedAutocompleteIndex = autocompleteSuggestions.count - 1
         }
-        refreshAutocompleteItems()
-        updateView()
+        updatePresenter()
     }
     
     func onEnterPress() {
@@ -146,7 +162,7 @@ class InputViewModel: ObservableObject {
             }
         }
         
-        updateView()
+        updatePresenter()
     }
     
     private func createItem() {
@@ -154,7 +170,7 @@ class InputViewModel: ObservableObject {
               let quantity,
               let quantityMeasurement,
               let calories,
-              let onProvideInput
+              let completeInput
         else { return }
         let item = EntryEntity.Item(
             title: name,
@@ -162,7 +178,7 @@ class InputViewModel: ObservableObject {
             measurement: quantityMeasurement,
             calories: calories
         )
-        onProvideInput(item) // dismisses window
+        completeInput(item) // dismisses window
     }
     
     private var hasCaloricInformation: Bool {

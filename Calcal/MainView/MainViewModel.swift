@@ -9,7 +9,7 @@ import SwiftUI
 
 class MainViewModel: ObservableObject {
     
-    private let model = Model()
+    private let model: Model
     private let inputViewModel: InputViewModel
     private var openWindow: ((WindowId) -> Void)?
     private var dismissWindow: ((WindowId) -> Void)?
@@ -23,7 +23,8 @@ class MainViewModel: ObservableObject {
     private(set) var entryPresenter: EntryPresenter?
     private(set) var openInputButton: ButtonPresenter?
     
-    init(inputViewModel: InputViewModel) {
+    init(inputViewModel: InputViewModel, model: Model) {
+        self.model = model
         self.inputViewModel = inputViewModel
     }
     
@@ -45,27 +46,38 @@ class MainViewModel: ObservableObject {
         fetchEntries()
         
         NSEvent.addLocalMonitorForEvents(matching: .keyDown, handler: { [weak self] event in
-            guard let self,
-                  event.modifierFlags.contains(.command),
-                  event.charactersIgnoringModifiers == "v",
-                  let pasteboardString = NSPasteboard.general.string(forType: .string)
-            else { return event }
+            guard let self else { return event }
             
-            do {
-                let parser = Parser(text: pasteboardString)
-                let entries = try parser.parse()
-                
-                for entry in entries {
-                    self.dismissWindow?(.input)
-                    self.model.addOrUpdateEntry(entry: entry)
-                    self.fetchEntries()
-                }
+            if event.modifierFlags.contains(.command),
+               event.charactersIgnoringModifiers == "v",
+               let pasteboardString = NSPasteboard.general.string(forType: .string) {
+                acceptPasteEvent(text: pasteboardString)
                 return nil
-            } catch {
-                print(error)
-                return event
             }
+            
+            if event.charactersIgnoringModifiers == " " {
+                // todo: check if already presenting and do nothing
+                openInput()
+                return nil
+            }
+            
+            return event
         })
+    }
+    
+    private func acceptPasteEvent(text: String) {
+        do {
+            let parser = Parser(text: text)
+            let entries = try parser.parse()
+            
+            for entry in entries {
+                self.dismissWindow?(.input)
+                self.model.addOrUpdateEntry(entry: entry)
+                self.fetchEntries()
+            }
+        } catch {
+            print(error)
+        }
     }
     
     private func fetchEntries() {
@@ -170,16 +182,18 @@ class MainViewModel: ObservableObject {
     
     private func openInput() {
         openWindow?(WindowId.input)
-        inputViewModel.setupExternalActions(onProvideInput: { [weak self] item in
+        
+        inputViewModel.setup(completeInput: { [weak self] item in
             guard let self else { return }
-            assert(entries.count > selectedEntryIndex)
+            self.dismissWindow?(.input)
             
+            guard let item else { return }
+            assert(entries.count > selectedEntryIndex)
             let entry = self.entries[selectedEntryIndex]
             
             // todo: fix this
             let sectionId: EntryEntity.SectionId = entry.sections.last?.id ?? .breakfast
             self.model.appendItemToLastEntry(item: item, sectionId: sectionId)
-            self.dismissWindow?(.input)
             self.fetchEntries()
         })
         inputViewModel.setupInitialState()

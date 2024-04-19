@@ -99,7 +99,8 @@ class Parser {
                     break
                 }
                 
-                let sectionName = String(textRemainder[i..<sectionSeparatorIndex]).trimmingCharacters(in: .whitespaces)
+                // todo: parse section name
+//                let sectionName = String(textRemainder[i..<sectionSeparatorIndex]).trimmingCharacters(in: .whitespaces)
                 advanceIfPossible(after: sectionSeparatorIndex)
                 
                 guard let sectionNewLineIndex = textRemainder.firstIndex(of: "\n") else {

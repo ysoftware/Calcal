@@ -48,6 +48,10 @@ struct InputView: View {
                         viewModel.onEnterPress()
                         return .handled
                     })
+                    .onKeyPress(.escape, action: {
+                        viewModel.onEscapePress()
+                        return .handled
+                    })
                     .textFieldStyle(.plain)
                     .font(.system(size: 25))
                     .frame(maxWidth: .infinity, alignment: .leading)
