@@ -71,13 +71,52 @@ class MainViewModel: ObservableObject {
     private func fetchEntries() {
         self.entries = model.getAllEntries()
         self.selectedEntryIndex = max(0, entries.count - 1)
-        
+        updatePresenter()
+    }
+    
+    private func updatePresenter() {
         updateSelectedEntry()
-        updateView()
+        updateEntrySwitcherButtons()
+        
+        DispatchQueue.main.async { [self] in
+            objectWillChange.send()
+        }
+    }
+    
+    private func updateEntrySwitcherButtons() {
+        nextButton = if entries.count > selectedEntryIndex + 1 {
+            ButtonPresenter(
+                title: "Next day",
+                action: { [weak self] in
+                    guard let self else { return }
+                    self.selectedEntryIndex += 1
+                    self.updatePresenter()
+                }
+            )
+        } else {
+            nil
+        }
+        
+        previousButton = if selectedEntryIndex > 0 {
+            ButtonPresenter(
+                title: "Previous day",
+                action: { [weak self] in
+                    guard let self else { return }
+                    self.selectedEntryIndex -= 1
+                    self.updatePresenter()
+                }
+            )
+        } else {
+            nil
+        }
     }
     
     private func updateSelectedEntry() {
-        guard entries.count > selectedEntryIndex else { return }
+        guard entries.count > selectedEntryIndex else {
+            self.entryPresenter = nil
+            return
+        }
+        
         let selectedEntry = entries[selectedEntryIndex]
         
         // todo: update for better ui
@@ -144,12 +183,6 @@ class MainViewModel: ObservableObject {
             self.fetchEntries()
         })
         inputViewModel.setupInitialState()
-    }
-    
-    private func updateView() {
-        DispatchQueue.main.async { [self] in
-            objectWillChange.send()
-        }
     }
 }
 
