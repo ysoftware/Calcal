@@ -11,7 +11,6 @@ import XCTest
 final class CalcalTests: XCTestCase {
 
     func testGeneralParsing() throws {
-        
         let parser = Parser(text: """
 Date: 18 April 2024
 

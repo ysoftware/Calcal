@@ -45,19 +45,52 @@ class InputViewModel: ObservableObject {
         self.text = ""
         self.selectedAutocompleteIndex = nil
         
-        let allEntries = model.getAllEntries()
+        let allItems = model.getAllEntries()
+            .flatMap { $0.sections }
+            .flatMap { $0.items }
         
-        // todo: compile a list of frequently added items
+        var items: [PopularItem] = []
+        
+        for item in allItems {
+            if let foundItemIndex = items.firstIndex(where: {
+                $0.title == item.title && $0.quantity == item.quantity && $0.measurement == item.measurement
+            }) {
+                items[foundItemIndex] = PopularItem(
+                    title: item.title,
+                    occurencesCount: items[foundItemIndex].occurencesCount + 1,
+                    quantity: item.quantity,
+                    measurement: item.measurement,
+                    calories: item.calories
+                )
+            } else {
+                items.append(
+                    PopularItem(
+                        title: item.title,
+                        occurencesCount: 1,
+                        quantity: item.quantity,
+                        measurement: item.measurement,
+                        calories: item.calories
+                    )
+                )
+            }
+        }
+
         self.popularEntries = Array(
-            allEntries
-                .flatMap { $0.sections }
-                .flatMap { $0.items }
+            items
+                .sorted { $0.occurencesCount > $1.occurencesCount }
                 .prefix(10)
                 .map { item in
+                    // todo: reuse presentation from main view
                     QuickItemPresenter(
-                        title: "\(item.title), \(item.quantity) \(item.measurement) \(item.calories) kcal",
+                        title: "\(item.title), \(item.quantity) \(item.measurement), \(item.calories) kcal (x\(item.occurencesCount))",
                         onAcceptItem: { [weak self] in
-                            self?.completeInput?(item)
+                            let entryItem = EntryEntity.Item(
+                                title: item.title,
+                                quantity: item.quantity,
+                                measurement: item.measurement,
+                                calories: item.calories
+                            )
+                            self?.completeInput?(entryItem)
                         }
                     )
                 }
@@ -183,5 +216,13 @@ class InputViewModel: ObservableObject {
     
     private var hasCaloricInformation: Bool {
         false // todo: implement
+    }
+    
+    struct PopularItem {
+        let title: String
+        let occurencesCount: Int
+        let quantity: Float
+        let measurement: EntryEntity.QuantityMeasurement
+        let calories: Float
     }
 }

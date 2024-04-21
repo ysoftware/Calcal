@@ -6,6 +6,7 @@
 //
 
 import SwiftUI
+import AppKit
 
 class MainViewModel: ObservableObject {
     
@@ -16,6 +17,8 @@ class MainViewModel: ObservableObject {
     
     private var selectedEntryIndex: Int = 0
     private var entries: [EntryEntity] = []
+    
+    var isPresentingInput = false
     
     private(set) var nextButton: ButtonPresenter?
     private(set) var previousButton: ButtonPresenter?
@@ -56,22 +59,34 @@ class MainViewModel: ObservableObject {
             }
             
             if event.charactersIgnoringModifiers == " " {
-                // todo: check if already presenting and do nothing
+                guard !self.isPresentingInput else { return event }
                 openInput()
                 return nil
             }
             
             return event
         })
+        
+        NotificationCenter.default.addObserver(
+            forName: NSWindow.willCloseNotification,
+            object: nil,
+            queue: .main,
+            using: { [weak self] notification in
+                guard !(notification.object is NSPopupMenuWindow) else { return }
+                // todo: other windows possibly?
+                print(notification)
+                self?.isPresentingInput = false
+            }
+        )
     }
     
     private func acceptPasteEvent(text: String) {
         do {
             let parser = Parser(text: text)
             let entries = try parser.parse()
+            self.dismissWindow?(.input)
             
             for entry in entries {
-                self.dismissWindow?(.input)
                 self.model.addOrUpdateEntry(entry: entry)
                 self.fetchEntries()
             }
@@ -185,7 +200,7 @@ class MainViewModel: ObservableObject {
         
         inputViewModel.setup(completeInput: { [weak self] item in
             guard let self else { return }
-            self.dismissWindow?(.input)
+//            self.dismissWindow?(.input)
             
             guard let item else { return }
             assert(entries.count > selectedEntryIndex)

@@ -299,3 +299,26 @@ Dinner - 661 kcal
 - Chocolate Cookies, 30g, 150 kcal
 
 Total: 1637 kcal
+
+Date: 19 April 2024
+
+Breakfast - 166 kcal
+- Cappuccino, 45 kcal
+- Banana, 121 kcal
+
+Lunch - 473 kcal
+- Chicken breast fried, 130g, 325 kcal
+- Burek, 35g, 75 kcal
+- Cheese, 20g, 70 kcal
+- Cucumber, 20g, 3 kcal
+
+Second lunch - 483 kcal
+- Chicken breast fried, 150g, 375 kcal
+- Burek, 50g, 105 kcal
+- Cucumber, 20g, 3 kcal
+
+Dinner - 270 kcal
+- Bellini, 375ml, 270 kcal
+- Pizza, 1, 700 kcal
+
+Total: 1392 kcal
