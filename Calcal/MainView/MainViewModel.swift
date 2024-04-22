@@ -10,34 +10,18 @@ import AppKit
 
 class MainViewModel: ObservableObject {
     
-    private let model: Model
-    private let inputViewModel: InputViewModel
-    private var openWindow: ((WindowId) -> Void)?
-    private var dismissWindow: ((WindowId) -> Void)?
+    private let model = Model()
     
+    // private state
     private var selectedEntryIndex: Int = 0
     private var entries: [EntryEntity] = []
     
-    var isPresentingInput = false
-    
+    // ui properties
+    private(set) var inputViewModel: InputViewModel?
     private(set) var nextButton: ButtonPresenter?
     private(set) var previousButton: ButtonPresenter?
-    
     private(set) var entryPresenter: EntryPresenter?
     private(set) var openInputButton: ButtonPresenter?
-    
-    init(inputViewModel: InputViewModel, model: Model) {
-        self.model = model
-        self.inputViewModel = inputViewModel
-    }
-    
-    func setupExternalActions(
-        openWindow: @escaping (WindowId) -> Void,
-        dismissWindow: @escaping (WindowId) -> Void
-    ) {
-        self.openWindow = openWindow
-        self.dismissWindow = dismissWindow
-    }
     
     func setupInitialState() {
         openInputButton = ButtonPresenter(
@@ -59,32 +43,20 @@ class MainViewModel: ObservableObject {
             }
             
             if event.charactersIgnoringModifiers == " " {
-                guard !self.isPresentingInput else { return event }
+                guard self.inputViewModel == nil else { return event }
                 openInput()
                 return nil
             }
             
             return event
         })
-        
-        NotificationCenter.default.addObserver(
-            forName: NSWindow.willCloseNotification,
-            object: nil,
-            queue: .main,
-            using: { [weak self] notification in
-                guard !(notification.object is NSPopupMenuWindow) else { return }
-                // todo: other windows possibly?
-                print(notification)
-                self?.isPresentingInput = false
-            }
-        )
     }
     
     private func acceptPasteEvent(text: String) {
         do {
             let parser = Parser(text: text)
             let entries = try parser.parse()
-            self.dismissWindow?(.input)
+//            self.dismissWindow?(.input)
             
             for entry in entries {
                 self.model.addOrUpdateEntry(entry: entry)
@@ -196,22 +168,27 @@ class MainViewModel: ObservableObject {
     }
     
     private func openInput() {
-        openWindow?(WindowId.input)
+        let inputViewModel = InputViewModel(
+            model: model,
+            completeInput: { [weak self] item in
+                guard let self else { return }
+    //            self.dismissWindow?(.input)
+                
+                guard let item else { return }
+                assert(entries.count > selectedEntryIndex)
+                let entry = self.entries[selectedEntryIndex]
+                
+                // todo: fix this
+                let sectionId: EntryEntity.SectionId = entry.sections.last?.id ?? .breakfast
+                self.model.appendItemToLastEntry(item: item, sectionId: sectionId)
+                self.fetchEntries()
+            }
+        )
         
-        inputViewModel.setup(completeInput: { [weak self] item in
-            guard let self else { return }
-//            self.dismissWindow?(.input)
-            
-            guard let item else { return }
-            assert(entries.count > selectedEntryIndex)
-            let entry = self.entries[selectedEntryIndex]
-            
-            // todo: fix this
-            let sectionId: EntryEntity.SectionId = entry.sections.last?.id ?? .breakfast
-            self.model.appendItemToLastEntry(item: item, sectionId: sectionId)
-            self.fetchEntries()
-        })
         inputViewModel.setupInitialState()
+        
+        self.inputViewModel = inputViewModel
+        self.updatePresenter()
     }
 }
 

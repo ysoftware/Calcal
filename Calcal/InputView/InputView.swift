@@ -31,11 +31,18 @@ struct InputView: View {
     @State private var text: String = ""
     
     var body: some View {
-        Group {
+        VStack(spacing: 20) {
             VStack(spacing: 10) {
-                Text(stateText)
-                
                 TextField(stateText, text: $text)
+                    .textFieldStyle(.roundedBorder)
+                    .font(.system(size: 25))
+                    .frame(maxWidth: .infinity, alignment: .leading)
+                    .onChange(of: text, initial: false) { _, newValue in
+                        viewModel.onTextChange(newText: newValue)
+                    }
+                    .onChange(of: viewModel.text) { _, newValue in
+                        text = newValue
+                    }
                     .onKeyPress(.downArrow, action: {
                         viewModel.onArrowDownPress()
                         return .handled
@@ -52,15 +59,6 @@ struct InputView: View {
                         viewModel.onEscapePress()
                         return .handled
                     })
-                    .textFieldStyle(.plain)
-                    .font(.system(size: 25))
-                    .frame(maxWidth: .infinity, alignment: .leading)
-                    .onChange(of: text, initial: false) { _, newValue in
-                        viewModel.onTextChange(newText: newValue)
-                    }
-                    .onChange(of: viewModel.text) { _, newValue in
-                        text = newValue
-                    }
                 
                 VStack(spacing: 2) {
                     ForEach(viewModel.autocompleteSuggestions.swiftUIEnumerated, id: \.0) { _, item in
@@ -77,7 +75,7 @@ struct InputView: View {
                 Spacer()
             }
             .padding()
-            .opacity(isShowingSuggestions ? 0 : 1)
+//            .opacity(isShowingSuggestions ? 0 : 1)
             
             if isShowingSuggestions {
                 ScrollView(.vertical) {

@@ -11,7 +11,7 @@ import SwiftUI
 class InputViewModel: ObservableObject {
     
     private let model: Model
-    private var completeInput: ((EntryEntity.Item?) -> Void)?
+    private let completeInput: (EntryEntity.Item?) -> Void
     
     private var name: String?
     private var quantity: Float?
@@ -24,8 +24,9 @@ class InputViewModel: ObservableObject {
     private(set) var popularEntries: [QuickItemPresenter] = []
     private(set) var text: String = ""
     
-    init(model: Model) {
+    init(model: Model, completeInput: @escaping (EntryEntity.Item?) -> Void) {
         self.model = model
+        self.completeInput = completeInput
     }
     
     func onTextChange(newText: String) {
@@ -35,12 +36,6 @@ class InputViewModel: ObservableObject {
     }
     
     func setupInitialState() {
-        
-    }
-    
-    func setup(completeInput: @escaping (EntryEntity.Item?) -> Void) {
-        self.completeInput = completeInput
-    
         self.state = .name
         self.text = ""
         self.selectedAutocompleteIndex = nil
@@ -90,7 +85,7 @@ class InputViewModel: ObservableObject {
                                 measurement: item.measurement,
                                 calories: item.calories
                             )
-                            self?.completeInput?(entryItem)
+                            self?.completeInput(entryItem)
                         }
                     )
                 }
@@ -112,7 +107,7 @@ class InputViewModel: ObservableObject {
         let allEntries = model.getAllEntries()
         
         // todo: cache this unfiltered list
-        self.autocompleteSuggestions = allEntries
+        self.autocompleteSuggestions = Array(allEntries
             .flatMap { $0.sections }
             .flatMap { $0.items }
             .enumerated()
@@ -128,10 +123,12 @@ class InputViewModel: ObservableObject {
             .filter {
                 $0.title.lowercased().contains(text.lowercased())
             }
+            .prefix(10)
+        )
     }
     
     func onEscapePress() {
-        completeInput?(nil)
+        completeInput(nil)
     }
     
     func onArrowDownPress() {
@@ -202,8 +199,7 @@ class InputViewModel: ObservableObject {
         guard let name,
               let quantity,
               let quantityMeasurement,
-              let calories,
-              let completeInput
+              let calories
         else { return }
         let item = EntryEntity.Item(
             title: name,
