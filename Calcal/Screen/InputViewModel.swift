@@ -73,7 +73,7 @@ class InputViewModel: ObservableObject {
         self.popularEntries = Array(
             items
                 .sorted { $0.occurencesCount > $1.occurencesCount }
-                .prefix(10)
+                .prefix(14)
                 .map { item in
                     // todo: reuse presentation from main view
                     QuickItemPresenter(

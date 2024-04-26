@@ -1,6 +1,5 @@
 Date: 7 April 2024
 
-
 Breakfast - 166 kcal
 - Cappuccino, 45 kcal
 - Banana, 1, 121 kcal
@@ -419,3 +418,8 @@ Dinner - 1410 kcal
 - Wine, 0.5l, 410 kcal
 
 Total: 3020 kcal
+
+Date: 26 April 2024
+
+Breakfast -
+- Cappuccino, 45 kcal

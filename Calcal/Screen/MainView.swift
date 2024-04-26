@@ -11,9 +11,9 @@ struct MainView: View {
     @ObservedObject var viewModel: MainViewModel
     
     var body: some View {
-        HStack(spacing: 20) {
-            VStack(spacing: 8) {
-                HStack {
+        HStack(alignment: .top, spacing: 10) {
+            VStack(spacing: 10) {
+                HStack(spacing: 0) {
                     viewModel.previousButton
                         .map(ButtonView.init(presenter:))
                     
@@ -32,15 +32,16 @@ struct MainView: View {
                     .map(ButtonView.init(presenter:))
                     .frame(maxWidth: .infinity, alignment: .trailing)
             }
-            .frame(width: 350, height: 600)
-            .padding()
-            .border(.red)
+            .frame(width: 350)
             
             if let inputViewModel = viewModel.inputViewModel {
+                
+                Divider()
                 InputView(viewModel: inputViewModel)
-                    .padding()
-                    .border(.green)
+                    .frame(width: 350)
             }
         }
+        .padding(10)
+        .frame(height: 500)
     }
 }
