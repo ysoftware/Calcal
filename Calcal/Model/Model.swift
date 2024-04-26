@@ -6,18 +6,29 @@
 //
 
 import Foundation
+import OSLog
 
 class Model {
     
     private var data: [EntryEntity] = []
     
     init() {
-        guard let url = Bundle.main.url(forResource: "data", withExtension: "txt"),
-              let contents = try? String(contentsOf: url, encoding: .utf8),
-              let entities = try? Parser(text: contents).parse()
-        else { return }
-        
-        self.data = entities
+        do {
+            guard let documentsUrl = FileManager.default.urls(
+                for: .documentDirectory,
+                in: .userDomainMask
+            ).first else { return }
+            
+            let url = documentsUrl
+                .appendingPathComponent("Other")
+                .appendingPathComponent("Calcal-data.txt")
+            
+            let contents = try String(contentsOf: url, encoding: .utf8)
+            let entities = try Parser(text: contents).parse()
+            self.data = entities
+        } catch {
+            Logger().error("\(error.localizedDescription)")
+        }
     }
     
     func appendItemToLastEntry(item: EntryEntity.Item, sectionId: EntryEntity.SectionId) {

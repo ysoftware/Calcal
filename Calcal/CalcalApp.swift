@@ -21,4 +21,3 @@ struct CalcalApp: App {
         .windowResizability(.contentSize)
     }
 }
-
