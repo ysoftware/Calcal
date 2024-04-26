@@ -99,8 +99,7 @@ class Parser {
                     break
                 }
                 
-                // todo: parse section name
-//                let sectionName = String(textRemainder[i..<sectionSeparatorIndex]).trimmingCharacters(in: .whitespaces)
+                let sectionName = String(textRemainder[i..<sectionSeparatorIndex]).trimmingCharacters(in: .whitespacesAndNewlines)
                 advanceIfPossible(after: sectionSeparatorIndex)
                 
                 guard let sectionNewLineIndex = textRemainder.firstIndex(of: "\n") else {
@@ -188,7 +187,7 @@ class Parser {
                 
                 // finalise section
                 let section = EntryEntity.Section(
-                    id: .breakfast, // TODO: fix
+                    id: sectionName,
                     items: foodItems
                 )
                 sections.append(section)

@@ -43,7 +43,7 @@ Total: 12345 kcal
                 date: "18 April 2024",
                 sections: [
                     EntryEntity.Section(
-                        id: .breakfast,
+                        id: "Breakfast",
                         items: [
                             EntryEntity.Item(
                                 title: "Cappuccino",
@@ -54,7 +54,7 @@ Total: 12345 kcal
                         ]
                     ),
                     EntryEntity.Section(
-                        id: .breakfast, // TODO: adjust test
+                        id: "Lunch",
                         items: [
                             EntryEntity.Item(
                                 title: "Chicker Burger",
@@ -76,7 +76,7 @@ Total: 12345 kcal
                 date: "19 April 2024",
                 sections: [
                     EntryEntity.Section(
-                        id: .breakfast,
+                        id: "Breakfast",
                         items: [
                             EntryEntity.Item(
                                 title: "Cappuccino",
@@ -92,7 +92,7 @@ Total: 12345 kcal
                 date: "20 April 2024",
                 sections: [
                     EntryEntity.Section(
-                        id: .breakfast,
+                        id: "Breakfast",
                         items: [
                             EntryEntity.Item(
                                 title: "Cappuccino",
@@ -123,7 +123,7 @@ Breakfast - 45 kcal
                 date: "19 April 2024",
                 sections: [
                     EntryEntity.Section(
-                        id: .breakfast,
+                        id: "Breakfast",
                         items: [
                             EntryEntity.Item(
                                 title: "Cappuccino",
@@ -159,7 +159,7 @@ Breakfast - 227 kcal
                 date: "19 April 2024",
                 sections: [
                     EntryEntity.Section(
-                        id: .breakfast,
+                        id: "Breakfast",
                         items: [
                             EntryEntity.Item(
                                 title: "Chocolate Cookies",

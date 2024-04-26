@@ -31,7 +31,7 @@ class Model {
         }
     }
     
-    func appendItemToLastEntry(item: EntryEntity.Item, sectionId: EntryEntity.SectionId) {
+    func appendItemToLastEntry(item: EntryEntity.Item, sectionId: String) {
         guard var entry = getAllEntries().last else { return }
         
         if entry.sections.firstIndex(where: { $0.id == sectionId }) == nil {

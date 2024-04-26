@@ -131,7 +131,7 @@ class MainViewModel: ObservableObject {
                 sectionCalories += item.calories
             }
             
-            entryText.append("\(section.id.rawValue.uppercased()) - \(sectionCalories.formatted(.number.rounded())) kcal\n\(itemsText)\n")
+            entryText.append("\(section.id) - \(sectionCalories.formatted(.number.rounded())) kcal\n\(itemsText)\n")
             totalCalories += sectionCalories
         }
         
@@ -177,8 +177,7 @@ class MainViewModel: ObservableObject {
                     assert(entries.count > selectedEntryIndex)
                     let entry = self.entries[selectedEntryIndex]
                     
-                    // todo: fix this
-                    let sectionId: EntryEntity.SectionId = entry.sections.last?.id ?? .breakfast
+                    let sectionId = entry.sections.last?.id ?? "Breakfast"
                     self.model.appendItemToLastEntry(item: item, sectionId: sectionId)
                     self.fetchEntries()
                 }

@@ -14,7 +14,7 @@ struct EntryEntity: Equatable {
 
 extension EntryEntity {
     struct Section: Equatable {
-        let id: SectionId
+        let id: String
         var items: [Item]
     }
     
@@ -30,14 +30,5 @@ extension EntryEntity {
         case liter
         case kilogramm
         case cup
-    }
-    
-    enum SectionId: String, Equatable {
-        case breakfast
-        case brunch
-        case lunch
-        case secondLunch
-        case snack
-        case dinner
     }
 }
