@@ -70,7 +70,7 @@ struct InputView: View {
     }
     
     private var textField: some View {
-        TextField(stateText, text: $text)
+        TextField(viewModel.inputPlaceholder, text: $text)
             .textFieldStyle(.plain)
             .font(.system(size: 18))
             .focused($isTextFieldFocused)
@@ -110,16 +110,5 @@ struct InputView: View {
     
     private var isShowingSuggestions: Bool {
         text.isEmpty && viewModel.state == .name
-    }
-    
-    private var stateText: String {
-        switch viewModel.state {
-        case .name:
-            return "Name"
-        case .quantity:
-            return "Quantity"
-        case .calories:
-            return "Calories"
-        }
     }
 }

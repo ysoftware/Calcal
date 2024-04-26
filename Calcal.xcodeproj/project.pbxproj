@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		CC229D622BDBC89700DC57D0 /* Algorithms in Frameworks */ = {isa = PBXBuildFile; productRef = CC229D612BDBC89700DC57D0 /* Algorithms */; };
 		CC25B1392BD2A7AD0006CB5C /* data.txt in Resources */ = {isa = PBXBuildFile; fileRef = CC25B1382BD2A7AD0006CB5C /* data.txt */; };
 		CC4EAC9F2BD1A03D00DF94ED /* Parser.swift in Sources */ = {isa = PBXBuildFile; fileRef = CC4EAC9E2BD1A03D00DF94ED /* Parser.swift */; };
 		CC4EACA72BD1A90E00DF94ED /* CalcalTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = CC4EACA62BD1A90E00DF94ED /* CalcalTests.swift */; };
@@ -67,12 +68,20 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				CC229D622BDBC89700DC57D0 /* Algorithms in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		CC229D602BDBC89700DC57D0 /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
 		CC4EACA52BD1A90E00DF94ED /* CalcalTests */ = {
 			isa = PBXGroup;
 			children = (
@@ -87,6 +96,7 @@
 				CCFE260E2BCBEEB50032FD48 /* Calcal */,
 				CC4EACA52BD1A90E00DF94ED /* CalcalTests */,
 				CCFE260D2BCBEEB50032FD48 /* Products */,
+				CC229D602BDBC89700DC57D0 /* Frameworks */,
 			);
 			sourceTree = "<group>";
 		};
@@ -187,6 +197,9 @@
 			dependencies = (
 			);
 			name = Calcal;
+			packageProductDependencies = (
+				CC229D612BDBC89700DC57D0 /* Algorithms */,
+			);
 			productName = Calcal;
 			productReference = CCFE260C2BCBEEB50032FD48 /* Calcal.app */;
 			productType = "com.apple.product-type.application";
@@ -572,6 +585,14 @@
 			};
 		};
 /* End XCRemoteSwiftPackageReference section */
+
+/* Begin XCSwiftPackageProductDependency section */
+		CC229D612BDBC89700DC57D0 /* Algorithms */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = CC229D5F2BDBC84000DC57D0 /* XCRemoteSwiftPackageReference "swift-algorithms" */;
+			productName = Algorithms;
+		};
+/* End XCSwiftPackageProductDependency section */
 	};
 	rootObject = CCFE26042BCBEEB50032FD48 /* Project object */;
 }

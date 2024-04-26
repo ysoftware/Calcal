@@ -6,6 +6,7 @@
 //
 
 import Foundation
+import Algorithms
 import SwiftUI
 
 class InputViewModel: ObservableObject {
@@ -14,12 +15,12 @@ class InputViewModel: ObservableObject {
     private let completeInput: (EntryEntity.Item?) -> Void
     
     private var selectedItemCaloricInformation: CaloricInformation?
-    
     private var name: String?
     private var quantity: Float?
     private var quantityMeasurement: EntryEntity.QuantityMeasurement?
     private var calories: Float?
     
+    private(set) var inputPlaceholder: String = ""
     private(set) var state: InputViewState = .name
     private(set) var selectedAutocompleteIndex: Int?
     private(set) var autocompleteSuggestions: [AutocompleteItemPresenter] = []
@@ -39,6 +40,7 @@ class InputViewModel: ObservableObject {
     
     private func resetAllInput() {
         state = .name
+        inputPlaceholder = "Item name"
         name = nil
         quantity = nil
         quantityMeasurement = nil
@@ -46,8 +48,9 @@ class InputViewModel: ObservableObject {
     }
     
     func setupInitialState() {
-        self.state = .name
-        self.text = ""
+        state = .name
+        inputPlaceholder = "Item name"
+        text = ""
         
         resetAllInput()
     
@@ -124,6 +127,7 @@ class InputViewModel: ObservableObject {
             .filter {
                 $0.title.lowercased().contains(text.lowercased())
             }
+            .uniqued(on: { "\($0.title) \($0.measurement)" })
             .prefix(10)
             .enumerated()
             .map { index, item in
@@ -196,7 +200,13 @@ class InputViewModel: ObservableObject {
             if text.count > 1 {
                 self.name = text
                 self.text = ""
+                
                 state = .quantity
+                if let selectedItemCaloricInformation {
+                    inputPlaceholder = "Quantity (\(selectedItemCaloricInformation.measurement))"
+                } else {
+                    inputPlaceholder = "Quantity"
+                }
             } else {
                 // error
                 print("Error: incorrect name: '\(text)'")
@@ -214,15 +224,18 @@ class InputViewModel: ObservableObject {
                     } else {
                         self.selectedItemCaloricInformation = nil // reset invalid
                         state = .calories
+                        inputPlaceholder = "Calories"
                     }
                 } else {
                     state = .calories
+                    inputPlaceholder = "Calories"
                 }
             } else {
                 // error
                 print("Error: incorrect quantity: '\(text)'")
             }
         case .calories:
+            // todo: feature - specify calories per weight or per measurement
             if let calorieValue = text.floatValue {
                 self.calories = calorieValue
                 self.text = ""
@@ -237,17 +250,27 @@ class InputViewModel: ObservableObject {
     }
     
     private func createItem() {
-        guard let name, 
-                let quantity,
-                let quantityMeasurement,
-              let calories = selectedItemCaloricInformation?.value ?? self.calories
-        else { return  } // todo: show validation error
+        guard let name,
+              let quantity,
+              let quantityMeasurement
+        else { return } // todo: show validation error
+        
+        let caloriesValue: Float
+        
+        if let selectedItemCaloricInformation {
+            caloriesValue = (selectedItemCaloricInformation.value * quantity).rounded()
+        } else if let calories {
+            caloriesValue = calories
+        } else {
+            // todo: show validation error
+            return
+        }
         
         let item = EntryEntity.Item(
             title: name,
             quantity: quantity,
             measurement: quantityMeasurement,
-            calories: calories
+            calories: caloriesValue
         )
         completeInput(item)
     }
