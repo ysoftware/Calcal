@@ -26,6 +26,7 @@ struct AutocompleteItemPresenter {
 }
 
 struct InputView: View {
+    @FocusState var isTextFieldFocused: Bool
     @ObservedObject var viewModel: InputViewModel
     
     @State private var text: String = ""
@@ -35,7 +36,8 @@ struct InputView: View {
             VStack(spacing: 10) {
                 TextField(stateText, text: $text)
                     .textFieldStyle(.roundedBorder)
-                    .font(.system(size: 25))
+                    .font(.system(size: 18))
+                    .focused($isTextFieldFocused)
                     .frame(maxWidth: .infinity, alignment: .leading)
                     .onChange(of: text, initial: false) { _, newValue in
                         viewModel.onTextChange(newText: newValue)
@@ -59,6 +61,9 @@ struct InputView: View {
                         viewModel.onEscapePress()
                         return .handled
                     })
+                    .onAppear {
+                        isTextFieldFocused = true
+                    }
                 
                 VStack(spacing: 2) {
                     ForEach(viewModel.autocompleteSuggestions.swiftUIEnumerated, id: \.0) { _, item in

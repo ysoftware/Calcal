@@ -322,3 +322,100 @@ Dinner - 270 kcal
 - Pizza, 1, 700 kcal
 
 Total: 1392 kcal
+
+Date: 22 April 2024
+
+Breakfast - 166 kcal
+- Cappuccino, 45 kcal
+- Banana, 1, 121 kcal
+
+Lunch - 812 kcal
+- Chicken breast fried, 200g, 374 kcal
+- Couscous, 150g, 168 kcal
+- Sauce, 30g, 45 kcal
+- Jam cookie, 2, 180 kcal
+- Cappuccino, 45 kcal
+
+Snack - 266 kcal
+- Grapes, 100g, 67 kcal
+- Jam cookie, 90 kcal
+- Tonic water, 300ml, 120 kcal
+
+Dinner - 867 kcal
+- Flatbread, 50g, 137 kcal
+- Yogurt, 30g, 30 kcal
+- Adana Kebab, 700 kcal
+
+Total: 2111 kcal
+
+Date: 23 April 2024
+
+Breakfast - 45 kcal
+- Cappuccino, 45 kcal
+
+Lunch - 780 kcal
+- Ramen, 600 kcal
+- Sugary drink, 500ml, 180 kcal
+
+Snack - 301 kcal
+- Apfelschorle, 0.33l, 93 kcal
+- Chips, 30g, 160 kcal
+- Waffel, 10g, 48 kcal
+
+Dinner - 1017 kcal
+- Cheese, 20g, 70 kcal
+- Couscous, 150g, 168 kcal
+- Sauce, 30g, 45 kcal
+- Fried Chicken Breast, 200g, 374 kcal
+- Orange Juice, 300ml, 105 kcal
+- Jam cookie, 90 kcal
+- Nuts, 30g, 165 kcal
+
+Total: 2143 kcal
+
+Date: 24 April 2024
+
+Breakfast - 166 kcal
+- Cappuccino, 45 kcal
+- Banana, 1, 121 kcal
+
+Lunch - 339 kcal
+- Pasta with sauce, 150g, 236 kcal
+- Cucumber salad, 30g, 10 kcal
+- Apfelschorle, 0.33l, 93 kcal
+
+Snack - 220 kcal
+- Cappuccino, 45 kcal
+- Praline, 55 kcal
+- Nougat, 30g, 120 kcal
+
+Dinner - 885 kcal
+- Ayran, 250ml, 85 kcal
+- Döner sandwich, 1, 800 kcal
+
+Snack 2 - 590 kcal
+- Waffel, 30g, 150 kcal
+- Orange juice, 150ml, 52 kcal
+- Wafer tubes, 45g, 250 kcal
+- Merci chocolate, 25g, 138 kcal
+
+Total: 2200 kcal
+
+Date: 25 April 2024
+
+Breakfast - 717 kcal
+- Cappuccino, 45 kcal
+- Müsli, 350 kcal
+- Apfelschorle, 0.33l, 93 kcal
+- Greek Yoghurt, 150g, 174 kcal
+- Praline, 55 kcal
+
+Lunch - 893 kcal
+- Duck with noodles, 800 kcal
+- Apfelschorle, 0.33l, 93 kcal
+
+Dinner - 1410 kcal
+- Greek food, 1000 kcal
+- Wine, 0.5l, 410 kcal
+
+Total: 3020 kcal

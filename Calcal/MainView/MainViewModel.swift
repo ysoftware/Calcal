@@ -56,7 +56,7 @@ class MainViewModel: ObservableObject {
         do {
             let parser = Parser(text: text)
             let entries = try parser.parse()
-//            self.dismissWindow?(.input)
+            self.inputViewModel = nil
             
             for entry in entries {
                 self.model.addOrUpdateEntry(entry: entry)
@@ -172,16 +172,19 @@ class MainViewModel: ObservableObject {
             model: model,
             completeInput: { [weak self] item in
                 guard let self else { return }
-    //            self.dismissWindow?(.input)
                 
-                guard let item else { return }
-                assert(entries.count > selectedEntryIndex)
-                let entry = self.entries[selectedEntryIndex]
+                if let item {
+                    assert(entries.count > selectedEntryIndex)
+                    let entry = self.entries[selectedEntryIndex]
+                    
+                    // todo: fix this
+                    let sectionId: EntryEntity.SectionId = entry.sections.last?.id ?? .breakfast
+                    self.model.appendItemToLastEntry(item: item, sectionId: sectionId)
+                    self.fetchEntries()
+                }
                 
-                // todo: fix this
-                let sectionId: EntryEntity.SectionId = entry.sections.last?.id ?? .breakfast
-                self.model.appendItemToLastEntry(item: item, sectionId: sectionId)
-                self.fetchEntries()
+                self.inputViewModel = nil
+                self.updatePresenter()
             }
         )
         
