@@ -13,6 +13,8 @@ class InputViewModel: ObservableObject {
     private let model: Model
     private let completeInput: (EntryEntity.Item?) -> Void
     
+    private var selectedItemCaloricInformation: CaloricInformation?
+    
     private var name: String?
     private var quantity: Float?
     private var quantityMeasurement: EntryEntity.QuantityMeasurement?
@@ -35,11 +37,20 @@ class InputViewModel: ObservableObject {
         updatePresenter()
     }
     
+    private func resetAllInput() {
+        state = .name
+        name = nil
+        quantity = nil
+        quantityMeasurement = nil
+        calories = nil
+    }
+    
     func setupInitialState() {
         self.state = .name
         self.text = ""
-        self.selectedAutocompleteIndex = nil
         
+        resetAllInput()
+    
         let allItems = model.getAllEntries()
             .flatMap { $0.sections }
             .flatMap { $0.items }
@@ -106,29 +117,42 @@ class InputViewModel: ObservableObject {
         
         let allEntries = model.getAllEntries()
         
-        // todo: cache this unfiltered list
+        // todo: cache this unfiltered list long term
         self.autocompleteSuggestions = Array(allEntries
             .flatMap { $0.sections }
             .flatMap { $0.items }
-            .enumerated()
-            .map { index, item in
-                AutocompleteItemPresenter(
-                    title: item.title,
-                    isSelected: index == self.selectedAutocompleteIndex,
-                    onAcceptItem: { 
-                        // todo: implement
-                    }
-                )
-            }
             .filter {
                 $0.title.lowercased().contains(text.lowercased())
             }
             .prefix(10)
+            .enumerated()
+            .map { index, item in
+                AutocompleteItemPresenter(
+                    title: "\(item.title) (in \(item.measurement))",
+                    isSelected: index == self.selectedAutocompleteIndex,
+                    onAcceptItem: { [weak self] in
+                        guard let self else { return }
+                        
+                        self.text = item.title
+                        self.selectedItemCaloricInformation = CaloricInformation(
+                            value: item.calories / item.quantity,
+                            measurement: item.measurement
+                        )
+                        self.processInputState()
+                        self.selectedAutocompleteIndex = nil
+                    }
+                )
+            }
         )
     }
     
     func onEscapePress() {
-        completeInput(nil)
+        if selectedAutocompleteIndex != nil {
+            selectedAutocompleteIndex = nil
+        } else {
+            completeInput(nil)
+        }
+        updatePresenter()
     }
     
     func onArrowDownPress() {
@@ -156,6 +180,17 @@ class InputViewModel: ObservableObject {
     }
     
     func onEnterPress() {
+        if let selectedAutocompleteIndex { // select autocompletion item
+            assert(selectedAutocompleteIndex >= 0)
+            assert(autocompleteSuggestions.count > selectedAutocompleteIndex)
+            
+            autocompleteSuggestions[selectedAutocompleteIndex].onAcceptItem()
+        } else {
+            processInputState() // just press enter with the input
+        }
+    }
+    
+    private func processInputState() {
         switch state {
         case .name:
             if text.count > 1 {
@@ -172,8 +207,14 @@ class InputViewModel: ObservableObject {
                 self.quantity = quantityValue
                 self.quantityMeasurement = measurement
                 
-                if hasCaloricInformation {
-                    createItem()
+                if let selectedItemCaloricInformation {
+                    if selectedItemCaloricInformation.measurement == measurement || measurement == .portion {
+                        self.quantityMeasurement = selectedItemCaloricInformation.measurement
+                        createItem()
+                    } else {
+                        self.selectedItemCaloricInformation = nil // reset invalid
+                        state = .calories
+                    }
                 } else {
                     state = .calories
                 }
@@ -196,22 +237,24 @@ class InputViewModel: ObservableObject {
     }
     
     private func createItem() {
-        guard let name,
-              let quantity,
-              let quantityMeasurement,
-              let calories
-        else { return }
+        guard let name, 
+                let quantity,
+                let quantityMeasurement,
+              let calories = selectedItemCaloricInformation?.value ?? self.calories
+        else { return  } // todo: show validation error
+        
         let item = EntryEntity.Item(
             title: name,
             quantity: quantity,
             measurement: quantityMeasurement,
             calories: calories
         )
-        completeInput(item) // dismisses window
+        completeInput(item)
     }
     
-    private var hasCaloricInformation: Bool {
-        false // todo: implement
+    struct CaloricInformation {
+        let value: Float
+        let measurement: EntryEntity.QuantityMeasurement
     }
     
     struct PopularItem {
