@@ -6,7 +6,10 @@
 //
 
 import SwiftUI
+
+#if canImport(AppKit)
 import AppKit
+#endif
 
 class MainViewModel: ObservableObject {
     
@@ -43,6 +46,7 @@ class MainViewModel: ObservableObject {
         
         fetchEntries()
         
+        #if canImport(AppKit)
         NSEvent.addLocalMonitorForEvents(matching: .keyDown, handler: { [weak self] event in
             guard let self else { return event }
             
@@ -65,6 +69,7 @@ class MainViewModel: ObservableObject {
             
             return event
         })
+        #endif
     }
     
     private func acceptPasteEvent(text: String) {

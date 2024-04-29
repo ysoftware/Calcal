@@ -19,22 +19,7 @@ class Model {
     private var data: [EntryEntity] = []
     
     init() {
-        do {
-            guard let documentsUrl = FileManager.default.urls(
-                for: .documentDirectory,
-                in: .userDomainMask
-            ).first else { return }
-            
-            let url = documentsUrl
-                .appendingPathComponent("Other")
-                .appendingPathComponent("Calcal-data.txt")
-            
-            let contents = try String(contentsOf: url, encoding: .utf8)
-            let entities = try Parser(text: contents).parse()
-            self.data = entities
-        } catch {
-            Logger().error("\(error)")
-        }
+        loadModel()
     }
     
     func appendItem(item: EntryEntity.Item, destination: ItemDestination) {
@@ -64,7 +49,45 @@ class Model {
         }
     }
     
-    func saveModel() {
+    func getAllEntries() -> [EntryEntity] {
+        data
+    }
+    
+    // MARK: - Work with Storage
+    
+    private func loadModel() {
+        do {
+            guard let documentsUrl = FileManager.default.urls(
+                for: .documentDirectory,
+                in: .userDomainMask
+            ).first else { return }
+            
+            let url = documentsUrl
+                .appendingPathComponent("Other")
+                .appendingPathComponent("Calcal-data.txt")
+            
+            let contents = try String(contentsOf: url, encoding: .utf8)
+            let entities = try Parser(text: contents).parse()
+            self.data = entities
+        } catch {
+            logger.error("Model: init: \(error)")
+            resetToInitialFile()
+        }
+    }
+    
+    private func resetToInitialFile() {
+        do {
+            guard let url = Bundle.main.url(forResource: "data", withExtension: "txt") else { return }
+            let contents = try String(contentsOf: url)
+            let entities = try Parser(text: contents).parse()
+            self.data = entities
+            saveModel()
+        } catch {
+            logger.error("Model: resetToInitialFile: \(error)")
+        }
+    }
+    
+    private func saveModel() {
         guard let documentsUrl = FileManager.default.urls(
             for: .documentDirectory,
             in: .userDomainMask
@@ -82,12 +105,8 @@ class Model {
         do {
             try content.write(to: url, atomically: true, encoding: .utf8)
         } catch {
-            Logger().error("\(error)")
+            logger.error("Model: saveModel: \(error)")
         }
-    }
-    
-    func getAllEntries() -> [EntryEntity] {
-        data
     }
 }
 
@@ -95,3 +114,5 @@ struct ItemDestination {
     let entryId: String
     let sectionId: String
 }
+
+let logger = Logger(subsystem: "app", category: "main")

@@ -1,83 +1,83 @@
 Date: 7 April 2024
 
 Breakfast - 166 kcal
-- Cappuccino, 45 kcal
+- Cappuccino, 1, 45 kcal
 - Banana, 1, 121 kcal
 
 Lunch - 763 kcal
-- Egg noodles, 60g, 120 kcal 
-- Sucuk, 30g, 100 kcal
-- Brie Cheese, 30g, 100 kcal
-- Banica, 40g, 153 kcal
+- Egg noodles, 60 g, 120 kcal
+- Sucuk, 30 g, 100 kcal
+- Brie Cheese, 30 g, 100 kcal
+- Banica, 40 g, 153 kcal
 - Omelette, 1.5, 200 kcal
 - Chorizo, 2, 90 kcal
 
 Snackies - 882 kcal
-- Praline, 56 kcal
+- Praline, 1, 56 kcal
 - Mate, 0.5, 100 kcal
-- Cinnamon rolls, 2, 210 kcal 
-- Chips, 50g, 266 kcal
+- Cinnamon rolls, 2, 210 kcal
+- Chips, 50 g, 266 kcal
 - Apple, 0.5, 50 kcal
-- Easter egg cookie, 40g, 200 kcal
+- Easter egg cookie, 40 g, 200 kcal
 
 Dinner - 613 kcal
-- Sucuk, 30g, 119 kcal
-- Cervelate, 30g, 108 kcal
-- Chorizo, 20g, 67 kcal
-- Brie cheese, 20g, 67 kcal
-- Lady fingers, 25g, 110 kcal
-- Chocolate milk, 200ml, 142 kcal
+- Sucuk, 30 g, 119 kcal
+- Cervelate, 30 g, 108 kcal
+- Chorizo, 20 g, 67 kcal
+- Brie cheese, 20 g, 67 kcal
+- Lady fingers, 25 g, 110 kcal
+- Chocolate milk, 200 ml, 142 kcal
 
 Total: 2424 kcal
 
 Date: 8 April 2024
 
 Breakfast - 768 kcal
-- Black coffee, 0 kcal
+- Black coffee, 1, 0 kcal
 - Omelette, 3, 537 kcal
-- Juice multifruit, 280ml, 123 kcal
-- Cervelate, 30g, 108 kcal
+- Juice multifruit, 280 ml, 123 kcal
+- Cervelate, 30 g, 108 kcal
 
 Lunch - 805 kcal
-- Rice, 130g, 170 kcal
-- Chicken breast, 170g, 280 kcal
-- Cauliflower with sauce, 250g, 125 kcal
-- Sauce, 50 kcal
-- Damla Cookie, 45g, 180 kcal
+- Rice, 130 g, 170 kcal
+- Chicken breast, 170 g, 280 kcal
+- Cauliflower with sauce, 250 g, 125 kcal
+- Sauce, 1, 50 kcal
+- Damla Cookie, 45 g, 180 kcal
 
 Snack time - 201 kcal
-- Cappuccino, 45 kcal
-- Praline, 56 kcal
+- Cappuccino, 1, 45 kcal
+- Praline, 1, 56 kcal
 - Apple, 1, 100 kcal
 
-Dinner - 533 kcal
-- Thai Cashew Chicken, 300g, 327 kcal
-- Rice, 160g, 206 kcal
-- Praline, 56 kcal
+Dinner - 589 kcal
+- Thai Cashew Chicken, 300 g, 327 kcal
+- Rice, 160 g, 206 kcal
+- Praline, 1, 56 kcal
 
 Total: 2363 kcal
 
 Date: 9 April 2024
 
 Breakfast - 166 kcal
-- Cappuccino, 45 kcal
+- Cappuccino, 1, 45 kcal
 - Banana, 1, 121 kcal
 
 Lunch - 761 kcal
-- Thai Cashew Chicken, 300g, 327 kcal
-- Rice, 160g, 206 kcal
+- Thai Cashew Chicken, 300 g, 327 kcal
+- Rice, 160 g, 206 kcal
 - Pide, 1, 90 kcal
-- Cappuccino, 45 kcal
-- Apfelschorle, 0.33l, 93 kcal
+- Cappuccino, 1, 45 kcal
+- Apfelschorle, 330 ml, 93 kcal
 
-Dinner - 1161 kcal
-- Mashed potato, 150g, 132 kcal
-- Fried Salmon, 220g, 556 kcal 
-- Praline, 56 kcal
-- Dalma cookies, 35g, 150 kcal
-- Juicy, 300ml, 105 kcal
-- Pear, 100 kcal
-- Orange, 62 kcal
+Dinner - 1.161 kcal
+- Mashed potato, 150 g, 132 kcal
+- Fried Salmon, 220 g, 556 kcal
+- Praline, 1, 56 kcal
+- Dalma cookies, 35 g, 150 kcal
+- Juicy, 300 ml, 105 kcal
+- Pear, 1, 100 kcal
+- Orange, 1, 62 kcal
 
 Total: 2088 kcal
 
@@ -85,196 +85,195 @@ Date: 10 April 2024
 
 Breakfast - 339 kcal
 - Twinkie, 0.5, 80 kcal
-- Cappuccino, 45 kcal
+- Cappuccino, 1, 45 kcal
 - Banana, 1, 121 kcal
-- Apfelschorle, 0.33l, 93 kcal
+- Apfelschorle, 330 ml, 93 kcal
 
 Lunch - 710 kcal
-- Süßkartoffel-Spinat-Auflauf, 400 kcal
-- Pastel de Nata, 200 kcal
-- Pistaccio marcipan, 15g, 65 kcal
-- Cappuccino, 45 kcal
+- Süßkartoffel-Spinat-Auflauf, 1, 400 kcal
+- Pastel de Nata, 1, 200 kcal
+- Pistaccio marcipan, 15 g, 65 kcal
+- Cappuccino, 1, 45 kcal
 
 Snaky - 337 kcal
-- Laugenstange mit Käse, 337 kcal
+- Laugenstange mit Käse, 1, 337 kcal
 
 Dinner - 664 kcal
-- Udon noodle, 200g, 344 kcal
-- Sucuk, 20g, 80 kcal
+- Udon noodle, 200 g, 344 kcal
+- Sucuk, 20 g, 80 kcal
 - Egg, 1.5, 140 kcal
-- Syrup, 30g, 100 kcal
+- Syrup, 30 g, 100 kcal
 
 Total: 2050 kcal
 
 Date: 11 April 2024
 
 Breakfast - 259 kcal
-- Cappuccino, 45 kcal
+- Cappuccino, 1, 45 kcal
 - Banana, 1, 121 kcal
-- Apfelschorle, 0.33l, 93 kcal
+- Apfelschorle, 330 ml, 93 kcal
 
 Lunch - 925 kcal
-- Sauerbraten, 800 kcal
-- Kölsch, 80 kcal
-- Cappuccino, 45 kcal
+- Sauerbraten, 1, 800 kcal
+- Kölsch, 1, 80 kcal
+- Cappuccino, 1, 45 kcal
 
 Dinner - 913 kcal
-- Mashed potato, 130g, 115 kcal
-- Thai Cashew Chicken, 230g, 250 kcal
-- Juicy, 200g, 70 kcal
-- Choco, 20g, 100 kcal
-- Chips, 70g, 378 kcal
+- Mashed potato, 130 g, 115 kcal
+- Thai Cashew Chicken, 230 g, 250 kcal
+- Juicy, 200 g, 70 kcal
+- Choco, 20 g, 100 kcal
+- Chips, 70 g, 378 kcal
 
 Total: 2097 kcal
 
 Date: 12 April 2024
 
 Breakfast - 145 kcal
-- Cappuccino, 45 kcal
-- Chorizo, 25g, 100 kcal
+- Cappuccino, 1, 45 kcal
+- Chorizo, 25 g, 100 kcal
 
 Lunch - 785 kcal
-- Pasta Bolognese, 550g, 715 kcal
-- Juicy, 200g, 70 kcal
+- Pasta Bolognese, 0.55 kg, 715 kcal
+- Juicy, 200 g, 70 kcal
 
 Snack - 430 kcal
-- Cappuccino, 45 kcal
-- Croissant, 80g, 325 kcal
-- Strawberry Jam, 22g, 50 kcal
-- Strawberries, 30g, 10 kcal
+- Cappuccino, 1, 45 kcal
+- Croissant, 80 g, 325 kcal
+- Strawberry Jam, 22 g, 50 kcal
+- Strawberries, 30 g, 10 kcal
 
-Dinner 1326 kcal
-- Burger, 800 kcal
+Dinner 1326 kcal - 526 kcal
 - Beer, 0.75, 337 kcal
-- Chips, 35g, 189 kcal
+- Chips, 35 g, 189 kcal
 
-Total: 2686 kcal
+Total: 1886 kcal
 
 Date: 13 April 2024
 
 Breakfast - 145 kcal
-- Cappuccino, 45 kcal
+- Cappuccino, 1, 45 kcal
 - Apple, 1, 100 kcal
 
 Lunch - 790 kcal
-- Sushi, 500 kcal
-- Limo, 660ml, 160 kcal
-- Banana bread, 40g, 130 kcal
+- Sushi, 1, 500 kcal
+- Limo, 0.66 l, 160 kcal
+- Banana bread, 40 g, 130 kcal
 
 Snack - 70 kcal
-- Sucuk, 10g, 30 kcal
-- Cheese, 10g, 40 kcal
+- Sucuk, 10 g, 30 kcal
+- Cheese, 10 g, 40 kcal
 
-Dinner - 1240 kcal
+Dinner - 1.240 kcal
 - Cheese Toasie, 0.5, 310 kcal
-- Tapas, 400 kcal
-- Aperol Spritz, 125 kcal
-- Creme Brule, 200 kcal
-- Wine, 0.25l, 205 kcal
+- Tapas, 1, 400 kcal
+- Aperol Spritz, 1, 125 kcal
+- Creme Brule, 1, 200 kcal
+- Wine, 250 ml, 205 kcal
 
 Total: 2245 kcal
 
 Date: 14 April 2024
 
 Breakfast - 45 kcal
-- Cappuccino, 45 kcal
+- Cappuccino, 1, 45 kcal
 
 Lunch - 505 kcal
 - Fried egg, 2, 180 kcal
-- Sucuk, 10g, 30 kcal
-- Cheese, 30g, 120 kcal
-- Jam, 20g, 56 kcal
-- Bread, 45g, 119 kcal
+- Sucuk, 10 g, 30 kcal
+- Cheese, 30 g, 120 kcal
+- Jam, 20 g, 56 kcal
+- Bread, 45 g, 119 kcal
 
 Snacky - 300 kcal
-- Cheese, 20g, 80 kcal
-- Jam, 20g, 56 kcal
-- Bread, 45g, 119 kcal
-- Cappuccino, 45 kcal
+- Cheese, 20 g, 80 kcal
+- Jam, 20 g, 56 kcal
+- Bread, 45 g, 119 kcal
+- Cappuccino, 1, 45 kcal
 
 Dinner - 780 kcal
-- Salami cheese baguette, 300 kcal
-- m&m's, 45g, 236 kcal
-- Snickers, 50g, 244 kcal
+- Salami cheese baguette, 1, 300 kcal
+- m&m's, 45 g, 236 kcal
+- Snickers, 50 g, 244 kcal
 
 Total: 1630 kcal
 
 Date: 15 April 2024
 
 Breakfast - 417 kcal
-- Omelette, 40g, 60 kcal
-- Jam, 20g, 56 kcal
-- Waffel, 30g, 90 kcal
-- Orange juice, 200ml, 70 kcal
-- Cappuccino, 45 kcal
-- Ham, 15g, 15 kcal
-- Apfelschorle, 0.3l, 81 kcal
+- Omelette, 40 g, 60 kcal
+- Jam, 20 g, 56 kcal
+- Waffel, 30 g, 90 kcal
+- Orange juice, 200 ml, 70 kcal
+- Cappuccino, 1, 45 kcal
+- Ham, 15 g, 15 kcal
+- Apfelschorle, 300 ml, 81 kcal
 
 Lunch - 970 kcal
 - Cappuccino, 2, 90 kcal
-- Rice, 60g, 84 kcal
-- Veggie curry, 70g, 70 kcal
-- Coca cola, 0.3l, 126 kcal
-- Donut with filling, 300 kcal
-- Brezel with butter, 300 kcal
+- Rice, 60 g, 84 kcal
+- Veggie curry, 70 g, 70 kcal
+- Coca cola, 300 ml, 126 kcal
+- Donut with filling, 1, 300 kcal
+- Brezel with butter, 1, 300 kcal
 
-Dinner - 1012 kcal
-- Bob & Grill, 800 kcal
-- Wine, 250ml, 212 kcal
+Dinner - 1.012 kcal
+- Bob & Grill, 1, 800 kcal
+- Wine, 250 ml, 212 kcal
 
 Total: 2399 kcal
 
 Date: 16 April 2024
 
-Breakfast - 347 kcal
-- Omelette, 40g, 60 kcal
-- Jam, 20g, 56 kcal
-- Waffel, 30g, 90 kcal
-- Orange juice, 200ml, 70 kcal
-- Cappuccino, 45 kcal
-- Ham, 15g, 15 kcal
+Breakfast - 336 kcal
+- Omelette, 40 g, 60 kcal
+- Jam, 20 g, 56 kcal
+- Waffel, 30 g, 90 kcal
+- Orange juice, 200 ml, 70 kcal
+- Cappuccino, 1, 45 kcal
+- Ham, 15 g, 15 kcal
 
 Lunch - 624 kcal
 - Cappuccino, 2, 90 kcal
-- Rice, 60g, 84 kcal
-- Veggie curry, 100g, 100 kcal
+- Rice, 60 g, 84 kcal
+- Veggie curry, 100 g, 100 kcal
 - Blueberry muffin, 1, 350 kcal
 
 Snack - 986 kcal
-- Milky way 2, 200 kcal
-- Fanta, 0.5l, 160 kcal
-- Snickers Peanut Butter, 200 kcal
-- Mars, 51g, 226 kcal
-- Cake, 50g, 200 kcal
+- Milky way 2, 1, 200 kcal
+- Fanta, 500 ml, 160 kcal
+- Snickers Peanut Butter, 1, 200 kcal
+- Mars, 51 g, 226 kcal
+- Cake, 50 g, 200 kcal
 
-Total: 1957 kcal
+Total: 1946 kcal
 
 Date: 17 April 2024
 
-Breakfast - 531 kcal
+Breakfast - 831 kcal
 - Cappuccino, 1, 45 kcal
-- Cake, 100g, 400 kcal
-- Burek, 140g, 386 kcal
+- Cake, 100 g, 400 kcal
+- Burek, 140 g, 386 kcal
 
 Lunch - 651 kcal
-- Burek, 140g, 386 kcal
+- Burek, 140 g, 386 kcal
 - Fried egg, 2, 180 kcal
-- Ayran, 250ml, 85 kcal
+- Ayran, 250 ml, 85 kcal
 
 Snack - 600 kcal
-- Cappuccino, 45 kcal
-- Cake, 120g, 480 kcal
-- Schweppes, 300ml, 75 kcal
+- Cappuccino, 1, 45 kcal
+- Cake, 120 g, 480 kcal
+- Schweppes, 300 ml, 75 kcal
 
-Dinner - 1175 kcal
-- Lab gai, 150g, 275 kcal
-- Rice, 150g, 195 kcal 
-- Pad Kra Pao, 200g, 200 kcal
+Dinner - 1.175 kcal
+- Lab gai, 150 g, 275 kcal
+- Rice, 150 g, 195 kcal
+- Pad Kra Pao, 200 g, 200 kcal
 - Fried egg, 1, 90 kcal
-- Easter Cookie, 40g, 190 kcal
-- Beer, 0.5l, 225 kcal
+- Easter Cookie, 40 g, 190 kcal
+- Beer, 500 ml, 225 kcal
 
-Total: 2957 kcal
+Total: 3257 kcal
 
 Date: 18 April 2024
 
@@ -286,140 +285,228 @@ Lunch - 800 kcal
 - Sweet Potat Fries, 1, 100 kcal
 
 Snack - 131 kcal
-- Rice, 30g, 40 kcal
-- Lab gai, 50g, 91 kcal
+- Rice, 30 g, 40 kcal
+- Lab gai, 50 g, 91 kcal
 
 Dinner - 661 kcal
-- Bread, 80g, 207 kcal
-- Camambert Cheese, 35g, 77 kcal
-- Jam, 20g, 50 kcal
-- Orange Juice, 220ml, 77 kcal
+- Bread, 80 g, 207 kcal
+- Camambert Cheese, 35 g, 77 kcal
+- Jam, 20 g, 50 kcal
+- Orange Juice, 220 ml, 77 kcal
 - Apple, 1, 100 kcal
-- Chocolate Cookies, 30g, 150 kcal
+- Chocolate Cookies, 30 g, 150 kcal
 
 Total: 1637 kcal
 
 Date: 19 April 2024
 
 Breakfast - 166 kcal
-- Cappuccino, 45 kcal
-- Banana, 121 kcal
+- Cappuccino, 1, 45 kcal
+- Banana, 1, 121 kcal
 
 Lunch - 473 kcal
-- Chicken breast fried, 130g, 325 kcal
-- Burek, 35g, 75 kcal
-- Cheese, 20g, 70 kcal
-- Cucumber, 20g, 3 kcal
+- Chicken breast fried, 130 g, 325 kcal
+- Burek, 35 g, 75 kcal
+- Cheese, 20 g, 70 kcal
+- Cucumber, 20 g, 3 kcal
 
 Second lunch - 483 kcal
-- Chicken breast fried, 150g, 375 kcal
-- Burek, 50g, 105 kcal
-- Cucumber, 20g, 3 kcal
+- Chicken breast fried, 150 g, 375 kcal
+- Burek, 50 g, 105 kcal
+- Cucumber, 20 g, 3 kcal
 
-Dinner - 270 kcal
-- Bellini, 375ml, 270 kcal
+Dinner - 970 kcal
+- Bellini, 375 ml, 270 kcal
 - Pizza, 1, 700 kcal
 
-Total: 1392 kcal
+Total: 2092 kcal
 
 Date: 22 April 2024
 
 Breakfast - 166 kcal
-- Cappuccino, 45 kcal
+- Cappuccino, 1, 45 kcal
 - Banana, 1, 121 kcal
 
 Lunch - 812 kcal
-- Chicken breast fried, 200g, 374 kcal
-- Couscous, 150g, 168 kcal
-- Sauce, 30g, 45 kcal
+- Chicken breast fried, 200 g, 374 kcal
+- Couscous, 150 g, 168 kcal
+- Sauce, 30 g, 45 kcal
 - Jam cookie, 2, 180 kcal
-- Cappuccino, 45 kcal
+- Cappuccino, 1, 45 kcal
 
-Snack - 266 kcal
-- Grapes, 100g, 67 kcal
-- Jam cookie, 90 kcal
-- Tonic water, 300ml, 120 kcal
+Snack - 277 kcal
+- Grapes, 100 g, 67 kcal
+- Jam cookie, 1, 90 kcal
+- Tonic water, 300 ml, 120 kcal
 
 Dinner - 867 kcal
-- Flatbread, 50g, 137 kcal
-- Yogurt, 30g, 30 kcal
-- Adana Kebab, 700 kcal
+- Flatbread, 50 g, 137 kcal
+- Yogurt, 30 g, 30 kcal
+- Adana Kebab, 1, 700 kcal
 
-Total: 2111 kcal
+Total: 2122 kcal
 
 Date: 23 April 2024
 
 Breakfast - 45 kcal
-- Cappuccino, 45 kcal
+- Cappuccino, 1, 45 kcal
 
 Lunch - 780 kcal
-- Ramen, 600 kcal
-- Sugary drink, 500ml, 180 kcal
+- Ramen, 1, 600 kcal
+- Sugary drink, 500 ml, 180 kcal
 
 Snack - 301 kcal
-- Apfelschorle, 0.33l, 93 kcal
-- Chips, 30g, 160 kcal
-- Waffel, 10g, 48 kcal
+- Apfelschorle, 330 ml, 93 kcal
+- Chips, 30 g, 160 kcal
+- Waffel, 10 g, 48 kcal
 
-Dinner - 1017 kcal
-- Cheese, 20g, 70 kcal
-- Couscous, 150g, 168 kcal
-- Sauce, 30g, 45 kcal
-- Fried Chicken Breast, 200g, 374 kcal
-- Orange Juice, 300ml, 105 kcal
-- Jam cookie, 90 kcal
-- Nuts, 30g, 165 kcal
+Dinner - 1.017 kcal
+- Cheese, 20 g, 70 kcal
+- Couscous, 150 g, 168 kcal
+- Sauce, 30 g, 45 kcal
+- Fried Chicken Breast, 200 g, 374 kcal
+- Orange Juice, 300 ml, 105 kcal
+- Jam cookie, 1, 90 kcal
+- Nuts, 30 g, 165 kcal
 
 Total: 2143 kcal
 
 Date: 24 April 2024
 
 Breakfast - 166 kcal
-- Cappuccino, 45 kcal
+- Cappuccino, 1, 45 kcal
 - Banana, 1, 121 kcal
 
 Lunch - 339 kcal
-- Pasta with sauce, 150g, 236 kcal
-- Cucumber salad, 30g, 10 kcal
-- Apfelschorle, 0.33l, 93 kcal
+- Pasta with sauce, 150 g, 236 kcal
+- Cucumber salad, 30 g, 10 kcal
+- Apfelschorle, 330 ml, 93 kcal
 
 Snack - 220 kcal
-- Cappuccino, 45 kcal
-- Praline, 55 kcal
-- Nougat, 30g, 120 kcal
+- Cappuccino, 1, 45 kcal
+- Praline, 1, 55 kcal
+- Nougat, 30 g, 120 kcal
 
 Dinner - 885 kcal
-- Ayran, 250ml, 85 kcal
+- Ayran, 250 ml, 85 kcal
 - Döner sandwich, 1, 800 kcal
 
 Snack 2 - 590 kcal
-- Waffel, 30g, 150 kcal
-- Orange juice, 150ml, 52 kcal
-- Wafer tubes, 45g, 250 kcal
-- Merci chocolate, 25g, 138 kcal
+- Waffel, 30 g, 150 kcal
+- Orange juice, 150 ml, 52 kcal
+- Wafer tubes, 45 g, 250 kcal
+- Merci chocolate, 25 g, 138 kcal
 
 Total: 2200 kcal
 
 Date: 25 April 2024
 
 Breakfast - 717 kcal
-- Cappuccino, 45 kcal
-- Müsli, 350 kcal
-- Apfelschorle, 0.33l, 93 kcal
-- Greek Yoghurt, 150g, 174 kcal
-- Praline, 55 kcal
+- Cappuccino, 1, 45 kcal
+- Müsli, 1, 350 kcal
+- Apfelschorle, 330 ml, 93 kcal
+- Greek Yoghurt, 150 g, 174 kcal
+- Praline, 1, 55 kcal
 
 Lunch - 893 kcal
-- Duck with noodles, 800 kcal
-- Apfelschorle, 0.33l, 93 kcal
+- Duck with noodles, 1, 800 kcal
+- Apfelschorle, 330 ml, 93 kcal
 
-Dinner - 1410 kcal
-- Greek food, 1000 kcal
-- Wine, 0.5l, 410 kcal
+Dinner - 1.410 kcal
+- Greek food, 1, 1.000 kcal
+- Wine, 500 ml, 410 kcal
 
 Total: 3020 kcal
 
 Date: 26 April 2024
 
-Breakfast -
-- Cappuccino, 45 kcal
+Breakfast - 45 kcal
+- Cappuccino, 1, 45 kcal
+
+Lunch - 663 kcal
+- Couscous, 150 g, 168 kcal
+- Fried Chicken Breast, 80 g, 150 kcal
+- Köfte, 60 g, 174 kcal
+- Sauce, 30 g, 45 kcal
+- Coca cola, 300 ml, 126 kcal
+
+Snack - 494 kcal
+- Ferrero Rocher, 1, 78 kcal
+- Ferrero Küsschen, 2, 112 kcal
+- Nuts, 30 g, 180 kcal
+- Berries, 40 g, 24 kcal
+- Apple, 1, 100 kcal
+
+Dinner - 1.020 kcal
+- Snail Sosis, 100 g, 260 kcal
+- Chicken Spieß, 1, 250 kcal
+- Couscous, 100 g, 112 kcal
+- White Wine, 400 ml, 328 kcal
+- Cheese, 20 g, 70 kcal
+
+Total: 2222 kcal
+
+Date: 27 April 2024
+
+Breakfast - 45 kcal
+- Cappuccino, 1, 45 kcal
+
+Lunch - 912 kcal
+- Big Tasty, 1, 912 kcal
+
+Snack - 499 kcal
+- Tea, 330 ml, 66 kcal
+- Cappuccino, 1, 45 kcal
+- Marmorkuchen, 50 g, 208 kcal
+- Nuts, 30 g, 180 kcal
+
+Dinner - 1.077 kcal
+- Bread, 100 g, 265 kcal
+- Meat meze, 50 g, 200 kcal
+- Cheese, 40 g, 160 kcal
+- Orange Juice, 400 ml, 140 kcal
+- Fish, 25 g, 30 kcal
+- Butter, 15 g, 107 kcal
+- Cream au chocolat, 1, 175 kcal
+
+Total: 2533 kcal
+
+Date: 28 April 2024
+
+Breakfast - 384 kcal
+- Fried egg, 2, 180 kcal
+- Butter, 10 g, 71 kcal
+- White bread, 50 g, 133 kcal
+
+Lunch - 738 kcal
+- Vietnamese coffee, 1, 150 kcal
+- Pho soup, 1, 400 kcal
+- Deep fried shrimp, 2, 88 kcal
+- Teigtaschen, 3, 100 kcal
+
+Dinner - 803 kcal
+- Eier salat, 140 g, 400 kcal
+- White bread, 50 g, 133 kcal
+- Cheese, 20 g, 70 kcal
+- Meat meze, 50 g, 200 kcal
+
+Snack - 736 kcal
+- Candy, 70 g, 280 kcal
+- Ferrero Küsschen, 1, 56 kcal
+- Candy, 100 g, 400 kcal
+
+Total: 2661 kcal
+
+Date: 29 April 2024
+
+Breakfast - 604 kcal
+- Fried egg, 2, 180 kcal
+- Butter, 10 g, 71 kcal
+- Wiener Wurst, 50 g, 144 kcal
+- Coca cola, 100 ml, 38 kcal
+- Eier salat, 60 g, 171 kcal
+
+Snack - 84 kcal
+- Coca cola, 200 ml, 84 kcal
+
+Total: 688 kcal

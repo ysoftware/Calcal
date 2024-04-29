@@ -58,7 +58,7 @@ class Parser {
     
     private func printErrorPosition() {
         let previousSymbols = self.textRemainder[self.i..<self.endIndex].prefix(100)
-        Logger().debug("Parser: Error occured right before this text:\n\(previousSymbols)")
+        logger.debug("Parser: Error occured right before this text:\n\(previousSymbols)")
     }
     
     func parse() throws -> [EntryEntity] {
