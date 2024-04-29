@@ -15,6 +15,7 @@ class MainViewModel: ObservableObject {
     // private state
     private var selectedEntryIndex: Int = 0
     private var entries: [EntryEntity] = []
+    private var inputDestination: ItemDestination?
     
     // ui properties
     private(set) var inputViewModel: InputViewModel?
@@ -22,12 +23,13 @@ class MainViewModel: ObservableObject {
     private(set) var previousButton: ButtonPresenter?
     private(set) var entryPresenter: EntryRepresentation?
     private(set) var openInputButton: ButtonPresenter?
+    private(set) var inputText: String?
     
     func setupInitialState() {
         openInputButton = ButtonPresenter(
             title: "Add",
             action: { [weak self] in
-                self?.openInput()
+                self?.openInputForLastSection()
             }
         )
         fetchEntries()
@@ -38,13 +40,13 @@ class MainViewModel: ObservableObject {
             if event.modifierFlags.contains(.command),
                event.charactersIgnoringModifiers == "v",
                let pasteboardString = NSPasteboard.general.string(forType: .string) {
-                acceptPasteEvent(text: pasteboardString)
+                self.acceptPasteEvent(text: pasteboardString)
                 return nil
             }
             
             if event.charactersIgnoringModifiers == " " {
                 guard self.inputViewModel == nil else { return event }
-                openInput()
+                self.openInputForLastSection()
                 return nil
             }
             
@@ -57,6 +59,7 @@ class MainViewModel: ObservableObject {
             let parser = Parser(text: text)
             let entries = try parser.parse()
             self.inputViewModel = nil
+            self.inputDestination = nil
             
             for entry in entries {
                 self.model.addOrUpdateEntry(entry: entry)
@@ -81,6 +84,12 @@ class MainViewModel: ObservableObject {
         
         let selectedEntry = entries[selectedEntryIndex]
         self.entryPresenter = Mapper.map(entity: selectedEntry)
+        
+        self.inputText = if let inputDestination {
+            "adding into \(inputDestination.sectionId) on \(inputDestination.entryId)"
+        } else {
+            nil
+        }
         
         updateEntrySwitcherButtons()
         
@@ -117,22 +126,30 @@ class MainViewModel: ObservableObject {
         }
     }
     
-    private func openInput() {
+    private func openInputForLastSection() {
+        assert(entries.count > selectedEntryIndex)
+        let entry = self.entries[selectedEntryIndex]
+        let sectionId = entry.sections.last?.id ?? "Breakfast"
+        let dest = ItemDestination(entryId: entry.date, sectionId: sectionId)
+        self.openInput(destination: dest)
+    }
+    
+    private func openInput(destination: ItemDestination) {
         let inputViewModel = InputViewModel(
             model: model,
             completeInput: { [weak self] item in
                 guard let self else { return }
                 
                 if let item {
-                    assert(entries.count > selectedEntryIndex)
-                    let entry = self.entries[selectedEntryIndex]
-                    
-                    let sectionId = entry.sections.last?.id ?? "Breakfast"
-                    self.model.appendItemToLastEntry(item: item, sectionId: sectionId)
+                    self.model.appendItem(
+                        item: item,
+                        destination: destination
+                    )
                     self.fetchEntries()
                 }
                 
                 self.inputViewModel = nil
+                self.inputDestination = nil
                 self.updatePresenter()
             }
         )
@@ -140,7 +157,7 @@ class MainViewModel: ObservableObject {
         inputViewModel.setupInitialState()
         
         self.inputViewModel = inputViewModel
+        self.inputDestination = destination
         self.updatePresenter()
     }
 }
-

@@ -37,14 +37,14 @@ class Model {
         }
     }
     
-    func appendItemToLastEntry(item: EntryEntity.Item, sectionId: String) {
-        guard var entry = getAllEntries().last else { return }
+    func appendItem(item: EntryEntity.Item, destination: ItemDestination) {
+        guard var entry = getAllEntries().first(where: { $0.date == destination.entryId }) else { return }
         
-        if entry.sections.firstIndex(where: { $0.id == sectionId }) == nil {
-            entry.sections.append(EntryEntity.Section(id: sectionId, items: []))
+        if entry.sections.firstIndex(where: { $0.id == destination.sectionId }) == nil {
+            entry.sections.append(EntryEntity.Section(id: destination.sectionId, items: []))
         }
         
-        guard let sectionIndex = entry.sections.firstIndex(where: { $0.id == sectionId })
+        guard let sectionIndex = entry.sections.firstIndex(where: { $0.id == destination.sectionId })
         else { return assertionFailure("the section must have been added") }
         
         entry.sections[sectionIndex].items.append(item)
@@ -86,6 +86,11 @@ class Model {
     func getAllEntries() -> [EntryEntity] {
         data
     }
+}
+
+struct ItemDestination {
+    let entryId: String
+    let sectionId: String
 }
 
 struct Mapper {

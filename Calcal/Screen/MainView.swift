@@ -15,33 +15,39 @@ struct MainView: View {
             VStack(spacing: 10) {
                 HStack(spacing: 0) {
                     viewModel.previousButton
-                        .map(ButtonView.init(presenter:))
+                        .map { ButtonView(presenter: $0) }
                     
                     Spacer()
                     
                     viewModel.nextButton
-                        .map(ButtonView.init(presenter:))
+                        .map { ButtonView(presenter: $0) }
                 }
                 
                 viewModel.entryPresenter
-                    .map(EntryView.init(presenter:))
+                    .map { EntryView(presenter: $0) }
                 
                 Spacer()
                 
-                viewModel.openInputButton
-                    .map(ButtonView.init(presenter:))
-                    .frame(maxWidth: .infinity, alignment: .trailing)
+                VStack(spacing: 0) {
+                    viewModel.inputText
+                        .map { Text($0) }
+                    
+                    viewModel.openInputButton
+                        .map { ButtonView(presenter: $0) }
+                        .frame(maxWidth: .infinity, alignment: .trailing)
+                }
             }
             .frame(width: 350)
             
             if let inputViewModel = viewModel.inputViewModel {
                 
                 Divider()
+                
                 InputView(viewModel: inputViewModel)
                     .frame(width: 350)
             }
         }
         .padding(10)
-        .frame(height: 500)
+        .frame(minHeight: 500)
     }
 }
