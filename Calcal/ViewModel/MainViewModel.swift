@@ -89,7 +89,7 @@ class MainViewModel: ObservableObject {
                         try await self.model.addOrUpdateEntry(entry: entry)
                         self.fetchEntries()
                     } catch {
-                        //
+                        Logger.main.error("\(error)")
                     }
                 }
             }
@@ -107,7 +107,7 @@ class MainViewModel: ObservableObject {
                 
                 updatePresenter()
             } catch {
-                //
+                Logger.main.error("\(error)")
             }
         }
     }
@@ -165,7 +165,7 @@ class MainViewModel: ObservableObject {
                             self.fetchEntries()
                             
                         } catch {
-                            //
+                            Logger.main.error("\(error)")
                         }
                     }
                 }
@@ -226,7 +226,7 @@ class MainViewModel: ObservableObject {
                             try await self.model.appendItem(item: item, destination: destination)
                             self.fetchEntries()
                         } catch {
-                            //
+                            Logger.main.error("\(error)")
                         }
                     }
                 }

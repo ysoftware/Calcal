@@ -17,8 +17,19 @@ struct CalcalApp: App {
                 .onAppear {
                     mainViewModel.setupInitialState()
                 }
-                .border(Model.TEST_DATA_CHANGES_LOCALLY ? .green : .clear)
+                .border(appBorder)
         }
         .windowResizability(.contentSize)
+    }
+    
+    private var appBorder: Color {
+        if Model.TEST_DATA_NEVER_UPLOAD {
+            return .red
+        }
+        
+        if Model.TEST_DATA_CHANGES_LOCAL_BACKEND {
+            return .green
+        }
+        return .clear
     }
 }

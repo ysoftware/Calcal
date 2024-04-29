@@ -17,7 +17,8 @@ struct EntryRepresentation {
 class Model {
     
     /// load data once, update locally, never save to backend
-    static let TEST_DATA_CHANGES_LOCALLY = false
+    static let TEST_DATA_NEVER_UPLOAD = false
+    static let TEST_DATA_CHANGES_LOCAL_BACKEND = false
 
     private var data: [EntryEntity] = []
     
@@ -55,10 +56,16 @@ class Model {
     
     // MARK: - Work with Storage
     
-    private let apiUrl = "" // todo: security: api url
+    private var apiUrl: URL {
+        if Self.TEST_DATA_CHANGES_LOCAL_BACKEND {
+            URL(string: "http://192.168.178.30:8000/main.php")!
+        } else {
+            URL(string: "https://whoniverse-app.com/calcal/main.php")!
+        }
+    }
     
     func fetchModel() async throws {
-        if Self.TEST_DATA_CHANGES_LOCALLY {
+        if Self.TEST_DATA_NEVER_UPLOAD {
             // loads data once
             if !self.data.isEmpty { return }
         }
@@ -78,7 +85,7 @@ class Model {
     }
     
     private func saveModel() async throws {
-        if Self.TEST_DATA_CHANGES_LOCALLY {
+        if Self.TEST_DATA_NEVER_UPLOAD {
             return
         }
         
@@ -87,23 +94,41 @@ class Model {
             .map(Mapper.map(representation:))
             .joined(separator: "\n\n")
         
+        guard let url = Bundle.main.url(forResource: "password", withExtension: "txt") else { return }
+        let password = try String(contentsOf: url).trimmingCharacters(in: .whitespacesAndNewlines)
+        
         let boundary = UUID().uuidString
         var request = URLRequest(url: apiUrl)
         request.httpMethod = "POST"
         request.setValue("multipart/form-data; boundary=\(boundary)", forHTTPHeaderField: "Content-Type")
         
         var body = Data()
+        
+        // file content
         body.append("--\(boundary)\r\n")
         body.append("Content-Disposition: form-data; name=\"file\"; filename=\"text.txt\"\r\n")
         body.append("Content-Type: text/plain\r\n\r\n")
         body.append(content)
         body.append("\r\n")
+        
+        // password
+        body.append("--\(boundary)\r\n")
+        body.append("Content-Disposition: form-data; name=\"password\"\r\n")
+        body.append("Content-Type: text/plain\r\n\r\n")
+        body.append(password)
+        body.append("\r\n")
+        
         body.append("--\(boundary)--\r\n")
         
-        let (_, response) = try await URLSession.shared.upload(for: request, from: body)
+        let (data, response) = try await URLSession.shared.upload(for: request, from: body)
         
         guard let statusCode = (response as? HTTPURLResponse)?.statusCode else { return }
-        guard statusCode == 200 else { throw Error.invalidResponse(code: statusCode) }
+        
+        if statusCode != 200 {
+            let dump = (try? String(data: data, encoding: .utf8)) ?? ""
+            Logger.main.debug("\(dump)")
+            throw Error.invalidResponse(code: statusCode)
+        }
     }
     
     enum Error: Swift.Error {
