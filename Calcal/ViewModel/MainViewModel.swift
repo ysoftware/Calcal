@@ -84,14 +84,22 @@ class MainViewModel: ObservableObject {
                 self.fetchEntries()
             }
         } catch {
-            print(error)
+            logger.error("Main: acceptPasteEvent: \(error)")
         }
     }
     
     private func fetchEntries() {
-        self.entries = model.getAllEntries()
-        self.selectedEntryIndex = max(0, entries.count - 1)
-        updatePresenter()
+        Task {
+            do {
+                try await model.fetchModel()
+                self.entries = model.getAllEntries()
+                self.selectedEntryIndex = max(0, entries.count - 1)
+                
+                updatePresenter()
+            } catch {
+                // todo: feature: add reload functionality
+            }
+        }
     }
     
     private func updatePresenter() {
@@ -183,8 +191,14 @@ class MainViewModel: ObservableObject {
                 )
                 
                 if let item {
-                    self.model.appendItem(item: item, destination: destination)
-                    self.fetchEntries()
+                    Task {
+                        do {
+                            try await self.model.appendItem(item: item, destination: destination)
+                            self.fetchEntries()
+                        } catch {
+                            // todo: feature: add retry
+                        }
+                    }
                 }
                 
                 self.inputViewModel = nil

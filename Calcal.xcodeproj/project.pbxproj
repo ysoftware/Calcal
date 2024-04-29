@@ -8,7 +8,6 @@
 
 /* Begin PBXBuildFile section */
 		CC229D622BDBC89700DC57D0 /* Algorithms in Frameworks */ = {isa = PBXBuildFile; productRef = CC229D612BDBC89700DC57D0 /* Algorithms */; };
-		CC25B1392BD2A7AD0006CB5C /* data.txt in Resources */ = {isa = PBXBuildFile; fileRef = CC25B1382BD2A7AD0006CB5C /* data.txt */; };
 		CC4EAC9F2BD1A03D00DF94ED /* Parser.swift in Sources */ = {isa = PBXBuildFile; fileRef = CC4EAC9E2BD1A03D00DF94ED /* Parser.swift */; };
 		CC4EACA72BD1A90E00DF94ED /* CalcalTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = CC4EACA62BD1A90E00DF94ED /* CalcalTests.swift */; };
 		CC5FF3B52BDFA49400C9DAD3 /* Mapper.swift in Sources */ = {isa = PBXBuildFile; fileRef = CC5FF3B42BDFA49400C9DAD3 /* Mapper.swift */; };
@@ -38,7 +37,6 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
-		CC25B1382BD2A7AD0006CB5C /* data.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = data.txt; sourceTree = SOURCE_ROOT; };
 		CC4EAC9E2BD1A03D00DF94ED /* Parser.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Parser.swift; sourceTree = "<group>"; };
 		CC4EACA42BD1A90E00DF94ED /* CalcalTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = CalcalTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		CC4EACA62BD1A90E00DF94ED /* CalcalTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CalcalTests.swift; sourceTree = "<group>"; };
@@ -131,7 +129,6 @@
 				CCFE26212BCBF0F90032FD48 /* Subviews */,
 				CCFE260F2BCBEEB50032FD48 /* CalcalApp.swift */,
 				CCFE26132BCBEEB50032FD48 /* Assets.xcassets */,
-				CC25B1382BD2A7AD0006CB5C /* data.txt */,
 				CCFE26152BCBEEB50032FD48 /* Calcal.entitlements */,
 				CCFE26162BCBEEB50032FD48 /* Preview Content */,
 				CCFE262E2BCC4E380032FD48 /* Extensions.swift */,
@@ -272,7 +269,6 @@
 			buildActionMask = 2147483647;
 			files = (
 				CCFE26182BCBEEB50032FD48 /* Preview Assets.xcassets in Resources */,
-				CC25B1392BD2A7AD0006CB5C /* data.txt in Resources */,
 				CCFE26142BCBEEB50032FD48 /* Assets.xcassets in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

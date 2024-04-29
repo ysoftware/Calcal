@@ -18,11 +18,7 @@ class Model {
     
     private var data: [EntryEntity] = []
     
-    init() {
-        loadModel()
-    }
-    
-    func appendItem(item: EntryEntity.Item, destination: ItemDestination) {
+    func appendItem(item: EntryEntity.Item, destination: ItemDestination) async throws {
         assert(!destination.entryId.isEmpty)
         assert(!destination.sectionId.isEmpty)
         
@@ -38,7 +34,7 @@ class Model {
         entry.sections[sectionIndex].items.append(item)
         addOrUpdateEntry(entry: entry)
         
-        saveModel()
+        try await saveModel()
     }
     
     func addOrUpdateEntry(entry: EntryEntity) {
@@ -55,58 +51,50 @@ class Model {
     
     // MARK: - Work with Storage
     
-    private func loadModel() {
+    private let apiUrl = URL(string: "https://whoniverse-app.com/calcal/main.php")!
+    
+    func fetchModel() async throws {
         do {
-            guard let documentsUrl = FileManager.default.urls(
-                for: .documentDirectory,
-                in: .userDomainMask
-            ).first else { return }
+            let (data, response) = try await URLSession.shared.data(from: apiUrl)
             
-            let url = documentsUrl
-                .appendingPathComponent("Other")
-                .appendingPathComponent("Calcal-data.txt")
+            guard let statusCode = (response as? HTTPURLResponse)?.statusCode else { return }
+            guard statusCode == 200, let contents = String(data: data, encoding: .utf8)
+            else { throw Error.invalidResponse(code: statusCode) }
             
-            let contents = try String(contentsOf: url, encoding: .utf8)
             let entities = try Parser(text: contents).parse()
             self.data = entities
         } catch {
-            logger.error("Model: init: \(error)")
-            resetToInitialFile()
+            logger.error("Model: loadModel: \(error)")
         }
     }
     
-    private func resetToInitialFile() {
-        do {
-            guard let url = Bundle.main.url(forResource: "data", withExtension: "txt") else { return }
-            let contents = try String(contentsOf: url)
-            let entities = try Parser(text: contents).parse()
-            self.data = entities
-            saveModel()
-        } catch {
-            logger.error("Model: resetToInitialFile: \(error)")
-        }
-    }
-    
-    private func saveModel() {
-        guard let documentsUrl = FileManager.default.urls(
-            for: .documentDirectory,
-            in: .userDomainMask
-        ).first else { return }
-        
-        let url = documentsUrl
-            .appendingPathComponent("Other")
-            .appendingPathComponent("Calcal-data.txt")
-        
+    private func saveModel() async throws {
         let content = data
             .map(Mapper.map(entity:))
             .map(Mapper.map(representation:))
             .joined(separator: "\n\n")
         
-        do {
-            try content.write(to: url, atomically: true, encoding: .utf8)
-        } catch {
-            logger.error("Model: saveModel: \(error)")
-        }
+        let boundary = UUID().uuidString
+        var request = URLRequest(url: apiUrl)
+        request.httpMethod = "POST"
+        request.setValue("multipart/form-data; boundary=\(boundary)", forHTTPHeaderField: "Content-Type")
+        
+        var body = Data()
+        body.append("--\(boundary)\r\n")
+        body.append("Content-Disposition: form-data; name=\"file\"; filename=\"text.txt\"\r\n")
+        body.append("Content-Type: text/plain\r\n\r\n")
+        body.append(content)
+        body.append("\r\n")
+        body.append("--\(boundary)--\r\n")
+        
+        let (data, response) = try await URLSession.shared.upload(for: request, from: body)
+        
+        guard let statusCode = (response as? HTTPURLResponse)?.statusCode else { return }
+        guard statusCode == 200 else { throw Error.invalidResponse(code: statusCode) }
+    }
+    
+    enum Error: Swift.Error {
+        case invalidResponse(code: Int)
     }
 }
 
@@ -116,3 +104,13 @@ struct ItemDestination {
 }
 
 let logger = Logger(subsystem: "app", category: "main")
+
+extension Data {
+    mutating func append(_ value: String) {
+        guard let stringData = value.data(using: .utf8) else { return }
+        
+        stringData.withUnsafeBytes { bytes in
+            self.append(contentsOf: bytes)
+        }
+    }
+}

@@ -63,7 +63,7 @@ class Parser {
     
     func parse() throws -> [EntryEntity] {
         var entries: [EntryEntity] = []
-            
+        
         while (endIndex > i) {
             eatWhitespacesAndNewlines()
             guard textRemainder[i..<endIndex].starts(with: "Date: "),

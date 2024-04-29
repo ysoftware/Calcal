@@ -222,6 +222,7 @@ class InputViewModel: ObservableObject {
         }
     }
     
+    // todo: feature: error reporting to user
     private func processInputState() {
         switch state {
         case .sectionName:
@@ -240,8 +241,7 @@ class InputViewModel: ObservableObject {
                     inputPlaceholder = "Quantity"
                 }
             } else {
-                // error
-                print("Error: incorrect name: '\(text)'")
+                logger.error("Input: incorrect name: '\(self.text)'")
             }
         case .quantity:
             if let (quantityValue, measurement) = Parser.getQuantity(text: text) {
@@ -263,8 +263,7 @@ class InputViewModel: ObservableObject {
                     inputPlaceholder = "Calories"
                 }
             } else {
-                // error
-                print("Error: incorrect quantity: '\(text)'")
+                logger.error("Input: incorrect quantity: '\(self.text)'")
             }
         case .calories:
             // todo: feature - specify calories per weight or per measurement
@@ -273,8 +272,7 @@ class InputViewModel: ObservableObject {
                 self.text = ""
                 createItem()
             } else {
-                // error
-                print("Error: incorrect calories: '\(text)'")
+                logger.error("Input: incorrect calories: '\(self.text)'")
             }
         }
         
