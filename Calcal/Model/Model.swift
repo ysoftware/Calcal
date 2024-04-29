@@ -33,11 +33,14 @@ class Model {
             let entities = try Parser(text: contents).parse()
             self.data = entities
         } catch {
-            Logger().error("\(error.localizedDescription)")
+            Logger().error("\(error)")
         }
     }
     
     func appendItem(item: EntryEntity.Item, destination: ItemDestination) {
+        assert(!destination.entryId.isEmpty)
+        assert(!destination.sectionId.isEmpty)
+        
         guard var entry = getAllEntries().first(where: { $0.date == destination.entryId }) else { return }
         
         if entry.sections.firstIndex(where: { $0.id == destination.sectionId }) == nil {
@@ -74,12 +77,12 @@ class Model {
         let content = data
             .map(Mapper.map(entity:))
             .map(Mapper.map(representation:))
-            .joined(separator: "\n")
+            .joined(separator: "\n\n")
         
         do {
             try content.write(to: url, atomically: true, encoding: .utf8)
         } catch {
-            Logger().error("\(error.localizedDescription)")
+            Logger().error("\(error)")
         }
     }
     
@@ -91,66 +94,4 @@ class Model {
 struct ItemDestination {
     let entryId: String
     let sectionId: String
-}
-
-struct Mapper {
-    
-    static func measurementDisplayValue(item: EntryEntity.Item) -> String {
-        switch item.measurement {
-        case .portion:
-            if item.quantity == 1 {
-                return "1"
-            }
-            return "\(item.quantity.formatted(.number.rounded()))"
-        case .cup:
-            if item.quantity == 1 {
-                return "1 cup"
-            }
-            return "\(item.quantity.formatted(.number.rounded())) cups"
-        case .liter:
-            if item.quantity > 0.5 {
-                return "\(item.quantity.formatted(.number.rounded())) l"
-            }
-            return "\((item.quantity*1000).formatted(.number.rounded())) ml"
-        case .kilogramm:
-            if item.quantity > 0.5 {
-                return "\(item.quantity.formatted(.number.rounded())) kg"
-            }
-            return "\((item.quantity*1000).formatted(.number.rounded())) g"
-        }
-    }
-    
-    static func map(entity: EntryEntity) -> EntryRepresentation {
-        var entryText = ""
-        var totalCalories: Float = 0
-        
-        for section in entity.sections {
-            var itemsText = ""
-            var sectionCalories: Float = 0
-            
-            for item in section.items {
-                itemsText.append("- \(item.title), \(Self.measurementDisplayValue(item: item)), \(item.calories.formatted(.number.rounded())) kcal\n")
-                sectionCalories += item.calories
-            }
-            
-            entryText.append("\(section.id) - \(sectionCalories.formatted(.number.rounded())) kcal\n\(itemsText)\n")
-            totalCalories += sectionCalories
-        }
-        
-        return EntryRepresentation(
-            date: entity.date.uppercased(),
-            text: entryText.trimmingCharacters(in: .whitespacesAndNewlines),
-            total: "Total: \(totalCalories.formatted(.number.rounded().grouping(.never))) kcal"
-        )
-    }
-    
-    static func map(representation: EntryRepresentation) -> String {
-"""
-\(representation.date)
-
-\(representation.text)
-
-\(representation.total)
-"""
-    }
 }

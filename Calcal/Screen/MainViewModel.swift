@@ -23,6 +23,7 @@ class MainViewModel: ObservableObject {
     private(set) var previousButton: ButtonPresenter?
     private(set) var entryPresenter: EntryRepresentation?
     private(set) var openInputButton: ButtonPresenter?
+    private(set) var newSectionInputButton: ButtonPresenter?
     private(set) var inputText: String?
     
     func setupInitialState() {
@@ -32,6 +33,14 @@ class MainViewModel: ObservableObject {
                 self?.openInputForLastSection()
             }
         )
+        
+        newSectionInputButton = ButtonPresenter(
+            title: "Add new section",
+            action: { [weak self] in
+                self?.openToAddNewSection()
+            }
+        )
+        
         fetchEntries()
         
         NSEvent.addLocalMonitorForEvents(matching: .keyDown, handler: { [weak self] event in
@@ -126,6 +135,13 @@ class MainViewModel: ObservableObject {
         }
     }
     
+    private func openToAddNewSection() {
+        assert(entries.count > selectedEntryIndex)
+        let entry = self.entries[selectedEntryIndex]
+        let dest = ItemDestination(entryId: entry.date, sectionId: "")
+        self.openInput(destination: dest)
+    }
+    
     private func openInputForLastSection() {
         assert(entries.count > selectedEntryIndex)
         let entry = self.entries[selectedEntryIndex]
@@ -134,17 +150,23 @@ class MainViewModel: ObservableObject {
         self.openInput(destination: dest)
     }
     
+    /// if destination.sectionId is empty, input will request section name from the user
     private func openInput(destination: ItemDestination) {
+        assert(!destination.entryId.isEmpty)
+        
         let inputViewModel = InputViewModel(
             model: model,
-            completeInput: { [weak self] item in
+            shouldInputSectionName: destination.sectionId == "",
+            completeInput: { [weak self] item, sectionName in
                 guard let self else { return }
                 
+                let destination = ItemDestination(
+                    entryId: destination.entryId,
+                    sectionId: sectionName ?? destination.sectionId
+                )
+                
                 if let item {
-                    self.model.appendItem(
-                        item: item,
-                        destination: destination
-                    )
+                    self.model.appendItem(item: item, destination: destination)
                     self.fetchEntries()
                 }
                 

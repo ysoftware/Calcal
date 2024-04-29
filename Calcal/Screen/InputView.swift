@@ -8,6 +8,7 @@
 import SwiftUI
 
 enum InputViewState {
+    case sectionName
     case name
     case quantity
     case calories

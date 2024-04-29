@@ -12,15 +12,19 @@ import SwiftUI
 class InputViewModel: ObservableObject {
     
     private let model: Model
-    private let completeInput: (EntryEntity.Item?) -> Void
+    private let shouldInputSectionName: Bool
+    private let completeInput: (EntryEntity.Item?, String?) -> Void
     
+    // saved input values
     // todo: prefill also quantity input based on selected autocomplete item
     private var selectedItemCaloricInformation: CaloricInformation?
     private var name: String?
     private var quantity: Float?
     private var quantityMeasurement: EntryEntity.QuantityMeasurement?
     private var calories: Float?
+    private var sectionName: String?
     
+    // ui values
     private(set) var inputPlaceholder: String = ""
     private(set) var state: InputViewState = .name
     private(set) var selectedAutocompleteIndex: Int?
@@ -28,8 +32,13 @@ class InputViewModel: ObservableObject {
     private(set) var popularEntries: [QuickItemPresenter] = []
     private(set) var text: String = ""
     
-    init(model: Model, completeInput: @escaping (EntryEntity.Item?) -> Void) {
+    init(
+        model: Model,
+        shouldInputSectionName: Bool,
+        completeInput: @escaping (EntryEntity.Item?, String?) -> Void
+    ) {
         self.model = model
+        self.shouldInputSectionName = shouldInputSectionName
         self.completeInput = completeInput
     }
     
@@ -40,8 +49,15 @@ class InputViewModel: ObservableObject {
     }
     
     private func resetAllInput() {
-        state = .name
-        inputPlaceholder = "Item name"
+        if shouldInputSectionName {
+            state = .sectionName
+            inputPlaceholder = "New section name"
+        } else {
+            state = .name
+            inputPlaceholder = "Item name"
+        }
+        
+        sectionName = nil
         name = nil
         quantity = nil
         quantityMeasurement = nil
@@ -49,8 +65,6 @@ class InputViewModel: ObservableObject {
     }
     
     func setupInitialState() {
-        state = .name
-        inputPlaceholder = "Item name"
         text = ""
         
         resetAllInput()
@@ -94,13 +108,15 @@ class InputViewModel: ObservableObject {
                     QuickItemPresenter(
                         title: "\(item.title), \(item.quantity) \(item.measurement), \(item.calories) kcal (x\(item.occurencesCount))",
                         onAcceptItem: { [weak self] in
+                            guard let self else { return }
+                            
                             let entryItem = EntryEntity.Item(
                                 title: item.title,
                                 quantity: item.quantity,
                                 measurement: item.measurement,
                                 calories: item.calories
                             )
-                            self?.completeInput(entryItem)
+                            self.completeInput(entryItem, self.sectionName)
                         }
                     )
                 }
@@ -117,7 +133,7 @@ class InputViewModel: ObservableObject {
     }
     
     private func refreshAutocompleteItems() {
-        // todo: carefully update selection on list change
+        guard state == .name else { return }
         
         let allEntries = model.getAllEntries()
         
@@ -155,7 +171,7 @@ class InputViewModel: ObservableObject {
         if selectedAutocompleteIndex != nil {
             selectedAutocompleteIndex = nil
         } else {
-            completeInput(nil)
+            completeInput(nil, nil)
         }
         updatePresenter()
     }
@@ -197,6 +213,10 @@ class InputViewModel: ObservableObject {
     
     private func processInputState() {
         switch state {
+        case .sectionName:
+            self.sectionName = text
+            self.text = ""
+            state = .name
         case .name:
             if text.count > 1 {
                 self.name = text
@@ -273,7 +293,7 @@ class InputViewModel: ObservableObject {
             measurement: quantityMeasurement,
             calories: caloriesValue
         )
-        completeInput(item)
+        completeInput(item, sectionName)
     }
     
     struct CaloricInformation {

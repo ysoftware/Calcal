@@ -6,6 +6,7 @@
 //
 
 import Foundation
+import OSLog
 
 class Parser {
     
@@ -56,7 +57,8 @@ class Parser {
     }
     
     private func printErrorPosition() {
-        print("Parser: Error occured after: '\(textRemainder[i..<endIndex].prefix(10))'")
+        let previousSymbols = self.textRemainder[self.i..<self.endIndex].prefix(100)
+        Logger().debug("Parser: Error occured right before this text:\n\(previousSymbols)")
     }
     
     func parse() throws -> [EntryEntity] {
@@ -166,7 +168,7 @@ class Parser {
                     var itemCalorieString = String(textRemainder[i..<itemNewLine]).trimmingCharacters(in: .whitespaces)
                     guard itemCalorieString.contains(" kcal") else {
                         printErrorPosition()
-                        throw Error.invalidCalories
+                        throw Error.invalidCaloriesMissingKcal
                     }
                     itemCalorieString = String(itemCalorieString.dropLast(" kcal".count))
                     advanceIfPossible(after: itemNewLine)

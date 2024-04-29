@@ -28,13 +28,19 @@ struct MainView: View {
                 
                 Spacer()
                 
-                VStack(spacing: 0) {
+                VStack(spacing: 10) {
                     viewModel.inputText
                         .map { Text($0) }
                     
-                    viewModel.openInputButton
-                        .map { ButtonView(presenter: $0) }
-                        .frame(maxWidth: .infinity, alignment: .trailing)
+                    HStack(spacing: 0) {
+                        viewModel.newSectionInputButton
+                            .map { ButtonView(presenter: $0) }
+                        
+                        Spacer()
+                        
+                        viewModel.openInputButton
+                            .map { ButtonView(presenter: $0) }
+                    }
                 }
             }
             .frame(width: 350)
