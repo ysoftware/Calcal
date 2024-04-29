@@ -112,7 +112,6 @@ class InputViewModel: ObservableObject {
                 .sorted { $0.occurencesCount > $1.occurencesCount }
                 .prefix(14)
                 .map { item in
-                    // todo: refactor: reuse presentation from main view
                     QuickItemPresenter(
                         title: "\(item.title), \(item.quantity) \(item.measurement), \(item.calories) kcal (x\(item.occurencesCount))",
                         onAcceptItem: { [weak self] in
@@ -144,7 +143,7 @@ class InputViewModel: ObservableObject {
         if state == .name {
             let allEntries = model.getAllEntries()
             
-            // todo: improvement: cache this unfiltered list long term
+            // TODO: improvement: cache this unfiltered list long term
             self.autocompleteSuggestions = Array(allEntries
                 .flatMap { $0.sections }
                 .flatMap { $0.items }
@@ -239,7 +238,6 @@ class InputViewModel: ObservableObject {
         }
     }
     
-    // todo: feature: error reporting to user
     private func processInputState() {
         switch state {
         case .sectionName:
@@ -283,8 +281,20 @@ class InputViewModel: ObservableObject {
                 Logger.main.error("Input: incorrect quantity: '\(self.text)'")
             }
         case .calories:
-            // todo: feature - specify calories per weight or per measurement
-            if let calorieValue = text.floatValue {
+            if text.hasSuffix("/"), let quantity, let quantityMeasurement, let calorieValue = String(text.dropLast()).floatValue {
+                switch quantityMeasurement {
+                case .cup, .portion:
+                    self.calories = calorieValue * quantity
+                case .kilogramm, .liter:
+                    // input "40/":
+                    // for quantity entered 100ml, `quantity` will be 0.1
+                    // for calories entered 40kcal/100ml, result should be 40
+                    // 40 * 0.1 * 10 = 40
+                    self.calories = calorieValue * quantity * 10
+                }
+                self.text = ""
+                createItem()
+            } else if let calorieValue = text.floatValue {
                 self.calories = calorieValue
                 self.text = ""
                 createItem()
@@ -311,7 +321,6 @@ class InputViewModel: ObservableObject {
         } else {
             return
         }
-        // todo: feature: show validation errors on early return
         
         let item = EntryEntity.Item(
             title: name,

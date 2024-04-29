@@ -151,7 +151,7 @@ struct InputView: View {
 extension TextField {
     func isNumpad(_ value: Bool) -> some View {
         #if os(iOS)
-        self.keyboardType(value ? .numberPad : .default)
+        self.keyboardType(value ? .numbersAndPunctuation : .default)
         #else
         self
         #endif

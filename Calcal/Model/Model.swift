@@ -16,6 +16,9 @@ struct EntryRepresentation {
 
 class Model {
     
+    /// load data once, update locally, never save to backend
+    private static let TEST_DATA_CHANGES_LOCALLY = false
+
     private var data: [EntryEntity] = []
     
     func appendItem(item: EntryEntity.Item, destination: ItemDestination) async throws {
@@ -55,6 +58,11 @@ class Model {
     private let apiUrl = URL(string: "https://whoniverse-app.com/calcal/main.php")!
     
     func fetchModel() async throws {
+        if Self.TEST_DATA_CHANGES_LOCALLY {
+            // loads data once
+            if !self.data.isEmpty { return }
+        }
+        
         do {
             let (data, response) = try await URLSession.shared.data(from: apiUrl)
             
@@ -70,6 +78,10 @@ class Model {
     }
     
     private func saveModel() async throws {
+        if Self.TEST_DATA_CHANGES_LOCALLY {
+            return
+        }
+        
         let content = data
             .map(Mapper.map(entity:))
             .map(Mapper.map(representation:))
