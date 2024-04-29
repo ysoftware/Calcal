@@ -106,7 +106,6 @@
 		CCFE26032BCBEEB50032FD48 = {
 			isa = PBXGroup;
 			children = (
-				CC5FF3B92BDFEC2600C9DAD3 /* password.txt */,
 				CCFE260E2BCBEEB50032FD48 /* Calcal */,
 				CC4EACA52BD1A90E00DF94ED /* CalcalTests */,
 				CCFE260D2BCBEEB50032FD48 /* Products */,
@@ -135,6 +134,7 @@
 				CCFE26152BCBEEB50032FD48 /* Calcal.entitlements */,
 				CCFE26162BCBEEB50032FD48 /* Preview Content */,
 				CCFE262E2BCC4E380032FD48 /* Extensions.swift */,
+				CC5FF3B92BDFEC2600C9DAD3 /* password.txt */,
 			);
 			path = Calcal;
 			sourceTree = "<group>";
