@@ -51,7 +51,7 @@ class InputViewModel: ObservableObject {
     private func resetAllInput() {
         if shouldInputSectionName {
             state = .sectionName
-            inputPlaceholder = "New section name"
+            inputPlaceholder = "New meal name"
         } else {
             state = .name
             inputPlaceholder = "Item name"

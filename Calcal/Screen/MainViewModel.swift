@@ -35,7 +35,7 @@ class MainViewModel: ObservableObject {
         )
         
         newSectionInputButton = ButtonPresenter(
-            title: "Add new section",
+            title: "Add new meal",
             action: { [weak self] in
                 self?.openToAddNewSection()
             }
@@ -55,7 +55,11 @@ class MainViewModel: ObservableObject {
             
             if event.charactersIgnoringModifiers == " " {
                 guard self.inputViewModel == nil else { return event }
-                self.openInputForLastSection()
+                if event.modifierFlags.contains(.option) {
+                    self.openToAddNewSection()
+                } else {
+                    self.openInputForLastSection()
+                }
                 return nil
             }
             
@@ -95,7 +99,11 @@ class MainViewModel: ObservableObject {
         self.entryPresenter = Mapper.map(entity: selectedEntry)
         
         self.inputText = if let inputDestination {
-            "adding into \(inputDestination.sectionId) on \(inputDestination.entryId)"
+            if inputDestination.sectionId.isEmpty {
+                "starting new meal on \(inputDestination.entryId)"
+            } else {
+                "adding into \(inputDestination.sectionId) on \(inputDestination.entryId)"
+            }
         } else {
             nil
         }
