@@ -14,6 +14,7 @@ import AppKit
 
 class MainViewModel: ObservableObject {
     
+    private let dateFormatter = DateFormatter()
     private let model = Model()
     
     // private state
@@ -31,6 +32,8 @@ class MainViewModel: ObservableObject {
     private(set) var inputText: String?
     
     func setupInitialState() {
+        dateFormatter.dateFormat = "dd MMMM yyyy"
+        
         openInputButton = ButtonPresenter(
             title: "Add",
             action: { [weak self] in
@@ -81,8 +84,14 @@ class MainViewModel: ObservableObject {
             self.inputDestination = nil
             
             for entry in entries {
-                self.model.addOrUpdateEntry(entry: entry)
-                self.fetchEntries()
+                Task {
+                    do {
+                        try await self.model.addOrUpdateEntry(entry: entry)
+                        self.fetchEntries()
+                    } catch {
+                        // todo: feature: add reload functionality
+                    }
+                }
             }
         } catch {
             Logger.main.error("Main: acceptPasteEvent: \(error)")
@@ -130,6 +139,8 @@ class MainViewModel: ObservableObject {
     }
     
     private func updateEntrySwitcherButtons() {
+        let todayDate = self.dateFormatter.string(from: Date())
+
         nextButton = if entries.count > selectedEntryIndex + 1 {
             ButtonPresenter(
                 title: "Next day",
@@ -139,6 +150,24 @@ class MainViewModel: ObservableObject {
                     guard entries.count > selectedEntryIndex + 1 else { return }
                     self.selectedEntryIndex += 1
                     self.updatePresenter()
+                }
+            )
+        } else if !entries.contains(where: { $0.date.lowercased() == todayDate.lowercased() }) {
+            ButtonPresenter(
+                title: "Add day",
+                action: { [weak self] in
+                    guard let self else { return }
+                    
+                    Task {
+                        do {
+                            let todayEntry = EntryEntity(date: todayDate, sections: [])
+                            try await self.model.addOrUpdateEntry(entry: todayEntry)
+                            self.fetchEntries()
+                            
+                        } catch {
+                            // todo: feature: add reload functionality
+                        }
+                    }
                 }
             )
         } else {
@@ -197,7 +226,7 @@ class MainViewModel: ObservableObject {
                             try await self.model.appendItem(item: item, destination: destination)
                             self.fetchEntries()
                         } catch {
-                            // todo: feature: add retry
+                            // todo: feature: add reload functionality
                         }
                     }
                 }

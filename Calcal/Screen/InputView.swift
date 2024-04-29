@@ -7,13 +7,6 @@
 
 import SwiftUI
 
-enum InputViewState {
-    case sectionName
-    case name
-    case quantity
-    case calories
-}
-
 struct QuickItemPresenter {
     let title: String
     let onAcceptItem: () -> Void

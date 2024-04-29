@@ -32,17 +32,18 @@ class Model {
         else { return assertionFailure("the section must have been added") }
         
         entry.sections[sectionIndex].items.append(item)
-        addOrUpdateEntry(entry: entry)
         
+        try await addOrUpdateEntry(entry: entry)
         try await saveModel()
     }
     
-    func addOrUpdateEntry(entry: EntryEntity) {
+    func addOrUpdateEntry(entry: EntryEntity) async throws {
         if let entryIndex = data.firstIndex(where: { $0.date == entry.date }) {
             data[entryIndex] = entry
         } else {
             data.append(entry)
         }
+        try await saveModel()
     }
     
     func getAllEntries() -> [EntryEntity] {
