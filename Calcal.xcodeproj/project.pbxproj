@@ -12,6 +12,7 @@
 		CC4EACA72BD1A90E00DF94ED /* CalcalTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = CC4EACA62BD1A90E00DF94ED /* CalcalTests.swift */; };
 		CC5FF3B52BDFA49400C9DAD3 /* Mapper.swift in Sources */ = {isa = PBXBuildFile; fileRef = CC5FF3B42BDFA49400C9DAD3 /* Mapper.swift */; };
 		CC5FF3B72BDFB1C500C9DAD3 /* MainViewPhone.swift in Sources */ = {isa = PBXBuildFile; fileRef = CC5FF3B62BDFB1C500C9DAD3 /* MainViewPhone.swift */; };
+		CC5FF3BA2BDFEC2600C9DAD3 /* password.txt in Resources */ = {isa = PBXBuildFile; fileRef = CC5FF3B92BDFEC2600C9DAD3 /* password.txt */; };
 		CCFE26102BCBEEB50032FD48 /* CalcalApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = CCFE260F2BCBEEB50032FD48 /* CalcalApp.swift */; };
 		CCFE26122BCBEEB50032FD48 /* MainViewDesktop.swift in Sources */ = {isa = PBXBuildFile; fileRef = CCFE26112BCBEEB50032FD48 /* MainViewDesktop.swift */; };
 		CCFE26142BCBEEB50032FD48 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = CCFE26132BCBEEB50032FD48 /* Assets.xcassets */; };
@@ -42,6 +43,7 @@
 		CC4EACA62BD1A90E00DF94ED /* CalcalTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CalcalTests.swift; sourceTree = "<group>"; };
 		CC5FF3B42BDFA49400C9DAD3 /* Mapper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Mapper.swift; sourceTree = "<group>"; };
 		CC5FF3B62BDFB1C500C9DAD3 /* MainViewPhone.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainViewPhone.swift; sourceTree = "<group>"; };
+		CC5FF3B92BDFEC2600C9DAD3 /* password.txt */ = {isa = PBXFileReference; lastKnownFileType = text; path = password.txt; sourceTree = "<group>"; };
 		CCFE260C2BCBEEB50032FD48 /* Calcal.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Calcal.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		CCFE260F2BCBEEB50032FD48 /* CalcalApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CalcalApp.swift; sourceTree = "<group>"; };
 		CCFE26112BCBEEB50032FD48 /* MainViewDesktop.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainViewDesktop.swift; sourceTree = "<group>"; };
@@ -104,6 +106,7 @@
 		CCFE26032BCBEEB50032FD48 = {
 			isa = PBXGroup;
 			children = (
+				CC5FF3B92BDFEC2600C9DAD3 /* password.txt */,
 				CCFE260E2BCBEEB50032FD48 /* Calcal */,
 				CC4EACA52BD1A90E00DF94ED /* CalcalTests */,
 				CCFE260D2BCBEEB50032FD48 /* Products */,
@@ -270,6 +273,7 @@
 			files = (
 				CCFE26182BCBEEB50032FD48 /* Preview Assets.xcassets in Resources */,
 				CCFE26142BCBEEB50032FD48 /* Assets.xcassets in Resources */,
+				CC5FF3BA2BDFEC2600C9DAD3 /* password.txt in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
