@@ -1,5 +1,5 @@
 ## Calcal - The Calorie calculator
-_App that helps me count my calories_
+_iOS / macOS app that helps me count my calories_
 
 ### My approach
 - There is no calorie limit per day
@@ -11,7 +11,7 @@ There are multiple entries
 Day's entry consists of date, section and day's total 
 Meal section has items which are name, quantity and calories
 
-#### Example
+##### Example
 
 ```
 Date: 7 April 2024
@@ -22,3 +22,7 @@ Breakfast - 166 kcal
 
 - Total: 166 kcal
 ```
+
+### Simple Backend for data sync
+
+https://github.com/ysoftware/Calcal-backend
