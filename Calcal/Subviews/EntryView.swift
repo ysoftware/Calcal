@@ -8,14 +8,8 @@
 import Foundation
 import SwiftUI
 
-struct EntryPresenter {
-    let date: String
-    let text: String
-    let total: String
-}
-
 struct EntryView: View {
-    let presenter: EntryPresenter
+    let presenter: EntryRepresentation
     
     var body: some View {
         VStack(spacing: 15) {

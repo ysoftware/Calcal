@@ -14,6 +14,7 @@ class InputViewModel: ObservableObject {
     private let model: Model
     private let completeInput: (EntryEntity.Item?) -> Void
     
+    // todo: prefill also quantity input based on selected autocomplete item
     private var selectedItemCaloricInformation: CaloricInformation?
     private var name: String?
     private var quantity: Float?

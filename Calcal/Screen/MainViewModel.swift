@@ -20,7 +20,7 @@ class MainViewModel: ObservableObject {
     private(set) var inputViewModel: InputViewModel?
     private(set) var nextButton: ButtonPresenter?
     private(set) var previousButton: ButtonPresenter?
-    private(set) var entryPresenter: EntryPresenter?
+    private(set) var entryPresenter: EntryRepresentation?
     private(set) var openInputButton: ButtonPresenter?
     
     func setupInitialState() {
@@ -74,7 +74,14 @@ class MainViewModel: ObservableObject {
     }
     
     private func updatePresenter() {
-        updateSelectedEntry()
+        guard entries.count > selectedEntryIndex else {
+            self.entryPresenter = nil
+            return
+        }
+        
+        let selectedEntry = entries[selectedEntryIndex]
+        self.entryPresenter = Mapper.map(entity: selectedEntry)
+        
         updateEntrySwitcherButtons()
         
         DispatchQueue.main.async { [self] in
@@ -107,63 +114,6 @@ class MainViewModel: ObservableObject {
             )
         } else {
             nil
-        }
-    }
-    
-    private func updateSelectedEntry() {
-        guard entries.count > selectedEntryIndex else {
-            self.entryPresenter = nil
-            return
-        }
-        
-        let selectedEntry = entries[selectedEntryIndex]
-        
-        // todo: update for better ui
-        var entryText = ""
-        var totalCalories: Float = 0
-        
-        for section in selectedEntry.sections {
-            var itemsText = ""
-            var sectionCalories: Float = 0
-            
-            for item in section.items {
-                itemsText.append("- \(item.title), \(measurementDisplayValue(item: item)), \(item.calories.formatted(.number.rounded())) kcal\n")
-                sectionCalories += item.calories
-            }
-            
-            entryText.append("\(section.id) - \(sectionCalories.formatted(.number.rounded())) kcal\n\(itemsText)\n")
-            totalCalories += sectionCalories
-        }
-        
-        self.entryPresenter = EntryPresenter(
-            date: selectedEntry.date.uppercased(),
-            text: entryText.trimmingCharacters(in: .whitespacesAndNewlines),
-            total: "Total: \(totalCalories.formatted(.number.rounded().grouping(.never))) kcal"
-        )
-    }
-    
-    private func measurementDisplayValue(item: EntryEntity.Item) -> String {
-        switch item.measurement {
-        case .portion:
-            if item.quantity == 1 {
-                return "1"
-            }
-            return "\(item.quantity.formatted(.number.rounded()))"
-        case .cup:
-            if item.quantity == 1 {
-                return "1 cup"
-            }
-            return "\(item.quantity.formatted(.number.rounded())) cups"
-        case .liter:
-            if item.quantity > 0.5 {
-                return "\(item.quantity.formatted(.number.rounded())) l"
-            }
-            return "\((item.quantity*1000).formatted(.number.rounded())) ml"
-        case .kilogramm:
-            if item.quantity > 0.5 {
-                return "\(item.quantity.formatted(.number.rounded())) kg"
-            }
-            return "\((item.quantity*1000).formatted(.number.rounded())) g"
         }
     }
     
