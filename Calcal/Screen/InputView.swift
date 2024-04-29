@@ -48,13 +48,20 @@ struct InputView: View {
         if isShowingSuggestions, !viewModel.popularEntries.isEmpty {
             ScrollView(.vertical) {
                 VStack(spacing: 5) {
+                    // todo: ui: buttons are clipped on macos
                     ForEach(viewModel.popularEntries.swiftUIEnumerated, id: \.0) { _, item in
+                        #if os(iOS)
                         Button(item.title, action: item.onAcceptItem)
                             .frame(maxWidth: .infinity, alignment: .leading)
-                            .frame(height: 25)
+                            .frame(height: 40)
+                        #else
+                        Button(item.title, action: item.onAcceptItem)
+                            .frame(maxWidth: .infinity, alignment: .leading)
+                        #endif
                     }
                 }
                 .frame(maxWidth: .infinity, alignment: .leading)
+                .padding(1)
             }
         }
     }
@@ -73,7 +80,7 @@ struct InputView: View {
                                     Color.accentColor.opacity(0.3)
                                 }
                             }
-                            .frame(height: 25)
+                            .frame(height: 40)
                             .tint(.green)
                         #else
                         Text(item.title)

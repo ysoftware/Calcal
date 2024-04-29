@@ -17,7 +17,7 @@ struct EntryRepresentation {
 class Model {
     
     /// load data once, update locally, never save to backend
-    private static let TEST_DATA_CHANGES_LOCALLY = false
+    static let TEST_DATA_CHANGES_LOCALLY = false
 
     private var data: [EntryEntity] = []
     

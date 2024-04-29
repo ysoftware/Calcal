@@ -112,6 +112,7 @@ class InputViewModel: ObservableObject {
                 .sorted { $0.occurencesCount > $1.occurencesCount }
                 .prefix(14)
                 .map { item in
+                    // todo: improvement: use mapper
                     QuickItemPresenter(
                         title: "\(item.title), \(item.quantity) \(item.measurement), \(item.calories) kcal (x\(item.occurencesCount))",
                         onAcceptItem: { [weak self] in

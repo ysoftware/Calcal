@@ -17,6 +17,7 @@ struct CalcalApp: App {
                 .onAppear {
                     mainViewModel.setupInitialState()
                 }
+                .border(Model.TEST_DATA_CHANGES_LOCALLY ? .green : .clear)
         }
         .windowResizability(.contentSize)
     }
