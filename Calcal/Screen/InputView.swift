@@ -20,7 +20,6 @@ struct QuickItemPresenter {
 }
 
 struct AutocompleteItemPresenter {
-    // todo: implement separate search text field
     let title: String
     let isSelected: Bool
     let onAcceptItem: () -> Void

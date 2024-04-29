@@ -16,7 +16,6 @@ class InputViewModel: ObservableObject {
     private let completeInput: (EntryEntity.Item?, String?) -> Void
     
     // saved input values
-    // todo: prefill also quantity input based on selected autocomplete item
     private var selectedItemCaloricInformation: CaloricInformation?
     private var name: String?
     private var quantity: Float?
@@ -112,7 +111,7 @@ class InputViewModel: ObservableObject {
                 .sorted { $0.occurencesCount > $1.occurencesCount }
                 .prefix(14)
                 .map { item in
-                    // todo: reuse presentation from main view
+                    // todo: refactor: reuse presentation from main view
                     QuickItemPresenter(
                         title: "\(item.title), \(item.quantity) \(item.measurement), \(item.calories) kcal (x\(item.occurencesCount))",
                         onAcceptItem: { [weak self] in
@@ -141,11 +140,15 @@ class InputViewModel: ObservableObject {
     }
     
     private func refreshAutocompleteItems() {
-        guard state == .name else { return }
+        guard state == .name else {
+            // feature: in state == .quantity collect autocomplete items for quantity for selected name
+            self.autocompleteSuggestions = []
+            return
+        }
         
         let allEntries = model.getAllEntries()
         
-        // todo: cache this unfiltered list long term
+        // todo: improvement: cache this unfiltered list long term
         self.autocompleteSuggestions = Array(allEntries
             .flatMap { $0.sections }
             .flatMap { $0.items }
@@ -282,7 +285,7 @@ class InputViewModel: ObservableObject {
         guard let name,
               let quantity,
               let quantityMeasurement
-        else { return } // todo: show validation error
+        else { return }
         
         let caloriesValue: Float
         
@@ -291,9 +294,9 @@ class InputViewModel: ObservableObject {
         } else if let calories {
             caloriesValue = calories
         } else {
-            // todo: show validation error
             return
         }
+        // todo: feature: show validation errors on early return
         
         let item = EntryEntity.Item(
             title: name,
