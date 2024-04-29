@@ -7,6 +7,7 @@
 
 import Foundation
 import Algorithms
+import OSLog
 import SwiftUI
 
 class InputViewModel: ObservableObject {
@@ -133,9 +134,9 @@ class InputViewModel: ObservableObject {
     }
 
     private func updatePresenter() {
-        DispatchQueue.main.async { [self] in
-            refreshAutocompleteItems()
-            objectWillChange.send()
+        DispatchQueue.main.async {
+            self.refreshAutocompleteItems()
+            self.objectWillChange.send()
         }
     }
     
@@ -241,7 +242,7 @@ class InputViewModel: ObservableObject {
                     inputPlaceholder = "Quantity"
                 }
             } else {
-                logger.error("Input: incorrect name: '\(self.text)'")
+                Logger.main.error("Input: incorrect name: '\(self.text)'")
             }
         case .quantity:
             if let (quantityValue, measurement) = Parser.getQuantity(text: text) {
@@ -263,7 +264,7 @@ class InputViewModel: ObservableObject {
                     inputPlaceholder = "Calories"
                 }
             } else {
-                logger.error("Input: incorrect quantity: '\(self.text)'")
+                Logger.main.error("Input: incorrect quantity: '\(self.text)'")
             }
         case .calories:
             // todo: feature - specify calories per weight or per measurement
@@ -272,7 +273,7 @@ class InputViewModel: ObservableObject {
                 self.text = ""
                 createItem()
             } else {
-                logger.error("Input: incorrect calories: '\(self.text)'")
+                Logger.main.error("Input: incorrect calories: '\(self.text)'")
             }
         }
         

@@ -36,8 +36,10 @@ struct InputView: View {
             HStack(spacing: 10) {
                 textField
                 
+                #if os(iOS)
                 viewModel.closeButton
                     .map { ButtonView(presenter: $0) }
+                #endif
             }
             
             autocompletions
@@ -50,13 +52,13 @@ struct InputView: View {
     
     @ViewBuilder
     private var quickSuggestions: some View {
-        if isShowingSuggestions {
+        if isShowingSuggestions, !viewModel.popularEntries.isEmpty {
             ScrollView(.vertical) {
-                VStack(spacing: 10) {
+                VStack(spacing: 5) {
                     ForEach(viewModel.popularEntries.swiftUIEnumerated, id: \.0) { _, item in
                         Button(item.title, action: item.onAcceptItem)
                             .frame(maxWidth: .infinity, alignment: .leading)
-                            .padding(.trailing, 10)
+                            .frame(height: 25)
                     }
                 }
                 .frame(maxWidth: .infinity, alignment: .leading)
@@ -64,16 +66,33 @@ struct InputView: View {
         }
     }
     
+    @ViewBuilder
     private var autocompletions: some View {
-        VStack(spacing: 2) {
-            ForEach(viewModel.autocompleteSuggestions.swiftUIEnumerated, id: \.0) { index, item in
-                Button(item.title, action: item.onAcceptItem)
-                    .frame(maxWidth: .infinity, alignment: .leading)
-                    .background {
-                        if item.isSelected {
-                            Color.accentColor.opacity(0.3)
-                        }
+        if !viewModel.autocompleteSuggestions.isEmpty {
+            ScrollView(.vertical) {
+                VStack(spacing: 5) {
+                    ForEach(viewModel.autocompleteSuggestions.swiftUIEnumerated, id: \.0) { index, item in
+                        #if os(iOS)
+                        Button(item.title, action: item.onAcceptItem)
+                            .frame(maxWidth: .infinity, alignment: .leading)
+                            .background {
+                                if item.isSelected {
+                                    Color.accentColor.opacity(0.3)
+                                }
+                            }
+                            .frame(height: 25)
+                            .tint(.green)
+                        #else
+                        Text(item.title)
+                            .frame(maxWidth: .infinity, alignment: .leading)
+                            .background {
+                                if item.isSelected {
+                                    Color.accentColor.opacity(0.3)
+                                }
+                            }
+                        #endif
                     }
+                }
             }
         }
     }

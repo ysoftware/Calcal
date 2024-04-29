@@ -64,7 +64,7 @@ class Model {
             let entities = try Parser(text: contents).parse()
             self.data = entities
         } catch {
-            logger.error("Model: loadModel: \(error)")
+            Logger.main.error("Model: loadModel: \(error)")
         }
     }
     
@@ -87,7 +87,7 @@ class Model {
         body.append("\r\n")
         body.append("--\(boundary)--\r\n")
         
-        let (data, response) = try await URLSession.shared.upload(for: request, from: body)
+        let (_, response) = try await URLSession.shared.upload(for: request, from: body)
         
         guard let statusCode = (response as? HTTPURLResponse)?.statusCode else { return }
         guard statusCode == 200 else { throw Error.invalidResponse(code: statusCode) }
@@ -103,9 +103,7 @@ struct ItemDestination {
     let sectionId: String
 }
 
-let logger = Logger(subsystem: "app", category: "main")
-
-extension Data {
+private extension Data {
     mutating func append(_ value: String) {
         guard let stringData = value.data(using: .utf8) else { return }
         

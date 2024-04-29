@@ -6,6 +6,7 @@
 //
 
 import Foundation
+import OSLog
 
 extension Array {
     
@@ -22,4 +23,8 @@ extension String {
         guard !self.isEmpty else { return nil }
         return Float(self.replacingOccurrences(of: ",", with: "."))
     }
+}
+
+extension Logger {
+    static var main: Logger { Logger(subsystem: "app", category: "main") }
 }

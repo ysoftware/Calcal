@@ -6,6 +6,7 @@
 //
 
 import SwiftUI
+import OSLog
 
 #if canImport(AppKit)
 import AppKit
@@ -84,7 +85,7 @@ class MainViewModel: ObservableObject {
                 self.fetchEntries()
             }
         } catch {
-            logger.error("Main: acceptPasteEvent: \(error)")
+            Logger.main.error("Main: acceptPasteEvent: \(error)")
         }
     }
     
@@ -123,8 +124,8 @@ class MainViewModel: ObservableObject {
         
         updateEntrySwitcherButtons()
         
-        DispatchQueue.main.async { [self] in
-            objectWillChange.send()
+        DispatchQueue.main.async {
+            self.objectWillChange.send()
         }
     }
     
