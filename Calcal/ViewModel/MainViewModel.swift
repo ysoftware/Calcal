@@ -126,6 +126,8 @@ class MainViewModel: ObservableObject {
                 title: "Next day",
                 action: { [weak self] in
                     guard let self else { return }
+                    
+                    guard entries.count > selectedEntryIndex + 1 else { return }
                     self.selectedEntryIndex += 1
                     self.updatePresenter()
                 }
@@ -139,6 +141,8 @@ class MainViewModel: ObservableObject {
                 title: "Previous day",
                 action: { [weak self] in
                     guard let self else { return }
+                    
+                    guard selectedEntryIndex - 1 >= 0 else { return }
                     self.selectedEntryIndex -= 1
                     self.updatePresenter()
                 }

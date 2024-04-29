@@ -34,9 +34,18 @@ struct InputView: View {
     
     var body: some View {
         VStack(spacing: 0) {
-            textField
+            HStack(spacing: 10) {
+                textField
+                
+                viewModel.closeButton
+                    .map { ButtonView(presenter: $0) }
+            }
+            
             autocompletions
+            
             quickSuggestions
+            
+            Spacer()
         }
     }
     
@@ -58,8 +67,8 @@ struct InputView: View {
     
     private var autocompletions: some View {
         VStack(spacing: 2) {
-            ForEach(viewModel.autocompleteSuggestions.swiftUIEnumerated, id: \.0) { _, item in
-                Text(item.title)
+            ForEach(viewModel.autocompleteSuggestions.swiftUIEnumerated, id: \.0) { index, item in
+                Button(item.title, action: item.onAcceptItem)
                     .frame(maxWidth: .infinity, alignment: .leading)
                     .background {
                         if item.isSelected {
@@ -72,6 +81,7 @@ struct InputView: View {
     
     private var textField: some View {
         TextField(viewModel.inputPlaceholder, text: $text)
+            .isNumpad(isNumpadKeyboardType)
             .textFieldStyle(.plain)
             .font(.system(size: 18))
             .focused($isTextFieldFocused)
@@ -100,6 +110,10 @@ struct InputView: View {
                 viewModel.onEnterPress()
                 return .handled
             })
+            .onSubmit {
+                viewModel.onEnterPress()
+                isTextFieldFocused = true
+            }
             .onKeyPress(.escape, action: {
                 viewModel.onEscapePress()
                 return .handled
@@ -109,7 +123,26 @@ struct InputView: View {
             }
     }
     
+    private var isNumpadKeyboardType: Bool {
+        switch viewModel.state {
+        case .quantity, .calories:
+            return true
+        default:
+            return false
+        }
+    }
+    
     private var isShowingSuggestions: Bool {
         text.isEmpty && viewModel.state == .name
+    }
+}
+
+extension TextField {
+    func isNumpad(_ value: Bool) -> some View {
+        #if os(iOS)
+        self.keyboardType(value ? .numberPad : .default)
+        #else
+        self
+        #endif
     }
 }

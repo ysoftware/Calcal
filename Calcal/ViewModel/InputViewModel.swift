@@ -25,6 +25,7 @@ class InputViewModel: ObservableObject {
     private var sectionName: String?
     
     // ui values
+    private(set) var closeButton: ButtonPresenter?
     private(set) var inputPlaceholder: String = ""
     private(set) var state: InputViewState = .name
     private(set) var selectedAutocompleteIndex: Int?
@@ -68,6 +69,13 @@ class InputViewModel: ObservableObject {
         text = ""
         
         resetAllInput()
+        
+        closeButton = ButtonPresenter(
+            title: "Cancel",
+            action: { [weak self] in
+                self?.completeInput(nil, nil)
+            }
+        )
     
         let allItems = model.getAllEntries()
             .flatMap { $0.sections }
