@@ -55,7 +55,7 @@ class Model {
     
     // MARK: - Work with Storage
     
-    private let apiUrl = URL(string: "https://whoniverse-app.com/calcal/main.php")!
+    private let apiUrl = "" // todo: security: api url
     
     func fetchModel() async throws {
         if Self.TEST_DATA_CHANGES_LOCALLY {
