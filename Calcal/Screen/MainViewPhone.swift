@@ -18,7 +18,10 @@ struct MainView: View {
             }
             
             if let inputViewModel = viewModel.inputViewModel {
-                Divider()
+                viewModel.inputText
+                    .map { Text($0) }
+                    .multilineTextAlignment(.center)
+                    .frame(maxWidth: .infinity, alignment: .center)
                 
                 InputView(viewModel: inputViewModel)
             }
@@ -46,9 +49,6 @@ struct MainView: View {
             Spacer()
             
             VStack(spacing: 10) {
-                viewModel.inputText
-                    .map { Text($0) }
-                
                 HStack(spacing: 0) {
                     viewModel.newSectionInputButton
                         .map { ButtonView(presenter: $0) }
