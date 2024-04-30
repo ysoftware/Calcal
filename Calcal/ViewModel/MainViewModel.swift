@@ -74,6 +74,16 @@ class MainViewModel: ObservableObject {
                 return nil
             }
             
+            if event.keyCode == 124, entries.count > selectedEntryIndex + 1 {
+                self.nextButton?.action()
+                return nil
+            }
+            
+            if event.keyCode == 123, selectedEntryIndex > 0 {
+                self.previousButton?.action()
+                return nil
+            }
+            
             return event
         })
         #endif
