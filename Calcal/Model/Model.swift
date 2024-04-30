@@ -18,6 +18,8 @@ class Model {
     
     /// load data once, update locally, never save to backend
     static let TEST_DATA_NEVER_UPLOAD = false
+    
+    /// use another backend url
     static let TEST_DATA_CHANGES_LOCAL_BACKEND = false
 
     private var data: [EntryEntity] = []

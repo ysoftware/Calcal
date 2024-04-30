@@ -164,19 +164,19 @@ Breakfast - 227 kcal
                             EntryEntity.Item(
                                 title: "Chocolate Cookies",
                                 quantity: 0.030,
-                                measurement: .kilogramm,
+                                measurement: .kilogram,
                                 calories: 150
                             ),
                             EntryEntity.Item(
                                 title: "Chocolate Cookies",
                                 quantity: 0.030,
-                                measurement: .kilogramm,
+                                measurement: .kilogram,
                                 calories: 150
                             ),
                             EntryEntity.Item(
                                 title: "Chocolate Cookies",
                                 quantity: 0.030,
-                                measurement: .kilogramm,
+                                measurement: .kilogram,
                                 calories: 150
                             ),
                             EntryEntity.Item(

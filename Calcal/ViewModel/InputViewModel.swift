@@ -323,7 +323,7 @@ class InputViewModel: ObservableObject {
                 switch quantityMeasurement {
                 case .cup, .portion:
                     self.calories = calorieValue * quantity
-                case .kilogramm, .liter:
+                case .kilogram, .liter:
                     // input "40/":
                     // for quantity entered 100ml, `quantity` will be 0.1
                     // for calories entered 40kcal/100ml, result should be 40

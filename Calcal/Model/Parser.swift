@@ -229,7 +229,7 @@ class Parser {
             
             let acceptableValues = switch measurement {
             case .liter: ["milliliter", "millilitre", "liter", "litre", "ml", "l"]
-            case .kilogramm: ["kilogram", "gram", "kg", "gr", "g"]
+            case .kilogram: ["kilogram", "gram", "kg", "gr", "g"]
             case .cup: ["cup"]
             case .portion: ["portion", "part"]
             }

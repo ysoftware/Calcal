@@ -34,7 +34,7 @@ struct Mapper {
                 return "\(baseQuantity) l"
             }
             return "\(multipliedQuantity) ml"
-        case .kilogramm:
+        case .kilogram:
             if item.quantity > 0.5 {
                 return "\(baseQuantity) kg"
             }

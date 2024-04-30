@@ -28,7 +28,7 @@ extension EntryEntity {
     enum QuantityMeasurement: CaseIterable, Equatable {
         case portion
         case liter
-        case kilogramm
+        case kilogram
         case cup
     }
 }
