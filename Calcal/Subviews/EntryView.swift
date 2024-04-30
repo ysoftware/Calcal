@@ -8,6 +8,10 @@
 import Foundation
 import SwiftUI
 
+// todo: feature: rework ui
+// todo: feature: delete items
+// todo: feature: add items to older section?
+
 struct EntryView: View {
     let presenter: EntryRepresentation
     

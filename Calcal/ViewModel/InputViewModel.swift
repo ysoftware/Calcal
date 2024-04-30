@@ -141,58 +141,95 @@ class InputViewModel: ObservableObject {
     }
     
     private func refreshAutocompleteItems() {
-        if state == .name {
-            let allEntries = model.getAllEntries()
-            
-            // TODO: improvement: cache this unfiltered list long term
-            self.autocompleteSuggestions = Array(allEntries
-                .flatMap { $0.sections }
-                .flatMap { $0.items }
-                .filter {
-                    $0.title.lowercased().contains(text.lowercased())
-                }
-                .uniqued(on: { "\($0.title) \($0.measurement)" })
-                .prefix(10)
-                .enumerated()
-                .map { index, item in
-                    AutocompleteItemPresenter(
-                        title: "\(item.title) (in \(item.measurement))",
-                        isSelected: index == self.selectedAutocompleteIndex,
-                        onAcceptItem: { [weak self] in
-                            guard let self else { return }
-                            
-                            self.text = item.title
-                            self.selectedItemCaloricInformation = CaloricInformation(
-                                value: item.calories / item.quantity,
-                                measurement: item.measurement
-                            )
-                            self.processInputState()
-                            self.selectedAutocompleteIndex = nil
-                        }
-                    )
-                }
-            )
-        } else if state == .sectionName {
-            self.autocompleteSuggestions = [
-                "Breakfast", "Lunch", "Dinner", "Snack", "Snack 2"
-            ]
-                .enumerated()
-                .map { index, item in
-                    AutocompleteItemPresenter(
-                        title: "\(item)",
-                        isSelected: index == self.selectedAutocompleteIndex,
-                        onAcceptItem: { [weak self] in
-                            guard let self else { return }
-                            
-                            self.text = item
-                            self.processInputState()
-                            self.selectedAutocompleteIndex = nil
-                        }
-                    )
-            }
-        } else {
-            self.autocompleteSuggestions = []
+        switch state {
+        case .name:
+            setAutocompleteForNameInput()
+        case .sectionName:
+            setAutocompleteForSectionNameInput()
+        case .quantity:
+            setAutocompleteForQuantityInput()
+        case .calories:
+            // todo: feature: maybe list of top-calorie foods?
+            autocompleteSuggestions = []
         }
+    }
+    
+    private func setAutocompleteForQuantityInput() {
+        guard let name else {
+            self.autocompleteSuggestions = []
+            return
+        }
+        
+        self.autocompleteSuggestions = Array(model.getAllEntries()
+            .flatMap { $0.sections }
+            .flatMap { $0.items }
+            .filter { $0.title == name }
+            .enumerated()
+            .map { index, item in
+                AutocompleteItemPresenter(
+                    title: "\(item.title), \(item.quantity) \(item.measurement): \(item.calories) kcal",
+                    isSelected: index == self.selectedAutocompleteIndex,
+                    onAcceptItem: { [weak self] in
+                        guard let self else { return }
+                        
+                        self.text = "\(item.quantity) \(item.measurement)"
+                        self.processInputState()
+                        self.selectedAutocompleteIndex = nil
+                    }
+                )
+            }
+        )
+    }
+    
+    private func setAutocompleteForSectionNameInput() {
+        self.autocompleteSuggestions = [
+            "Breakfast", "Lunch", "Dinner", "Snack", "Snack 2"
+        ]
+            .enumerated()
+            .map { index, item in
+                AutocompleteItemPresenter(
+                    title: "\(item)",
+                    isSelected: index == self.selectedAutocompleteIndex,
+                    onAcceptItem: { [weak self] in
+                        guard let self else { return }
+                        
+                        self.text = item
+                        self.processInputState()
+                        self.selectedAutocompleteIndex = nil
+                    }
+                )
+        }
+    }
+    
+    private func setAutocompleteForNameInput() {
+        // todo: improvement: cache this unfiltered list long term
+        self.autocompleteSuggestions = Array(model.getAllEntries()
+            .flatMap { $0.sections }
+            .flatMap { $0.items }
+            .filter {
+                $0.title.lowercased().contains(text.lowercased())
+            }
+            .uniqued(on: { "\($0.title) \($0.measurement)" })
+            .prefix(10)
+            .enumerated()
+            .map { index, item in
+                AutocompleteItemPresenter(
+                    title: "\(item.title) (in \(item.measurement))",
+                    isSelected: index == self.selectedAutocompleteIndex,
+                    onAcceptItem: { [weak self] in
+                        guard let self else { return }
+                        
+                        self.text = item.title
+                        self.selectedItemCaloricInformation = CaloricInformation(
+                            value: item.calories / item.quantity,
+                            measurement: item.measurement
+                        )
+                        self.processInputState()
+                        self.selectedAutocompleteIndex = nil
+                    }
+                )
+            }
+        )
     }
     
     func onEscapePress() {

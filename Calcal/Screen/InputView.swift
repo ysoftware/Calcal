@@ -48,7 +48,6 @@ struct InputView: View {
         if isShowingSuggestions, !viewModel.popularEntries.isEmpty {
             ScrollView(.vertical) {
                 VStack(spacing: 5) {
-                    // todo: ui: buttons are clipped on macos
                     ForEach(viewModel.popularEntries.swiftUIEnumerated, id: \.0) { _, item in
                         #if os(iOS)
                         Button(item.title, action: item.onAcceptItem)
