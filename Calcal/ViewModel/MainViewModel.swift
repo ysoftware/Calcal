@@ -12,6 +12,8 @@ import OSLog
 import AppKit
 #endif
 
+// todo: bug: ui updates wait for data processing
+
 class MainViewModel: ObservableObject {
     
     private let dateFormatter = DateFormatter()
