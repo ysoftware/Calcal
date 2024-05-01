@@ -7,6 +7,14 @@
 
 import SwiftUI
 
+#if canImport(UIKit)
+import UIKit
+private typealias PlatformColor = UIColor
+#elseif canImport(AppKit)
+import AppKit
+private typealias PlatformColor = NSColor
+#endif
+
 struct QuickItemPresenter {
     let title: String
     let onAcceptItem: () -> Void
@@ -26,14 +34,13 @@ struct InputView: View {
     
     var body: some View {
         VStack(spacing: 0) {
-            HStack(spacing: 10) {
+            HStack(alignment: .center, spacing: 10) {
                 textField
                 
-                #if os(iOS)
                 viewModel.closeButton
                     .map { ButtonView(presenter: $0) }
-                #endif
             }
+            .padding(.bottom, 10)
             
             autocompletions
             
@@ -96,6 +103,14 @@ struct InputView: View {
         }
     }
     
+    private var inputFieldBackgroundColor: Color {
+#if canImport(AppKit)
+        Color(NSColor.controlBackgroundColor)
+#else
+        Color(UIColor.secondarySystemBackground)
+#endif
+    }
+    
     private var textField: some View {
         TextField(viewModel.inputPlaceholder, text: $text)
             .isNumpad(isNumpadKeyboardType)
@@ -106,9 +121,8 @@ struct InputView: View {
             .padding(.horizontal, 10)
             .frame(maxWidth: .infinity, alignment: .leading)
             .background {
-                Color.white.clipShape(RoundedRectangle(cornerRadius: 5))
+                inputFieldBackgroundColor.clipShape(RoundedRectangle(cornerRadius: 5))
             }
-            .padding(.bottom, 10)
             .onChange(of: text, initial: false) { _, newValue in
                 viewModel.onTextChange(newText: newValue)
             }
