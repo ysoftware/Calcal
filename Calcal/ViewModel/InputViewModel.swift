@@ -10,11 +10,11 @@ import Algorithms
 import OSLog
 import SwiftUI
 
-class InputViewModel: ObservableObject {
+final class InputViewModel: ObservableObject, Sendable {
     
     private let model: Model
     private let shouldInputSectionName: Bool
-    private let completeInput: (EntryEntity.Item?, String?) -> Void
+    private let completeInput: @Sendable (EntryEntity.Item?, String?) -> Void
     
     // saved input values
     private var selectedItemCaloricInformation: CaloricInformation?
@@ -36,7 +36,7 @@ class InputViewModel: ObservableObject {
     init(
         model: Model,
         shouldInputSectionName: Bool,
-        completeInput: @escaping (EntryEntity.Item?, String?) -> Void
+        completeInput: @escaping @Sendable (EntryEntity.Item?, String?) -> Void
     ) {
         self.model = model
         self.shouldInputSectionName = shouldInputSectionName

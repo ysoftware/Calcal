@@ -8,6 +8,10 @@
 import SwiftUI
 import OSLog
 
+#if canImport(UIKit)
+import UIKit
+#endif
+
 #if canImport(AppKit)
 import AppKit
 #endif
@@ -15,12 +19,13 @@ import AppKit
 // todo: bug: ui updates wait for data processing
 // todo: feature: round values during creation of an item
 
-class MainViewModel: ObservableObject {
+final class MainViewModel: ObservableObject, Sendable {
     
     private let dateFormatter = DateFormatter()
     private let model = Model()
     
     // private state
+    private var appBackgroundTimestamp = Date()
     private var selectedEntryIndex: Int = 0
     private var entries: [EntryEntity] = []
     private var inputDestination: ItemDestination?
@@ -36,6 +41,8 @@ class MainViewModel: ObservableObject {
     
     func setupInitialState() {
         dateFormatter.dateFormat = "dd MMMM yyyy"
+        setupAppLifecycleEvents()
+        setupKeyDownEvents()
         
         openInputButton = ButtonPresenter(
             title: "Add",
@@ -52,8 +59,29 @@ class MainViewModel: ObservableObject {
         )
         
         fetchEntries()
+    }
+    
+    private func setupAppLifecycleEvents() {
+#if canImport(UIKit)
+        let fg = UIApplication.willEnterForegroundNotification
+        let bg = UIApplication.didEnterBackgroundNotification
+#else
+        let fg = NSWindow.didBecomeKeyNotification
+        let bg = NSWindow.didResignKeyNotification
+#endif
         
-        #if canImport(AppKit)
+        NotificationCenter.default.addObserver(forName: fg, object: nil, queue: .main) { [weak self] _ in
+            guard let self, Date().timeIntervalSince(self.appBackgroundTimestamp) >= 10 else { return }
+            self.fetchEntries()
+        }
+        
+        NotificationCenter.default.addObserver(forName: bg, object: nil, queue: .main) { [weak self] _ in
+            self?.appBackgroundTimestamp = Date()
+        }
+    }
+    
+    private func setupKeyDownEvents() {
+#if canImport(AppKit)
         NSEvent.addLocalMonitorForEvents(matching: .keyDown, handler: { [weak self] event in
             guard let self else { return event }
             
@@ -86,7 +114,7 @@ class MainViewModel: ObservableObject {
             
             return event
         })
-        #endif
+#endif
     }
     
     private func acceptPasteEvent(text: String) {
@@ -99,7 +127,7 @@ class MainViewModel: ObservableObject {
             for entry in entries {
                 Task {
                     do {
-                        try await self.model.addOrUpdateEntry(entry: entry)
+                        try await model.addOrUpdateEntry(entry: entry)
                         self.fetchEntries()
                     } catch {
                         Logger.main.error("\(error)")

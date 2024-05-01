@@ -14,7 +14,7 @@ struct EntryRepresentation {
     let total: String
 }
 
-class Model {
+final class Model: Sendable {
     
     /// load data once, update locally, never save to backend
     static let TEST_DATA_NEVER_UPLOAD = false
@@ -72,6 +72,8 @@ class Model {
             if !self.data.isEmpty { return }
         }
         
+        Logger.main.info("Fetching data from \(self.apiUrl)...")
+        
         do {
             let (data, response) = try await URLSession.shared.data(from: apiUrl)
             
@@ -90,6 +92,8 @@ class Model {
         if Self.TEST_DATA_NEVER_UPLOAD {
             return
         }
+        
+        Logger.main.info("Saving data from \(self.apiUrl)...")
         
         let content = data
             .map(Mapper.map(entity:))
@@ -127,7 +131,7 @@ class Model {
         guard let statusCode = (response as? HTTPURLResponse)?.statusCode else { return }
         
         if statusCode != 200 {
-            let dump = (try? String(data: data, encoding: .utf8)) ?? ""
+            let dump = String(data: data, encoding: .utf8) ?? ""
             Logger.main.debug("\(dump)")
             throw Error.invalidResponse(code: statusCode)
         }
