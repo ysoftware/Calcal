@@ -10,11 +10,11 @@ import Algorithms
 import OSLog
 import SwiftUI
 
-final class InputViewModel: ObservableObject, Sendable {
+final class InputViewModel: ObservableObject, @unchecked Sendable {
     
     private let model: Model
     private let shouldInputSectionName: Bool
-    private let completeInput: @Sendable (EntryEntity.Item?, String?) -> Void
+    private let completeInput: (EntryEntity.Item?, String?) -> Void
     
     // saved input values
     private var selectedItemCaloricInformation: CaloricInformation?
@@ -25,13 +25,13 @@ final class InputViewModel: ObservableObject, Sendable {
     private var sectionName: String?
     
     // ui values
-    private(set) var closeButton: ButtonPresenter?
-    private(set) var inputPlaceholder: String = ""
-    private(set) var state: State = .name
-    private(set) var selectedAutocompleteIndex: Int?
-    private(set) var autocompleteSuggestions: [AutocompleteItemPresenter] = []
-    private(set) var popularEntries: [QuickItemPresenter] = []
-    private(set) var text: String = ""
+    @MainActor private(set) var closeButton: ButtonPresenter?
+    @MainActor private(set) var inputPlaceholder: String = ""
+    @MainActor private(set) var state: State = .name
+    @MainActor private(set) var selectedAutocompleteIndex: Int?
+    @MainActor private(set) var autocompleteSuggestions: [AutocompleteItemPresenter] = []
+    @MainActor private(set) var popularEntries: [QuickItemPresenter] = []
+    @MainActor private(set) var text: String = ""
     
     init(
         model: Model,
@@ -43,13 +43,13 @@ final class InputViewModel: ObservableObject, Sendable {
         self.completeInput = completeInput
     }
     
-    func onTextChange(newText: String) {
+    @MainActor func onTextChange(newText: String) {
         self.text = newText
         self.selectedAutocompleteIndex = nil
         updatePresenter()
     }
     
-    private func resetAllInput() {
+    @MainActor private func resetAllInput() {
         if shouldInputSectionName {
             state = .sectionName
             inputPlaceholder = "Meal name"
@@ -65,7 +65,7 @@ final class InputViewModel: ObservableObject, Sendable {
         calories = nil
     }
     
-    func setupInitialState() {
+    @MainActor func setupInitialState() {
         text = ""
         
         resetAllInput()
@@ -76,7 +76,7 @@ final class InputViewModel: ObservableObject, Sendable {
                 self?.completeInput(nil, nil)
             }
         )
-    
+        
         let allItems = model.getAllEntries()
             .flatMap { $0.sections }
             .flatMap { $0.items }
@@ -106,7 +106,7 @@ final class InputViewModel: ObservableObject, Sendable {
                 )
             }
         }
-
+        
         self.popularEntries = Array(
             items
                 .sorted { $0.occurencesCount > $1.occurencesCount }
@@ -132,15 +132,13 @@ final class InputViewModel: ObservableObject, Sendable {
         
         updatePresenter()
     }
-
-    private func updatePresenter() {
-        DispatchQueue.main.async {
-            self.refreshAutocompleteItems()
-            self.objectWillChange.send()
-        }
+    
+    @MainActor private func updatePresenter() {
+        self.refreshAutocompleteItems()
+        self.objectWillChange.send()
     }
     
-    private func refreshAutocompleteItems() {
+    @MainActor private func refreshAutocompleteItems() {
         switch state {
         case .name:
             setAutocompleteForNameInput()
@@ -154,7 +152,7 @@ final class InputViewModel: ObservableObject, Sendable {
         }
     }
     
-    private func setAutocompleteForQuantityInput() {
+    @MainActor private func setAutocompleteForQuantityInput() {
         guard let name else {
             self.autocompleteSuggestions = []
             return
@@ -181,7 +179,7 @@ final class InputViewModel: ObservableObject, Sendable {
         )
     }
     
-    private func setAutocompleteForSectionNameInput() {
+    @MainActor private func setAutocompleteForSectionNameInput() {
         self.autocompleteSuggestions = [
             "Breakfast", "Lunch", "Dinner", "Snack", "Snack 2"
         ]
@@ -198,10 +196,10 @@ final class InputViewModel: ObservableObject, Sendable {
                         self.selectedAutocompleteIndex = nil
                     }
                 )
-        }
+            }
     }
     
-    private func setAutocompleteForNameInput() {
+    @MainActor private func setAutocompleteForNameInput() {
         // todo: improvement: cache this unfiltered list long term
         self.autocompleteSuggestions = Array(model.getAllEntries()
             .flatMap { $0.sections }
@@ -232,7 +230,7 @@ final class InputViewModel: ObservableObject, Sendable {
         )
     }
     
-    func onEscapePress() {
+    @MainActor func onEscapePress() {
         if selectedAutocompleteIndex != nil {
             selectedAutocompleteIndex = nil
         } else {
@@ -241,7 +239,7 @@ final class InputViewModel: ObservableObject, Sendable {
         updatePresenter()
     }
     
-    func onArrowDownPress() {
+    @MainActor func onArrowDownPress() {
         if autocompleteSuggestions.isEmpty {
             self.selectedAutocompleteIndex = nil
         } else if let selectedAutocompleteIndex,
@@ -253,7 +251,7 @@ final class InputViewModel: ObservableObject, Sendable {
         updatePresenter()
     }
     
-    func onArrowUpPress() {
+    @MainActor func onArrowUpPress() {
         if autocompleteSuggestions.isEmpty {
             self.selectedAutocompleteIndex = nil
         } else if let selectedAutocompleteIndex,
@@ -265,7 +263,7 @@ final class InputViewModel: ObservableObject, Sendable {
         updatePresenter()
     }
     
-    func onEnterPress() {
+    @MainActor func onEnterPress() {
         if let selectedAutocompleteIndex { // select autocompletion item
             assert(selectedAutocompleteIndex >= 0)
             assert(autocompleteSuggestions.count > selectedAutocompleteIndex)
@@ -276,7 +274,7 @@ final class InputViewModel: ObservableObject, Sendable {
         }
     }
     
-    private func processInputState() {
+    @MainActor private func processInputState() {
         switch state {
         case .sectionName:
             self.sectionName = text

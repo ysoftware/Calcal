@@ -14,7 +14,7 @@ struct EntryRepresentation {
     let total: String
 }
 
-final class Model: Sendable {
+final class Model: @unchecked Sendable {
     
     /// load data once, update locally, never save to backend
     static let TEST_DATA_NEVER_UPLOAD = false

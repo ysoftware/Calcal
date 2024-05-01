@@ -19,7 +19,9 @@ import AppKit
 // todo: bug: ui updates wait for data processing
 // todo: feature: round values during creation of an item
 
-final class MainViewModel: ObservableObject, Sendable {
+final class MainViewModel: ObservableObject, @unchecked Sendable {
+    
+    nonisolated init() { } // swift bug
     
     private let dateFormatter = DateFormatter()
     private let model = Model()
@@ -31,37 +33,40 @@ final class MainViewModel: ObservableObject, Sendable {
     private var inputDestination: ItemDestination?
     
     // ui properties
-    private(set) var inputViewModel: InputViewModel?
-    private(set) var nextButton: ButtonPresenter?
-    private(set) var previousButton: ButtonPresenter?
-    private(set) var entryPresenter: EntryRepresentation?
-    private(set) var openInputButton: ButtonPresenter?
-    private(set) var newSectionInputButton: ButtonPresenter?
-    private(set) var inputText: String?
+    @MainActor private(set) var inputViewModel: InputViewModel?
+    @MainActor private(set) var nextButton: ButtonPresenter?
+    @MainActor private(set) var previousButton: ButtonPresenter?
+    @MainActor private(set) var entryPresenter: EntryRepresentation?
+    @MainActor private(set) var openInputButton: ButtonPresenter?
+    @MainActor private(set) var newSectionInputButton: ButtonPresenter?
+    @MainActor private(set) var inputText: String?
     
     func setupInitialState() {
         dateFormatter.dateFormat = "dd MMMM yyyy"
-        setupAppLifecycleEvents()
-        setupKeyDownEvents()
         
-        openInputButton = ButtonPresenter(
-            title: "Add",
-            action: { [weak self] in
-                self?.openInputForLastSection()
-            }
-        )
-        
-        newSectionInputButton = ButtonPresenter(
-            title: "Add new meal",
-            action: { [weak self] in
-                self?.openToAddNewSection()
-            }
-        )
+        Task { @MainActor in
+            setupAppLifecycleEvents()
+            setupKeyDownEvents()
+            
+            openInputButton = ButtonPresenter(
+                title: "Add",
+                action: { [weak self] in
+                    self?.openInputForLastSection()
+                }
+            )
+            
+            newSectionInputButton = ButtonPresenter(
+                title: "Add new meal",
+                action: { [weak self] in
+                    self?.openToAddNewSection()
+                }
+            )
+        }
         
         fetchEntries()
     }
     
-    private func setupAppLifecycleEvents() {
+    @MainActor private func setupAppLifecycleEvents() {
 #if canImport(UIKit)
         let fg = UIApplication.willEnterForegroundNotification
         let bg = UIApplication.didEnterBackgroundNotification
@@ -80,17 +85,10 @@ final class MainViewModel: ObservableObject, Sendable {
         }
     }
     
-    private func setupKeyDownEvents() {
+    @MainActor private func setupKeyDownEvents() {
 #if canImport(AppKit)
         NSEvent.addLocalMonitorForEvents(matching: .keyDown, handler: { [weak self] event in
             guard let self else { return event }
-            
-            if event.modifierFlags.contains(.command),
-               event.charactersIgnoringModifiers == "v",
-               let pasteboardString = NSPasteboard.general.string(forType: .string) {
-                self.acceptPasteEvent(text: pasteboardString)
-                return nil
-            }
             
             if event.charactersIgnoringModifiers == " " {
                 guard self.inputViewModel == nil else { return event }
@@ -117,30 +115,8 @@ final class MainViewModel: ObservableObject, Sendable {
 #endif
     }
     
-    private func acceptPasteEvent(text: String) {
-        do {
-            let parser = Parser(text: text)
-            let entries = try parser.parse()
-            self.inputViewModel = nil
-            self.inputDestination = nil
-            
-            for entry in entries {
-                Task {
-                    do {
-                        try await model.addOrUpdateEntry(entry: entry)
-                        self.fetchEntries()
-                    } catch {
-                        Logger.main.error("\(error)")
-                    }
-                }
-            }
-        } catch {
-            Logger.main.error("Main: acceptPasteEvent: \(error)")
-        }
-    }
-    
     private func fetchEntries() {
-        Task {
+        Task { @MainActor in
             do {
                 try await model.fetchModel()
                 self.entries = model.getAllEntries()
@@ -153,7 +129,7 @@ final class MainViewModel: ObservableObject, Sendable {
         }
     }
     
-    private func updatePresenter() {
+    @MainActor private func updatePresenter() {
         guard entries.count > selectedEntryIndex else {
             self.entryPresenter = nil
             return
@@ -174,14 +150,12 @@ final class MainViewModel: ObservableObject, Sendable {
         
         updateEntrySwitcherButtons()
         
-        DispatchQueue.main.async {
-            self.objectWillChange.send()
-        }
+        self.objectWillChange.send()
     }
     
-    private func updateEntrySwitcherButtons() {
+    @MainActor private func updateEntrySwitcherButtons() {
         let todayDate = self.dateFormatter.string(from: Date())
-
+        
         nextButton = if entries.count > selectedEntryIndex + 1 {
             ButtonPresenter(
                 title: "Next day",
@@ -263,8 +237,8 @@ final class MainViewModel: ObservableObject, Sendable {
                     sectionId: sectionName ?? destination.sectionId
                 )
                 
-                if let item {
-                    Task {
+                Task { @MainActor in
+                    if let item {
                         do {
                             try await self.model.appendItem(item: item, destination: destination)
                             self.fetchEntries()
@@ -272,18 +246,20 @@ final class MainViewModel: ObservableObject, Sendable {
                             Logger.main.error("\(error)")
                         }
                     }
+                    
+                    self.inputViewModel = nil
+                    self.inputDestination = nil
+                    self.updatePresenter()
                 }
-                
-                self.inputViewModel = nil
-                self.inputDestination = nil
-                self.updatePresenter()
             }
         )
         
-        inputViewModel.setupInitialState()
-        
-        self.inputViewModel = inputViewModel
-        self.inputDestination = destination
-        self.updatePresenter()
+        Task { @MainActor in
+            inputViewModel.setupInitialState()
+            
+            self.inputViewModel = inputViewModel
+            self.inputDestination = destination
+            self.updatePresenter()
+        }
     }
 }
