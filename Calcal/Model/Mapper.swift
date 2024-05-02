@@ -60,7 +60,7 @@ struct Mapper {
                 items.append(
                     EntryPresenter.Item(
                         title: item.title,
-                        calories: item.calories.formatted,
+                        calories: item.calories.calorieValue,
                         quantity: Self.measurementDisplayValue(
                             quantity: item.quantity,
                             measurement: item.measurement
@@ -80,7 +80,7 @@ struct Mapper {
             sections.append(
                 EntryPresenter.Section(
                     name: section.id,
-                    calories: sectionCalories.formatted,
+                    calories: sectionCalories.calorieValue,
                     items: items
                 )
             )
@@ -88,7 +88,7 @@ struct Mapper {
         
         return EntryPresenter(
             date: entity.date.uppercased(),
-            total: totalCalories.formatted,
+            total: totalCalories.calorieValue,
             sections: sections
         )
     }
@@ -119,12 +119,16 @@ struct Mapper {
         
         \(entryText.trimmingCharacters(in: .whitespacesAndNewlines))
         
-        Total: \(totalCalories.formatted) kcal
+        Total: \(totalCalories.calorieValue)
         """
     }
 }
 
 extension Float {
+    var calorieValue: String {
+        "\(self.formatted) kcal"
+    }
+    
     var formatted: String {
         self.formatted(.number.rounded().grouping(.never))
     }

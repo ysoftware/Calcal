@@ -47,7 +47,7 @@ struct EntryView: View {
                     .foregroundStyle(Color.text)
                     .frame(maxWidth: .infinity, alignment: .leading)
                 
-                Text(presenter.total + " kcal")
+                Text(presenter.total)
                     .font(Style.accent)
                     .foregroundStyle(Color.text)
             }
@@ -62,7 +62,7 @@ struct EntryView: View {
                                 .font(Style.sectionTitle)
                                 .frame(width: 120, alignment: .leading)
                             
-                            Text(section.calories + " kcal")
+                            Text(section.calories)
                                 .font(Style.sectionTitle)
                                 .foregroundStyle(Color.text)
                         }
@@ -83,7 +83,7 @@ struct EntryView: View {
                                             .foregroundStyle(Color.text)
                                             .frame(width: 60, alignment: .leading)
                                         
-                                        Text(item.calories + " kcal")
+                                        Text(item.calories)
                                             .font(Style.content)
                                             .foregroundStyle(Color.text)
                                             .frame(width: 60, alignment: .trailing)

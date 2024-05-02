@@ -166,6 +166,7 @@ final class InputViewModel: ObservableObject, @unchecked Sendable {
         
         self.autocompleteSuggestions = Array(allItems
             .filter { $0.title == name }
+            .uniqued(on: { $0.quantity })
             .enumerated()
             .map { index, item in
                 let quantityValue = Mapper.measurementDisplayValue(
@@ -173,7 +174,7 @@ final class InputViewModel: ObservableObject, @unchecked Sendable {
                     measurement: item.measurement
                 )
                 return AutocompleteItemPresenter(
-                    title: "\(item.title), \(quantityValue): \(item.calories.formatted) kcal",
+                    title: "\(item.title), \(quantityValue) → \(item.calories.formatted) kcal",
                     isSelected: index == self.selectedAutocompleteIndex,
                     onAcceptItem: { [weak self] in
                         guard let self else { return }
