@@ -9,33 +9,36 @@ import Foundation
 
 struct Mapper {
     
-    static func measurementDisplayValue(item: EntryEntity.Item) -> String {
-        let baseQuantity = item.quantity
-            .formatted(.number.rounded())
+    static func measurementDisplayValue(
+        quantity: Float,
+        measurement: EntryEntity.QuantityMeasurement
+    ) -> String {
+        let baseQuantity = quantity
+            .formatted
             .replacingOccurrences(of: ",", with: ".")
         
-        let multipliedQuantity = (item.quantity*1000)
-            .formatted(.number.rounded())
+        let multipliedQuantity = (quantity*1000)
+            .formatted
             .replacingOccurrences(of: ",", with: ".")
         
-        switch item.measurement {
+        switch measurement {
         case .portion:
-            if item.quantity == 1 {
+            if quantity == 1 {
                 return "1"
             }
             return "\(baseQuantity)"
         case .cup:
-            if item.quantity == 1 {
+            if quantity == 1 {
                 return "1 cup"
             }
             return "\(baseQuantity) cups"
         case .liter:
-            if item.quantity > 0.5 {
+            if quantity > 0.5 {
                 return "\(baseQuantity) l"
             }
             return "\(multipliedQuantity) ml"
         case .kilogram:
-            if item.quantity > 0.5 {
+            if quantity > 0.5 {
                 return "\(baseQuantity) kg"
             }
             return "\(multipliedQuantity) g"
@@ -58,7 +61,10 @@ struct Mapper {
                     EntryPresenter.Item(
                         title: item.title,
                         calories: item.calories.formatted,
-                        quantity: Self.measurementDisplayValue(item: item),
+                        quantity: Self.measurementDisplayValue(
+                            quantity: item.quantity,
+                            measurement: item.measurement
+                        ),
                         deleteButton: ButtonPresenter(
                             title: "delete",
                             action: {
@@ -87,7 +93,7 @@ struct Mapper {
         )
     }
     
-    static func map(entity: EntryEntity) -> EntryRepresentation {
+    static func map(entity: EntryEntity) -> String {
         var entryText = ""
         var totalCalories: Float = 0
         
@@ -96,29 +102,25 @@ struct Mapper {
             var sectionCalories: Float = 0
             
             for item in section.items {
-                itemsText.append("- \(item.title), \(Self.measurementDisplayValue(item: item)), \(item.calories.formatted(.number.rounded())) kcal\n")
+                let quantityValue = Self.measurementDisplayValue(
+                    quantity: item.quantity,
+                    measurement: item.measurement
+                )
+                itemsText.append("- \(item.title), \(quantityValue), \(item.calories.formatted) kcal\n")
                 sectionCalories += item.calories
             }
             
-            entryText.append("\(section.id) - \(sectionCalories.formatted(.number.rounded())) kcal\n\(itemsText)\n")
+            entryText.append("\(section.id) - \(sectionCalories.formatted)) kcal\n\(itemsText)\n")
             totalCalories += sectionCalories
         }
         
-        return EntryRepresentation(
-            date: "Date: \(entity.date)",
-            text: entryText.trimmingCharacters(in: .whitespacesAndNewlines),
-            total: "Total: \(totalCalories.formatted(.number.rounded().grouping(.never))) kcal"
-        )
-    }
-    
-    static func map(representation: EntryRepresentation) -> String {
-"""
-\(representation.date)
-
-\(representation.text)
-
-\(representation.total)
-"""
+        return """
+        Date: \(entity.date)
+        
+        \(entryText.trimmingCharacters(in: .whitespacesAndNewlines))
+        
+        Total: \(totalCalories.formatted) kcal
+        """
     }
 }
 

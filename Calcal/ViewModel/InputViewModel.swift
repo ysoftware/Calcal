@@ -16,6 +16,8 @@ final class InputViewModel: ObservableObject, @unchecked Sendable {
     private let shouldInputSectionName: Bool
     private let completeInput: (EntryEntity.Item?, String?) -> Void
     
+    private var allItems: [EntryEntity.Item] = []
+    
     // saved input values
     private var selectedItemCaloricInformation: CaloricInformation?
     private var name: String?
@@ -68,6 +70,10 @@ final class InputViewModel: ObservableObject, @unchecked Sendable {
     @MainActor func setupInitialState() {
         text = ""
         
+        allItems = model.getAllEntries()
+            .flatMap { $0.sections }
+            .flatMap { $0.items }
+        
         resetAllInput()
         
         closeButton = ButtonPresenter(
@@ -76,10 +82,6 @@ final class InputViewModel: ObservableObject, @unchecked Sendable {
                 self?.completeInput(nil, nil)
             }
         )
-        
-        let allItems = model.getAllEntries()
-            .flatMap { $0.sections }
-            .flatMap { $0.items }
         
         var items: [PopularItem] = []
         
@@ -112,9 +114,13 @@ final class InputViewModel: ObservableObject, @unchecked Sendable {
                 .sorted { $0.occurencesCount > $1.occurencesCount }
                 .prefix(14)
                 .map { item in
-                    // todo: improvement: use mapper
-                    ButtonPresenter(
-                        title: "\(item.title), \(item.quantity) \(item.measurement), \(item.calories) kcal (x\(item.occurencesCount))",
+                    let quantityDisplayValue = Mapper.measurementDisplayValue(
+                        quantity: item.quantity,
+                        measurement: item.measurement
+                    )
+                    
+                    return ButtonPresenter(
+                        title: "\(item.title), \(quantityDisplayValue), \(item.calories.formatted) kcal (x\(item.occurencesCount))",
                         action: { [weak self] in
                             guard let self else { return }
                             
@@ -158,15 +164,16 @@ final class InputViewModel: ObservableObject, @unchecked Sendable {
             return
         }
         
-        self.autocompleteSuggestions = Array(model.getAllEntries()
-            .flatMap { $0.sections }
-            .flatMap { $0.items }
+        self.autocompleteSuggestions = Array(allItems
             .filter { $0.title == name }
             .enumerated()
             .map { index, item in
-                // todo: feature: use proper presentation
-                AutocompleteItemPresenter(
-                    title: "\(item.title), \(item.quantity) \(item.measurement): \(item.calories) kcal",
+                let quantityValue = Mapper.measurementDisplayValue(
+                    quantity: item.quantity,
+                    measurement: item.measurement
+                )
+                return AutocompleteItemPresenter(
+                    title: "\(item.title), \(quantityValue): \(item.calories.formatted) kcal",
                     isSelected: index == self.selectedAutocompleteIndex,
                     onAcceptItem: { [weak self] in
                         guard let self else { return }
@@ -201,14 +208,11 @@ final class InputViewModel: ObservableObject, @unchecked Sendable {
     }
     
     @MainActor private func setAutocompleteForNameInput() {
-        // todo: improvement: cache this unfiltered list long term
-        self.autocompleteSuggestions = Array(model.getAllEntries()
-            .flatMap { $0.sections }
-            .flatMap { $0.items }
+        self.autocompleteSuggestions = Array(allItems
+            .uniqued(on: { "\($0.title) \($0.measurement)" })
             .filter {
                 $0.title.lowercased().contains(text.lowercased())
             }
-            .uniqued(on: { "\($0.title) \($0.measurement)" })
             .prefix(10)
             .enumerated()
             .map { index, item in
@@ -351,10 +355,8 @@ final class InputViewModel: ObservableObject, @unchecked Sendable {
         
         let caloriesValue: Float
         
-        // todo: feature: round values during creation of an item
-        
         if let selectedItemCaloricInformation {
-            caloriesValue = (selectedItemCaloricInformation.value * quantity).rounded()
+            caloriesValue = (selectedItemCaloricInformation.value * quantity)
         } else if let calories {
             caloriesValue = calories
         } else {
@@ -363,9 +365,9 @@ final class InputViewModel: ObservableObject, @unchecked Sendable {
         
         let item = EntryEntity.Item(
             title: name,
-            quantity: quantity,
+            quantity: quantity.rounded(),
             measurement: quantityMeasurement,
-            calories: caloriesValue
+            calories: caloriesValue.rounded()
         )
         completeInput(item, sectionName)
     }

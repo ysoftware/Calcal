@@ -106,7 +106,6 @@ final class Model: @unchecked Sendable {
         
         let content = data
             .map(Mapper.map(entity:))
-            .map(Mapper.map(representation:))
             .joined(separator: "\n\n")
         
         guard let url = Bundle.main.url(forResource: "password", withExtension: "txt") else { return }
@@ -149,13 +148,6 @@ final class Model: @unchecked Sendable {
     enum Error: Swift.Error {
         case invalidResponse(code: Int)
     }
-}
-
-// todo: improvement: maybe delete this?
-struct EntryRepresentation {
-    let date: String
-    let text: String
-    let total: String
 }
 
 struct ItemDestination {

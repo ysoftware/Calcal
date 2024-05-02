@@ -247,8 +247,6 @@ final class MainViewModel: ObservableObject, @unchecked Sendable {
             completeInput: { [weak self] item, sectionName in
                 guard let self else { return }
                 
-                // todo: feature: add number to section name if exists when adding a section
-                
                 let destination = ItemDestination(
                     entryId: destination.entryId,
                     sectionId: sectionName ?? destination.sectionId
