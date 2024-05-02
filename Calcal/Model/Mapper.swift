@@ -23,7 +23,7 @@ struct Mapper {
             if item.quantity == 1 {
                 return "1"
             }
-            return "x\(baseQuantity)"
+            return "\(baseQuantity)"
         case .cup:
             if item.quantity == 1 {
                 return "1 cup"
