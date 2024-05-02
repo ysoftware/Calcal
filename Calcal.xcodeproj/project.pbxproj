@@ -162,9 +162,9 @@
 		CCFE26212BCBF0F90032FD48 /* Subviews */ = {
 			isa = PBXGroup;
 			children = (
-				CC7667502BE3E44F004D004C /* Style.swift */,
 				CCFE261E2BCBF05B0032FD48 /* EntryView.swift */,
 				CCFE26272BCC12FC0032FD48 /* ButtonView.swift */,
+				CC7667502BE3E44F004D004C /* Style.swift */,
 			);
 			path = Subviews;
 			sourceTree = "<group>";
