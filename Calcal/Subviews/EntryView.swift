@@ -29,7 +29,7 @@ extension EntryPresenter {
         let title: String
         let calories: String
         let quantity: String
-        let onDelete: () -> Void
+        let deleteButton: ButtonPresenter
     }
 }
 
@@ -48,10 +48,12 @@ struct EntryView: View {
             HStack(alignment: .bottom, spacing: 0) {
                 Text(presenter.date)
                     .font(Style.title)
+                    .foregroundStyle(Color.text)
                     .frame(maxWidth: .infinity, alignment: .leading)
                 
                 Text(presenter.total + " kcal")
                     .font(Style.accent)
+                    .foregroundStyle(Color.text)
             }
             .padding(.horizontal, Style.padding)
             
@@ -60,11 +62,13 @@ struct EntryView: View {
                     VStack(spacing: Style.textSpacing) {
                         HStack(spacing: Style.textSpacing) {
                             Text(section.name)
+                                .foregroundStyle(Color.text)
                                 .font(Style.sectionTitle)
                                 .frame(width: 120, alignment: .leading)
                             
                             Text(section.calories + " kcal")
                                 .font(Style.sectionTitle)
+                                .foregroundStyle(Color.text)
                         }
                         .frame(maxWidth: .infinity, alignment: .leading)
                         .padding(.horizontal, Style.padding)
@@ -75,28 +79,28 @@ struct EntryView: View {
                                     HStack(alignment: .center, spacing: Style.textSpacing) {
                                         Text(item.title)
                                             .font(Style.content)
+                                            .foregroundStyle(Color.text)
                                             .frame(maxWidth: .infinity, alignment: .leading)
                                         
                                         Text(item.quantity)
                                             .font(Style.content)
+                                            .foregroundStyle(Color.text)
                                             .frame(width: 60, alignment: .leading)
                                         
                                         Text(item.calories + " kcal")
                                             .font(Style.content)
+                                            .foregroundStyle(Color.text)
                                             .frame(width: 60, alignment: .trailing)
                                     }
                                     .padding(.horizontal, Style.padding)
                                     .frame(height: 20)
                                     .frame(maxWidth: .infinity, alignment: .leading)
                                     .swipeActions(edge: .trailing, allowsFullSwipe: true) {
-                                        Button(action: item.onDelete) {
-                                            Text("Delete")
-                                                .font(Style.content)
-                                        }
-                                        .tint(.red)
+                                        ButtonView(presenter: item.deleteButton)
+                                            .tint(Color.deleteButtonBackground)
                                     }
                                     .setupRowStyle()
-                                    .background(itemIndex % 2 == 0 ? Color.accentColor.opacity(0.03) : .clear)
+                                    .background(itemIndex % 2 == 0 ? Color.evenItemBackground : .clear)
                                 }
                             }
                             .setupStyle()
@@ -116,12 +120,12 @@ private extension View {
         self
             .listRowSeparator(.hidden)
             .listRowInsets(EdgeInsets())
-            .listRowBackground(Color.clear)
+            .listRowBackground(SwiftUI.Color.clear)
         #else
         self
             .listRowSeparator(.hidden)
             .listRowInsets(EdgeInsets())
-            .listRowBackground(Color.clear)
+            .listRowBackground(SwiftUI.Color.clear)
             .listRowSpacing(0)
         #endif
     }

@@ -30,7 +30,7 @@ final class InputViewModel: ObservableObject, @unchecked Sendable {
     @MainActor private(set) var state: State = .name
     @MainActor private(set) var selectedAutocompleteIndex: Int?
     @MainActor private(set) var autocompleteSuggestions: [AutocompleteItemPresenter] = []
-    @MainActor private(set) var popularEntries: [QuickItemPresenter] = []
+    @MainActor private(set) var popularEntries: [ButtonPresenter] = []
     @MainActor private(set) var text: String = ""
     
     init(
@@ -113,9 +113,9 @@ final class InputViewModel: ObservableObject, @unchecked Sendable {
                 .prefix(14)
                 .map { item in
                     // todo: improvement: use mapper
-                    QuickItemPresenter(
+                    ButtonPresenter(
                         title: "\(item.title), \(item.quantity) \(item.measurement), \(item.calories) kcal (x\(item.occurencesCount))",
-                        onAcceptItem: { [weak self] in
+                        action: { [weak self] in
                             guard let self else { return }
                             
                             let entryItem = EntryEntity.Item(

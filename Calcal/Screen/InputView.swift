@@ -7,19 +7,6 @@
 
 import SwiftUI
 
-#if canImport(UIKit)
-import UIKit
-private typealias PlatformColor = UIColor
-#elseif canImport(AppKit)
-import AppKit
-private typealias PlatformColor = NSColor
-#endif
-
-struct QuickItemPresenter {
-    let title: String
-    let onAcceptItem: () -> Void
-}
-
 struct AutocompleteItemPresenter {
     let title: String
     let isSelected: Bool
@@ -41,6 +28,7 @@ struct InputView: View {
                     .map { ButtonView(presenter: $0) }
             }
             .padding(.bottom, Style.itemSpacing)
+            .padding(.horizontal, Style.padding)
             
             autocompletions
             
@@ -48,7 +36,6 @@ struct InputView: View {
             
             Spacer()
         }
-        .padding(.horizontal, Style.padding)
     }
     
     @ViewBuilder
@@ -58,17 +45,18 @@ struct InputView: View {
                 VStack(spacing: 5) {
                     ForEach(viewModel.popularEntries.swiftUIEnumerated, id: \.0) { _, item in
                         #if os(iOS)
-                        Button(item.title, action: item.onAcceptItem)
+                        ButtonView(presenter: item, color: Color.suggestionItem)
                             .frame(maxWidth: .infinity, alignment: .leading)
                             .frame(height: 40)
                         #else
-                        Button(item.title, action: item.onAcceptItem)
+                        ButtonView(presenter: item, color: Color.suggestionItem)
                             .frame(maxWidth: .infinity, alignment: .leading)
                         #endif
                     }
                 }
+                .padding(.vertical, 1)
                 .frame(maxWidth: .infinity, alignment: .leading)
-                .padding(1)
+                .padding(.horizontal, Style.padding)
             }
         }
     }
@@ -77,39 +65,30 @@ struct InputView: View {
     private var autocompletions: some View {
         if !viewModel.autocompleteSuggestions.isEmpty {
             ScrollView(.vertical) {
-                VStack(spacing: 5) {
+                VStack(spacing: Style.textSpacing) {
                     ForEach(viewModel.autocompleteSuggestions.swiftUIEnumerated, id: \.0) { index, item in
                         #if os(iOS)
-                        Button(item.title, action: item.onAcceptItem)
+                        ButtonView(presenter: ButtonPresenter(title: item.title, action: item.onAcceptItem))
                             .frame(maxWidth: .infinity, alignment: .leading)
-                            .background {
-                                if item.isSelected {
-                                    Color.accentColor.opacity(0.3)
-                                }
-                            }
                             .frame(height: 40)
-                            .tint(.green)
                         #else
                         Text(item.title)
+                            .foregroundStyle(Color.autocompletionItem)
                             .frame(maxWidth: .infinity, alignment: .leading)
+                            .frame(height: 20)
                             .background {
                                 if item.isSelected {
-                                    Color.accentColor.opacity(0.3)
+                                    RoundedRectangle(cornerRadius: 2)
+                                        .fill(Color.selectedAutocompletionItemBackground)
+                                        .padding(.trailing, Style.padding)
                                 }
                             }
                         #endif
                     }
                 }
+                .padding(.horizontal, Style.padding)
             }
         }
-    }
-    
-    private var inputFieldBackgroundColor: Color {
-#if canImport(AppKit)
-        Color(NSColor.controlBackgroundColor)
-#else
-        Color(UIColor.secondarySystemBackground)
-#endif
     }
     
     private var textField: some View {
@@ -122,7 +101,8 @@ struct InputView: View {
             .padding(.horizontal, Style.itemSpacing)
             .frame(maxWidth: .infinity, alignment: .leading)
             .background {
-                inputFieldBackgroundColor.clipShape(RoundedRectangle(cornerRadius: 5))
+                Color.inputFieldBackground
+                    .clipShape(RoundedRectangle(cornerRadius: 5))
             }
             .onChange(of: text, initial: false) { _, newValue in
                 viewModel.onTextChange(newText: newValue)

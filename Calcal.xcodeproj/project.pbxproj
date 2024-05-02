@@ -13,6 +13,7 @@
 		CC5FF3B52BDFA49400C9DAD3 /* Mapper.swift in Sources */ = {isa = PBXBuildFile; fileRef = CC5FF3B42BDFA49400C9DAD3 /* Mapper.swift */; };
 		CC5FF3B72BDFB1C500C9DAD3 /* MainViewPhone.swift in Sources */ = {isa = PBXBuildFile; fileRef = CC5FF3B62BDFB1C500C9DAD3 /* MainViewPhone.swift */; };
 		CC5FF3BA2BDFEC2600C9DAD3 /* password.txt in Resources */ = {isa = PBXBuildFile; fileRef = CC5FF3B92BDFEC2600C9DAD3 /* password.txt */; };
+		CC7667512BE3E44F004D004C /* Style.swift in Sources */ = {isa = PBXBuildFile; fileRef = CC7667502BE3E44F004D004C /* Style.swift */; };
 		CCFE26102BCBEEB50032FD48 /* CalcalApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = CCFE260F2BCBEEB50032FD48 /* CalcalApp.swift */; };
 		CCFE26122BCBEEB50032FD48 /* MainViewDesktop.swift in Sources */ = {isa = PBXBuildFile; fileRef = CCFE26112BCBEEB50032FD48 /* MainViewDesktop.swift */; };
 		CCFE26142BCBEEB50032FD48 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = CCFE26132BCBEEB50032FD48 /* Assets.xcassets */; };
@@ -44,6 +45,7 @@
 		CC5FF3B42BDFA49400C9DAD3 /* Mapper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Mapper.swift; sourceTree = "<group>"; };
 		CC5FF3B62BDFB1C500C9DAD3 /* MainViewPhone.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainViewPhone.swift; sourceTree = "<group>"; };
 		CC5FF3B92BDFEC2600C9DAD3 /* password.txt */ = {isa = PBXFileReference; lastKnownFileType = text; path = password.txt; sourceTree = "<group>"; };
+		CC7667502BE3E44F004D004C /* Style.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Style.swift; sourceTree = "<group>"; };
 		CCFE260C2BCBEEB50032FD48 /* Calcal.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Calcal.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		CCFE260F2BCBEEB50032FD48 /* CalcalApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CalcalApp.swift; sourceTree = "<group>"; };
 		CCFE26112BCBEEB50032FD48 /* MainViewDesktop.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainViewDesktop.swift; sourceTree = "<group>"; };
@@ -160,6 +162,7 @@
 		CCFE26212BCBF0F90032FD48 /* Subviews */ = {
 			isa = PBXGroup;
 			children = (
+				CC7667502BE3E44F004D004C /* Style.swift */,
 				CCFE261E2BCBF05B0032FD48 /* EntryView.swift */,
 				CCFE26272BCC12FC0032FD48 /* ButtonView.swift */,
 			);
@@ -297,6 +300,7 @@
 				CCFE262F2BCC4E380032FD48 /* Extensions.swift in Sources */,
 				CCFE26282BCC12FC0032FD48 /* ButtonView.swift in Sources */,
 				CC5FF3B52BDFA49400C9DAD3 /* Mapper.swift in Sources */,
+				CC7667512BE3E44F004D004C /* Style.swift in Sources */,
 				CCFE26102BCBEEB50032FD48 /* CalcalApp.swift in Sources */,
 				CCFE26262BCBF43A0032FD48 /* InputView.swift in Sources */,
 				CCFE26312BCEE2310032FD48 /* Model.swift in Sources */,

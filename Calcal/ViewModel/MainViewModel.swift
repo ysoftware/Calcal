@@ -223,14 +223,14 @@ final class MainViewModel: ObservableObject, @unchecked Sendable {
     }
     
     private func openToAddNewSection() {
-        assert(entries.count > selectedEntryIndex)
+        guard entries.count > selectedEntryIndex else { return }
         let entry = self.entries[selectedEntryIndex]
         let dest = ItemDestination(entryId: entry.date, sectionId: "")
         self.openInput(destination: dest)
     }
     
     private func openInputForLastSection() {
-        assert(entries.count > selectedEntryIndex)
+        guard entries.count > selectedEntryIndex else { return }
         let entry = self.entries[selectedEntryIndex]
         let sectionId = entry.sections.last?.id ?? "Breakfast"
         let dest = ItemDestination(entryId: entry.date, sectionId: sectionId)

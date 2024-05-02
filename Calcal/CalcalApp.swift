@@ -22,7 +22,7 @@ struct CalcalApp: App {
         .windowResizability(.contentSize)
     }
     
-    private var appBorder: Color {
+    private var appBorder: SwiftUI.Color {
         if Model.TEST_DATA_NEVER_UPLOAD {
             return .red
         }

@@ -59,9 +59,12 @@ struct Mapper {
                         title: item.title,
                         calories: item.calories.formatted,
                         quantity: Self.measurementDisplayValue(item: item),
-                        onDelete: {
-                            onDeleteItem(section.id, index)
-                        }
+                        deleteButton: ButtonPresenter(
+                            title: "delete",
+                            action: {
+                                onDeleteItem(section.id, index)
+                            }
+                        )
                     )
                 )
                 sectionCalories += item.calories
