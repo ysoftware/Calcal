@@ -42,7 +42,7 @@ final class MainViewModel: ObservableObject, @unchecked Sendable {
     @MainActor private(set) var inputText: String?
     
     func setupInitialState() {
-        dateFormatter.dateFormat = "dd MMMM yyyy"
+        dateFormatter.dateFormat = "d MMMM yyyy"
         
         Task { @MainActor in
             setupAppLifecycleEvents()
