@@ -17,7 +17,6 @@ import AppKit
 #endif
 
 // todo: bug: ui updates wait for data processing
-// todo: feature: round values during creation of an item
 
 final class MainViewModel: ObservableObject, @unchecked Sendable {
     

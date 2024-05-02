@@ -164,6 +164,7 @@ final class InputViewModel: ObservableObject, @unchecked Sendable {
             .filter { $0.title == name }
             .enumerated()
             .map { index, item in
+                // todo: feature: use proper presentation
                 AutocompleteItemPresenter(
                     title: "\(item.title), \(item.quantity) \(item.measurement): \(item.calories) kcal",
                     isSelected: index == self.selectedAutocompleteIndex,
@@ -349,6 +350,8 @@ final class InputViewModel: ObservableObject, @unchecked Sendable {
         else { return }
         
         let caloriesValue: Float
+        
+        // todo: feature: round values during creation of an item
         
         if let selectedItemCaloricInformation {
             caloriesValue = (selectedItemCaloricInformation.value * quantity).rounded()
