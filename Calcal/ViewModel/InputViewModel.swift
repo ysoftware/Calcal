@@ -165,8 +165,9 @@ final class InputViewModel: ObservableObject, @unchecked Sendable {
         }
         
         self.autocompleteSuggestions = Array(allItems
-            .filter { $0.title == name }
+            .filter { $0.title.lowercased() == name.lowercased() }
             .uniqued(on: { $0.quantity })
+            .sorted(by: { $0.quantity < $1.quantity })
             .enumerated()
             .map { index, item in
                 let quantityValue = Mapper.measurementDisplayValue(
@@ -210,7 +211,7 @@ final class InputViewModel: ObservableObject, @unchecked Sendable {
     
     @MainActor private func setAutocompleteForNameInput() {
         self.autocompleteSuggestions = Array(allItems
-            .uniqued(on: { "\($0.title) \($0.measurement)" })
+            .uniqued(on: { "\($0.title.lowercased()) \($0.measurement)" })
             .filter {
                 $0.title.lowercased().contains(text.lowercased())
             }
@@ -366,7 +367,7 @@ final class InputViewModel: ObservableObject, @unchecked Sendable {
         
         let item = EntryEntity.Item(
             title: name,
-            quantity: quantity.rounded(),
+            quantity: quantity,
             measurement: quantityMeasurement,
             calories: caloriesValue.rounded()
         )
