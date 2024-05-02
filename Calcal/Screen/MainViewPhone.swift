@@ -8,11 +8,25 @@
 #if os(iOS)
 import SwiftUI
 
+enum Style {
+    static let content: Font = .system(size: 15, weight: .regular)
+    static let sectionTitle: Font = .system(size: 15, weight: .semibold)
+    static let title: Font = .system(size: 15, weight: .semibold)
+    static let accent: Font = .system(size: 20, weight: .heavy)
+    
+    static let bigSpacing: CGFloat = 30
+    static let sectionSpacing: CGFloat = 20
+    static let itemSpacing: CGFloat = 10
+    static let textSpacing: CGFloat = 5
+    
+    static let padding: CGFloat = 10
+}
+
 struct MainView: View {
     @ObservedObject var viewModel: MainViewModel
     
     var body: some View {
-        VStack(alignment: .leading, spacing: 10) {
+        VStack(alignment: .leading, spacing: Style.itemSpacing) {
             if viewModel.inputViewModel == nil {
                 mainView
             }
@@ -26,11 +40,11 @@ struct MainView: View {
                 InputView(viewModel: inputViewModel)
             }
         }
-        .padding(10)
+        .padding(.vertical, Style.padding)
     }
     
     private var mainView: some View {
-        VStack(spacing: 10) {
+        VStack(spacing: Style.itemSpacing) {
             HStack(spacing: 0) {
                 viewModel.previousButton
                     .map { ButtonView(presenter: $0) }
@@ -40,6 +54,7 @@ struct MainView: View {
                 viewModel.nextButton
                     .map { ButtonView(presenter: $0) }
             }
+            .padding(.horizontal, Style.padding)
             
             ScrollView {
                 viewModel.entryPresenter
@@ -48,7 +63,7 @@ struct MainView: View {
             
             Spacer()
             
-            VStack(spacing: 10) {
+            VStack(spacing: Style.itemSpacing) {
                 HStack(spacing: 0) {
                     viewModel.newSectionInputButton
                         .map { ButtonView(presenter: $0) }
@@ -59,6 +74,7 @@ struct MainView: View {
                         .map { ButtonView(presenter: $0) }
                 }
             }
+            .padding(.horizontal, Style.padding)
         }
     }
 }

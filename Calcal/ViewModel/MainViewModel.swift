@@ -35,7 +35,7 @@ final class MainViewModel: ObservableObject, @unchecked Sendable {
     @MainActor private(set) var inputViewModel: InputViewModel?
     @MainActor private(set) var nextButton: ButtonPresenter?
     @MainActor private(set) var previousButton: ButtonPresenter?
-    @MainActor private(set) var entryPresenter: EntryRepresentation?
+    @MainActor private(set) var entryPresenter: EntryPresenter?
     @MainActor private(set) var openInputButton: ButtonPresenter?
     @MainActor private(set) var newSectionInputButton: ButtonPresenter?
     @MainActor private(set) var inputText: String?
@@ -157,7 +157,7 @@ final class MainViewModel: ObservableObject, @unchecked Sendable {
         
         nextButton = if entries.count > selectedEntryIndex + 1 {
             ButtonPresenter(
-                title: "Next day",
+                title: entries[selectedEntryIndex + 1].date + " →",
                 action: { [weak self] in
                     guard let self else { return }
                     
@@ -190,7 +190,7 @@ final class MainViewModel: ObservableObject, @unchecked Sendable {
         
         previousButton = if selectedEntryIndex > 0 {
             ButtonPresenter(
-                title: "Previous day",
+                title: "← " + entries[selectedEntryIndex - 1].date,
                 action: { [weak self] in
                     guard let self else { return }
                     

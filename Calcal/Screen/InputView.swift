@@ -34,13 +34,13 @@ struct InputView: View {
     
     var body: some View {
         VStack(spacing: 0) {
-            HStack(alignment: .center, spacing: 10) {
+            HStack(alignment: .center, spacing: Style.itemSpacing) {
                 textField
                 
                 viewModel.closeButton
                     .map { ButtonView(presenter: $0) }
             }
-            .padding(.bottom, 10)
+            .padding(.bottom, Style.itemSpacing)
             
             autocompletions
             
@@ -48,6 +48,7 @@ struct InputView: View {
             
             Spacer()
         }
+        .padding(.horizontal, Style.padding)
     }
     
     @ViewBuilder
@@ -118,7 +119,7 @@ struct InputView: View {
             .font(.system(size: 18))
             .focused($isTextFieldFocused)
             .frame(height: 40, alignment: .center)
-            .padding(.horizontal, 10)
+            .padding(.horizontal, Style.itemSpacing)
             .frame(maxWidth: .infinity, alignment: .leading)
             .background {
                 inputFieldBackgroundColor.clipShape(RoundedRectangle(cornerRadius: 5))

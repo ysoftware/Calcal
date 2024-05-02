@@ -23,7 +23,7 @@ struct Mapper {
             if item.quantity == 1 {
                 return "1"
             }
-            return "\(baseQuantity)"
+            return "x\(baseQuantity)"
         case .cup:
             if item.quantity == 1 {
                 return "1 cup"
@@ -40,6 +40,45 @@ struct Mapper {
             }
             return "\(multipliedQuantity) g"
         }
+    }
+    
+    static func map(entity: EntryEntity) -> EntryPresenter {
+        var totalCalories: Float = 0
+        var sections: [EntryPresenter.Section] = []
+
+        for section in entity.sections {
+            var items: [EntryPresenter.Item] = []
+            var sectionCalories: Float = 0
+            
+            for item in section.items {
+                items.append(
+                    EntryPresenter.Item(
+                        title: item.title,
+                        calories: item.calories.formatted,
+                        quantity: Self.measurementDisplayValue(item: item),
+                        onDelete: {
+                            // todo: implement
+                        }
+                    )
+                )
+                sectionCalories += item.calories
+            }
+            
+            totalCalories += sectionCalories
+            sections.append(
+                EntryPresenter.Section(
+                    name: section.id,
+                    calories: sectionCalories.formatted,
+                    items: items
+                )
+            )
+        }
+        
+        return EntryPresenter(
+            date: entity.date.uppercased(),
+            total: totalCalories.formatted,
+            sections: sections
+        )
     }
     
     static func map(entity: EntryEntity) -> EntryRepresentation {
@@ -74,5 +113,11 @@ struct Mapper {
 
 \(representation.total)
 """
+    }
+}
+
+extension Float {
+    var formatted: String {
+        self.formatted(.number.rounded().grouping(.never))
     }
 }

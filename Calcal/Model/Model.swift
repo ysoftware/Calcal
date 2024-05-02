@@ -8,12 +8,6 @@
 import Foundation
 import OSLog
 
-struct EntryRepresentation {
-    let date: String
-    let text: String
-    let total: String
-}
-
 final class Model: @unchecked Sendable {
     
     /// load data once, update locally, never save to backend
@@ -140,6 +134,13 @@ final class Model: @unchecked Sendable {
     enum Error: Swift.Error {
         case invalidResponse(code: Int)
     }
+}
+
+// todo: improvement: maybe delete this?
+struct EntryRepresentation {
+    let date: String
+    let text: String
+    let total: String
 }
 
 struct ItemDestination {

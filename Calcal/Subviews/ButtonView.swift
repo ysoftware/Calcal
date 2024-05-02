@@ -17,8 +17,9 @@ struct ButtonView: View {
     let presenter: ButtonPresenter
     
     var body: some View {
-        Button(action: presenter.action, label: {
+        Button(action: presenter.action) {
             Text(presenter.title)
-        })
+                .font(Style.content)
+        }
     }
 }
