@@ -110,7 +110,7 @@ struct Mapper {
                 sectionCalories += item.calories
             }
             
-            entryText.append("\(section.id) - \(sectionCalories.formatted)) kcal\n\(itemsText)\n")
+            entryText.append("\(section.id) - \(sectionCalories.formatted) kcal\n\(itemsText)\n")
             totalCalories += sectionCalories
         }
         
