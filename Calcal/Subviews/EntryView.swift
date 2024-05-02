@@ -89,7 +89,7 @@ struct EntryView: View {
                                             .frame(width: 60, alignment: .trailing)
                                     }
                                     .padding(.horizontal, Style.padding)
-                                    .frame(height: 25)
+                                    .frame(height: 20)
                                     .frame(maxWidth: .infinity, alignment: .leading)
                                     .swipeActions(edge: .trailing, allowsFullSwipe: true) {
                                         ButtonView(presenter: item.deleteButton)
@@ -101,7 +101,7 @@ struct EntryView: View {
                             }
                             .setupStyle()
                             .scrollDisabled(true)
-                            .frame(height: CGFloat(section.items.count) * 25 + CGFloat(section.items.count-1) * Style.textSpacing)
+                            .frame(height: CGFloat(section.items.count) * 20 + CGFloat(section.items.count-1) * Style.textSpacing)
                         }
                     }
                 }
