@@ -69,38 +69,40 @@ struct EntryView: View {
                         .frame(maxWidth: .infinity, alignment: .leading)
                         .padding(.horizontal, Style.padding)
                         
-                        List {
-                            ForEach(section.items.swiftUIEnumerated, id: \.0) { itemIndex, item in
-                                HStack(alignment: .center, spacing: Style.textSpacing) {
-                                    Text(item.title)
-                                        .font(Style.content)
-                                        .frame(maxWidth: .infinity, alignment: .leading)
-                                    
-                                    Text(item.quantity)
-                                        .font(Style.content)
-                                        .frame(width: 60, alignment: .leading)
-                                    
-                                    Text(item.calories + " kcal")
-                                        .font(Style.content)
-                                        .frame(width: 60, alignment: .trailing)
-                                }
-                                .padding(.horizontal, Style.padding)
-                                .frame(height: 20)
-                                .frame(maxWidth: .infinity, alignment: .leading)
-                                .swipeActions(edge: .trailing, allowsFullSwipe: true) {
-                                    Button(action: item.onDelete) {
-                                        Text("Delete")
+                        if !section.items.isEmpty {
+                            List {
+                                ForEach(section.items.swiftUIEnumerated, id: \.0) { itemIndex, item in
+                                    HStack(alignment: .center, spacing: Style.textSpacing) {
+                                        Text(item.title)
                                             .font(Style.content)
+                                            .frame(maxWidth: .infinity, alignment: .leading)
+                                        
+                                        Text(item.quantity)
+                                            .font(Style.content)
+                                            .frame(width: 60, alignment: .leading)
+                                        
+                                        Text(item.calories + " kcal")
+                                            .font(Style.content)
+                                            .frame(width: 60, alignment: .trailing)
                                     }
-                                    .tint(.red)
+                                    .padding(.horizontal, Style.padding)
+                                    .frame(height: 20)
+                                    .frame(maxWidth: .infinity, alignment: .leading)
+                                    .swipeActions(edge: .trailing, allowsFullSwipe: true) {
+                                        Button(action: item.onDelete) {
+                                            Text("Delete")
+                                                .font(Style.content)
+                                        }
+                                        .tint(.red)
+                                    }
+                                    .setupRowStyle()
+                                    .background(itemIndex % 2 == 0 ? Color.accentColor.opacity(0.03) : .clear)
                                 }
-                                .setupRowStyle()
-                                .background(itemIndex % 2 == 0 ? Color.accentColor.opacity(0.03) : .clear)
                             }
+                            .setupStyle()
+                            .scrollDisabled(true)
+                            .frame(height: CGFloat(section.items.count) * 20 + CGFloat(section.items.count-1) * Style.textSpacing)
                         }
-                        .setupStyle()
-                        .scrollDisabled(true)
-                        .frame(height: CGFloat(section.items.count) * 20 + CGFloat(section.items.count-1) * Style.textSpacing)
                     }
                 }
             }

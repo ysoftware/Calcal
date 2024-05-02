@@ -42,7 +42,10 @@ struct Mapper {
         }
     }
     
-    static func map(entity: EntryEntity) -> EntryPresenter {
+    static func map(
+        entity: EntryEntity,
+        onDeleteItem: @escaping (_ sectionId: String, _ index: Int) -> Void
+    ) -> EntryPresenter {
         var totalCalories: Float = 0
         var sections: [EntryPresenter.Section] = []
 
@@ -50,14 +53,14 @@ struct Mapper {
             var items: [EntryPresenter.Item] = []
             var sectionCalories: Float = 0
             
-            for item in section.items {
+            for (index, item) in section.items.enumerated() {
                 items.append(
                     EntryPresenter.Item(
                         title: item.title,
                         calories: item.calories.formatted,
                         quantity: Self.measurementDisplayValue(item: item),
                         onDelete: {
-                            // todo: implement
+                            onDeleteItem(section.id, index)
                         }
                     )
                 )

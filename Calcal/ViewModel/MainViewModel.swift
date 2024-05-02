@@ -55,7 +55,7 @@ final class MainViewModel: ObservableObject, @unchecked Sendable {
             )
             
             newSectionInputButton = ButtonPresenter(
-                title: "Add new meal",
+                title: "Add to meal",
                 action: { [weak self] in
                     self?.openToAddNewSection()
                 }
@@ -135,11 +135,30 @@ final class MainViewModel: ObservableObject, @unchecked Sendable {
         }
         
         let selectedEntry = entries[selectedEntryIndex]
-        self.entryPresenter = Mapper.map(entity: selectedEntry)
+        self.entryPresenter = Mapper.map(
+            entity: selectedEntry,
+            onDeleteItem: { [weak self] sectionId, itemIndex in
+                guard let self else { return }
+                
+                Task { @MainActor in
+                    do {
+                        try await self.model.deleteItem(
+                            entryId: selectedEntry.date,
+                            sectionId: sectionId,
+                            itemIndex: itemIndex
+                        )
+                        
+                        self.fetchEntries()
+                    } catch {
+                        Logger.main.error("\(error)")
+                    }
+                }
+            }
+        )
         
         self.inputText = if let inputDestination {
             if inputDestination.sectionId.isEmpty {
-                "starting new meal on \(inputDestination.entryId)"
+                "adding to meal on \(inputDestination.entryId)"
             } else {
                 "adding into \(inputDestination.sectionId) on \(inputDestination.entryId)"
             }
@@ -148,7 +167,6 @@ final class MainViewModel: ObservableObject, @unchecked Sendable {
         }
         
         updateEntrySwitcherButtons()
-        
         self.objectWillChange.send()
     }
     

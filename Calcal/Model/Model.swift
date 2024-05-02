@@ -82,6 +82,21 @@ final class Model: @unchecked Sendable {
         }
     }
     
+    func deleteItem(entryId: String, sectionId: String, itemIndex: Int) async throws {
+        guard let entryIndex = data.firstIndex(where: { $0.date == entryId }),
+              let sectionIndex = data[entryIndex].sections.firstIndex(where: { $0.id == sectionId }),
+              data[entryIndex].sections[sectionIndex].items.count > itemIndex
+        else { return }
+        
+        data[entryIndex].sections[sectionIndex].items.remove(at: itemIndex)
+        
+        if data[entryIndex].sections[sectionIndex].items.isEmpty {
+            data[entryIndex].sections.remove(at: sectionIndex)
+        }
+        
+        try await saveModel()
+    }
+    
     private func saveModel() async throws {
         if Self.TEST_DATA_NEVER_UPLOAD {
             return
