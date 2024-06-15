@@ -49,28 +49,25 @@ struct MainView: View {
             }
             .padding(.horizontal, Style.padding)
             
-            ScrollView {
-                viewModel.entryPresenter
-                    .map { EntryView(presenter: $0) }
-            }
+            viewModel.entryPresenter
+                .map { EntryView(presenter: $0) }
             
             Spacer()
             
             VStack(spacing: Style.itemSpacing) {
-                HStack(spacing: 0) {
+                HStack(spacing: Style.itemSpacing) {
+                    viewModel.openCalendarButton
+                        .map { ButtonView(presenter: $0) }
+
+                    Spacer()
+                    
                     viewModel.newSectionInputButton
                         .map { ButtonView(presenter: $0) }
-                    
-                    Spacer()
-                    
-                    viewModel.openCalendarButton
-                        .map { ButtonView(presenter: $0) }                    
-                    
-                    Spacer()
                     
                     viewModel.openInputButton
                         .map { ButtonView(presenter: $0) }
                 }
+                .frame(maxWidth: .infinity)
             }
             .padding(.horizontal, Style.padding)
         }

@@ -48,7 +48,8 @@ struct CalendarView: View {
             }
             
             ButtonView(presenter: presenter.dismissButton)
+                .padding(.horizontal, Style.padding)
+                .frame(maxWidth: .infinity, alignment: .leading)
         }
-        .frame(maxWidth: .infinity, alignment: .leading)
     }
 }

@@ -40,7 +40,7 @@ struct EntryView: View {
     }
     
     var body: some View {
-        VStack(spacing: Style.bigSpacing) {
+        VStack(spacing: Style.itemSpacing) {
             HStack(alignment: .bottom, spacing: 0) {
                 Text(presenter.date)
                     .font(Style.title)

@@ -175,13 +175,13 @@ struct Mapper {
     static func color(calories: Float) -> SwiftUI.Color {
         if calories <= 1400 {
             Color.entryIncomplete
-        } else if calories <= 1700 {
+        } else if calories <= 1900 {
             Color.entryBest
-        } else if calories <= 2100 {
+        } else if calories <= 2200 {
             Color.entryGood
-        } else if calories <= 2300 {
+        } else if calories <= 2400 {
             Color.entryNormal
-        } else if calories <= 2800 {
+        } else if calories <= 2900 {
             Color.entryBad
         } else {
             Color.entryHorrible

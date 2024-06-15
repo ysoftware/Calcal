@@ -256,7 +256,7 @@ final class MainViewModel: ObservableObject, @unchecked Sendable {
         Task { @MainActor in
             self.calendarPresenter = Mapper.mapCalendar(
                 entries: entries,
-                dismissButton: ButtonPresenter(title: "dismiss", action: { [weak self] in
+                dismissButton: ButtonPresenter(title: "Dismiss", action: { [weak self] in
                     guard let self else { return }
                     self.calendarPresenter = nil
                     self.updatePresenter()

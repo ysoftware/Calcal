@@ -54,20 +54,19 @@ struct MainView: View {
                     .map { Text($0) }
                     .foregroundStyle(Color.text)
                 
-                HStack(spacing: 0) {
-                    viewModel.newSectionInputButton
-                        .map { ButtonView(presenter: $0) }
-                    
-                    Spacer()
-                    
+                HStack(spacing: Style.itemSpacing) {
                     viewModel.openCalendarButton
                         .map { ButtonView(presenter: $0) }
-                    
+
                     Spacer()
+                    
+                    viewModel.newSectionInputButton
+                        .map { ButtonView(presenter: $0) }
                     
                     viewModel.openInputButton
                         .map { ButtonView(presenter: $0) }
                 }
+                .frame(maxWidth: .infinity)
             }
             .padding(.horizontal, Style.padding)
         }
