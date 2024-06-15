@@ -5,7 +5,7 @@
 //  Created by Iaroslav Erokhin on 29.04.24.
 //
 
-import Foundation
+import SwiftUI
 
 struct Mapper {
     
@@ -127,6 +127,65 @@ struct Mapper {
         
         Total: \(totalCalories.calorieValue)
         """
+    }
+    
+    static func mapCalendar(
+        entries: [EntryEntity],
+        dismissButton: ButtonPresenter
+    ) -> CalendarPresenter {
+        let calendar = Calendar(identifier: .gregorian)
+        
+        var rows: [[CalendarPresenter.Column]] = []
+        
+        var i = 0
+        while i < entries.count {
+            var row: [CalendarPresenter.Column] = []
+            for w in 1...7 {
+                
+                guard entries.count > i, let date = dateFormatter.date(from: entries[i].date) else {
+                    i += 1
+                    row.append(CalendarPresenter.Column(color: .clear, text: ""))
+                    continue
+                }
+                
+                let calories = entries[i].sections.map { $0.items.map { $0.calories }.reduce(0, +) }.reduce(0, +)
+                
+                // weekday adjusted to start on monday
+                var weekday: Int = calendar.component(.weekday, from: date)
+                if weekday == 1 {
+                    weekday = 7
+                } else {
+                    weekday -= 1
+                }
+                
+                if weekday == w {
+                    row.append(CalendarPresenter.Column(color: color(calories: calories), text: "\(Int(calories))"))
+                    i += 1
+                    continue
+                } else {
+                    row.append(CalendarPresenter.Column(color: .clear, text: ""))
+                }
+            }
+            rows.append(row)
+        }
+
+        return CalendarPresenter(rows: rows, dismissButton: dismissButton)
+    }
+    
+    static func color(calories: Float) -> SwiftUI.Color {
+        if calories <= 1400 {
+            Color.entryIncomplete
+        } else if calories <= 1700 {
+            Color.entryBest
+        } else if calories <= 2100 {
+            Color.entryGood
+        } else if calories <= 2300 {
+            Color.entryNormal
+        } else if calories <= 2800 {
+            Color.entryBad
+        } else {
+            Color.entryHorrible
+        }
     }
 }
 

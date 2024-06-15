@@ -22,7 +22,6 @@ final class MainViewModel: ObservableObject, @unchecked Sendable {
     
     nonisolated init() { } // swift bug
     
-    private let dateFormatter = DateFormatter()
     private let model = Model()
     
     // private state
@@ -31,9 +30,13 @@ final class MainViewModel: ObservableObject, @unchecked Sendable {
     private var entries: [EntryEntity] = []
     private var inputDestination: ItemDestination?
     
-    // ui properties
+    // other views
     @MainActor private(set) var errorPresenter: ErrorPresenter?
+    @MainActor private(set) var calendarPresenter: CalendarPresenter?
     @MainActor private(set) var inputViewModel: InputViewModel?
+    
+    // ui for this view
+    @MainActor private(set) var openCalendarButton: ButtonPresenter?
     @MainActor private(set) var nextButton: ButtonPresenter?
     @MainActor private(set) var previousButton: ButtonPresenter?
     @MainActor private(set) var entryPresenter: EntryPresenter?
@@ -42,11 +45,16 @@ final class MainViewModel: ObservableObject, @unchecked Sendable {
     @MainActor private(set) var inputText: String?
     
     func setupInitialState() {
-        dateFormatter.dateFormat = "d MMMM yyyy"
-        
         Task { @MainActor in
             setupAppLifecycleEvents()
             setupKeyDownEvents()
+            
+            openCalendarButton = ButtonPresenter(
+                title: "Calendar",
+                action: { [weak self] in
+                    self?.openCalendar()
+                }
+            )
             
             openInputButton = ButtonPresenter(
                 title: "Add",
@@ -178,7 +186,7 @@ final class MainViewModel: ObservableObject, @unchecked Sendable {
     }
     
     @MainActor private func updateEntrySwitcherButtons() {
-        let todayDate = self.dateFormatter.string(from: Date())
+        let todayDate = dateFormatter.string(from: Date())
         
         nextButton = if entries.count > selectedEntryIndex + 1 {
             ButtonPresenter(
@@ -242,6 +250,20 @@ final class MainViewModel: ObservableObject, @unchecked Sendable {
         let sectionId = entry.sections.last?.id ?? "Breakfast"
         let dest = ItemDestination(entryId: entry.date, sectionId: sectionId)
         self.openInput(destination: dest)
+    }
+    
+    private func openCalendar() {
+        Task { @MainActor in
+            self.calendarPresenter = Mapper.mapCalendar(
+                entries: entries,
+                dismissButton: ButtonPresenter(title: "dismiss", action: { [weak self] in
+                    guard let self else { return }
+                    self.calendarPresenter = nil
+                    self.updatePresenter()
+                })
+            )
+            self.updatePresenter()
+        }
     }
     
     /// if destination.sectionId is empty, input will request section name from the user

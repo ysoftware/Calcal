@@ -15,6 +15,8 @@ struct MainView: View {
         VStack(alignment: .leading, spacing: Style.itemSpacing) {
             if let presenter = viewModel.errorPresenter {
                 ErrorView(presenter: presenter)
+            } else if let presenter = viewModel.calendarPresenter {
+                CalendarView(presenter: presenter)
             } else {
                 if viewModel.inputViewModel == nil {
                     mainView
@@ -58,6 +60,11 @@ struct MainView: View {
                 HStack(spacing: 0) {
                     viewModel.newSectionInputButton
                         .map { ButtonView(presenter: $0) }
+                    
+                    Spacer()
+                    
+                    viewModel.openCalendarButton
+                        .map { ButtonView(presenter: $0) }                    
                     
                     Spacer()
                     

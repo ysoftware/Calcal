@@ -20,7 +20,7 @@ struct ErrorView: View {
         VStack(spacing: 30) {
             Text(presenter.message)
                 .font(Style.content)
-                .foregroundStyle(Color.errorMessageColor)
+                .foregroundStyle(Color.errorMessage)
                 .frame(maxWidth: .infinity, alignment: .center)
             
             if let buttonPresenter = presenter.retryButton {

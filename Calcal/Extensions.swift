@@ -8,6 +8,12 @@
 import Foundation
 import OSLog
 
+let dateFormatter: DateFormatter = {
+    let formatter = DateFormatter()
+    formatter.dateFormat = "d MMMM yyyy"
+    return formatter
+}()
+
 extension Array {
     
     /// This looks weird, but it's needed to get index

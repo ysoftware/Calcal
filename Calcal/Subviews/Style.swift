@@ -11,6 +11,8 @@ import SwiftUI
 import AppKit
 
 enum Style {
+    static let calendarNumber: Font = .system(size: 13, weight: .regular)
+    
     static let content: Font = .system(size: 14, weight: .regular)
     static let sectionTitle: Font = .system(size: 14, weight: .semibold)
     static let title: Font = .system(size: 14, weight: .medium)
@@ -27,6 +29,8 @@ enum Style {
 import UIKit
 
 enum Style {
+    static let calendarNumber: Font = .system(size: 13, weight: .regular)
+    
     static let content: Font = .system(size: 15, weight: .regular)
     static let sectionTitle: Font = .system(size: 15, weight: .semibold)
     static let title: Font = .system(size: 15, weight: .semibold)
@@ -51,5 +55,12 @@ enum Color {
     static let text = SwiftUI.Color("textColor")
     static let selectedAutocompletionItemBackground = SwiftUI.Color("selectedAutocompletionItemBackground")
     static let deleteButtonBackground = SwiftUI.Color("deleteButtonBackground")
-    static let errorMessageColor = SwiftUI.Color("errorMessageColor")
+    static let errorMessage = SwiftUI.Color("errorMessageColor")
+    
+    static let entryBest = SwiftUI.Color("entryBestColor")
+    static let entryGood = SwiftUI.Color("entryGoodColor")
+    static let entryNormal = SwiftUI.Color("entryNormalColor")
+    static let entryBad = SwiftUI.Color("entryBadColor")
+    static let entryHorrible = SwiftUI.Color("entryHorribleColor")
+    static let entryIncomplete = SwiftUI.Color("entryIncompleteColor")
 }
