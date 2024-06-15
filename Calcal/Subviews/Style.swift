@@ -51,4 +51,5 @@ enum Color {
     static let text = SwiftUI.Color("textColor")
     static let selectedAutocompletionItemBackground = SwiftUI.Color("selectedAutocompletionItemBackground")
     static let deleteButtonBackground = SwiftUI.Color("deleteButtonBackground")
+    static let errorMessageColor = SwiftUI.Color("errorMessageColor")
 }

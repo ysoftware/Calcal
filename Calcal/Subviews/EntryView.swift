@@ -53,55 +53,57 @@ struct EntryView: View {
             }
             .padding(.horizontal, Style.padding)
             
-            VStack(spacing: Style.sectionSpacing) {
-                ForEach(presenter.sections.swiftUIEnumerated, id: \.0) { sectionIndex, section in
-                    VStack(spacing: Style.textSpacing) {
-                        HStack(spacing: Style.textSpacing) {
-                            Text(section.name)
-                                .foregroundStyle(Color.text)
-                                .font(Style.sectionTitle)
-                                .frame(width: 120, alignment: .leading)
-                            
-                            Text(section.calories)
-                                .font(Style.sectionTitle)
-                                .foregroundStyle(Color.text)
-                        }
-                        .frame(maxWidth: .infinity, alignment: .leading)
-                        .padding(.horizontal, Style.padding)
-                        
-                        if !section.items.isEmpty {
-                            List {
-                                ForEach(section.items.swiftUIEnumerated, id: \.0) { itemIndex, item in
-                                    HStack(alignment: .center, spacing: Style.textSpacing) {
-                                        Text(item.title)
-                                            .font(Style.content)
-                                            .foregroundStyle(Color.text)
-                                            .frame(maxWidth: .infinity, alignment: .leading)
-                                        
-                                        Text(item.quantity)
-                                            .font(Style.content)
-                                            .foregroundStyle(Color.text)
-                                            .frame(width: 60, alignment: .leading)
-                                        
-                                        Text(item.calories)
-                                            .font(Style.content)
-                                            .foregroundStyle(Color.text)
-                                            .frame(width: 60, alignment: .trailing)
-                                    }
-                                    .padding(.horizontal, Style.padding)
-                                    .frame(height: 20)
-                                    .frame(maxWidth: .infinity, alignment: .leading)
-                                    .swipeActions(edge: .trailing, allowsFullSwipe: true) {
-                                        ButtonView(presenter: item.deleteButton)
-                                            .tint(Color.deleteButtonBackground)
-                                    }
-                                    .setupRowStyle()
-                                    .background(itemIndex % 2 == 0 ? Color.evenItemBackground : .clear)
-                                }
+            ScrollView(showsIndicators: false) {
+                VStack(spacing: Style.sectionSpacing) {
+                    ForEach(presenter.sections.swiftUIEnumerated, id: \.0) { sectionIndex, section in
+                        VStack(spacing: Style.textSpacing) {
+                            HStack(spacing: Style.textSpacing) {
+                                Text(section.name)
+                                    .foregroundStyle(Color.text)
+                                    .font(Style.sectionTitle)
+                                    .frame(width: 120, alignment: .leading)
+                                
+                                Text(section.calories)
+                                    .font(Style.sectionTitle)
+                                    .foregroundStyle(Color.text)
                             }
-                            .setupStyle()
-                            .scrollDisabled(true)
-                            .frame(height: CGFloat(section.items.count) * 20 + CGFloat(section.items.count-1) * Style.textSpacing)
+                            .frame(maxWidth: .infinity, alignment: .leading)
+                            .padding(.horizontal, Style.padding)
+                            
+                            if !section.items.isEmpty {
+                                List {
+                                    ForEach(section.items.swiftUIEnumerated, id: \.0) { itemIndex, item in
+                                        HStack(alignment: .center, spacing: Style.textSpacing) {
+                                            Text(item.title)
+                                                .font(Style.content)
+                                                .foregroundStyle(Color.text)
+                                                .frame(maxWidth: .infinity, alignment: .leading)
+                                            
+                                            Text(item.quantity)
+                                                .font(Style.content)
+                                                .foregroundStyle(Color.text)
+                                                .frame(width: 60, alignment: .leading)
+                                            
+                                            Text(item.calories)
+                                                .font(Style.content)
+                                                .foregroundStyle(Color.text)
+                                                .frame(width: 60, alignment: .trailing)
+                                        }
+                                        .padding(.horizontal, Style.padding)
+                                        .frame(height: 20)
+                                        .frame(maxWidth: .infinity, alignment: .leading)
+                                        .swipeActions(edge: .trailing, allowsFullSwipe: true) {
+                                            ButtonView(presenter: item.deleteButton)
+                                                .tint(Color.deleteButtonBackground)
+                                        }
+                                        .setupRowStyle()
+                                        .background(itemIndex % 2 == 0 ? Color.evenItemBackground : .clear)
+                                    }
+                                }
+                                .setupStyle()
+                                .scrollDisabled(true)
+                                .frame(height: CGFloat(section.items.count) * 20 + CGFloat(section.items.count-1) * Style.textSpacing)
+                            }
                         }
                     }
                 }

@@ -32,6 +32,7 @@ final class MainViewModel: ObservableObject, @unchecked Sendable {
     private var inputDestination: ItemDestination?
     
     // ui properties
+    @MainActor private(set) var errorPresenter: ErrorPresenter?
     @MainActor private(set) var inputViewModel: InputViewModel?
     @MainActor private(set) var nextButton: ButtonPresenter?
     @MainActor private(set) var previousButton: ButtonPresenter?
@@ -120,17 +121,24 @@ final class MainViewModel: ObservableObject, @unchecked Sendable {
                 try await model.fetchModel()
                 self.entries = model.getAllEntries()
                 self.selectedEntryIndex = max(0, entries.count - 1)
-                
-                updatePresenter()
             } catch {
-                Logger.main.error("\(error)")
+                Logger.main.error("MainViewModel.fetchEntries: \(error)")
+                self.errorPresenter = ErrorPresenter(
+                    message: "Unable to fetch entries: \(error)",
+                    retryButton: ButtonPresenter(title: "try fetching again", action: { [weak self] in
+                        self?.fetchEntries()
+                    })
+                )
             }
+            updatePresenter()
         }
     }
     
     @MainActor private func updatePresenter() {
+        defer { self.objectWillChange.send() }
+        
         guard entries.count > selectedEntryIndex else {
-            self.entryPresenter = nil
+            self.entryPresenter = nil // not error, just empty entry
             return
         }
         
@@ -167,7 +175,6 @@ final class MainViewModel: ObservableObject, @unchecked Sendable {
         }
         
         updateEntrySwitcherButtons()
-        self.objectWillChange.send()
     }
     
     @MainActor private func updateEntrySwitcherButtons() {

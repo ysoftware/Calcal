@@ -13,7 +13,11 @@ struct MainView: View {
     
     var body: some View {
         HStack(alignment: .top, spacing: Style.itemSpacing) {
-            mainView
+            if let presenter = viewModel.errorPresenter {
+                ErrorView(presenter: presenter)
+            } else {
+                mainView
+            }
             
             if let inputViewModel = viewModel.inputViewModel {
                 Divider()
@@ -40,10 +44,8 @@ struct MainView: View {
             }
             .padding(.horizontal, Style.padding)
             
-            ScrollView(showsIndicators: false) {
-                viewModel.entryPresenter
-                    .map { EntryView(presenter: $0) }
-            }
+            viewModel.entryPresenter
+                .map { EntryView(presenter: $0) }
             
             VStack(spacing: Style.itemSpacing) {
                 viewModel.inputText

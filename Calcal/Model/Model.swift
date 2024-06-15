@@ -68,18 +68,14 @@ final class Model: @unchecked Sendable {
         
         Logger.main.info("Fetching data from \(self.apiUrl)...")
         
-        do {
-            let (data, response) = try await URLSession.shared.data(from: apiUrl)
-            
-            guard let statusCode = (response as? HTTPURLResponse)?.statusCode else { return }
-            guard statusCode == 200, let contents = String(data: data, encoding: .utf8)
-            else { throw Error.invalidResponse(code: statusCode) }
-            
-            let entities = try Parser(text: contents).parse()
-            self.data = entities
-        } catch {
-            Logger.main.error("Model: loadModel: \(error)")
-        }
+        let (data, response) = try await URLSession.shared.data(from: apiUrl)
+        
+        guard let statusCode = (response as? HTTPURLResponse)?.statusCode else { return }
+        guard statusCode == 200, let contents = String(data: data, encoding: .utf8)
+        else { throw Error.invalidResponse(code: statusCode) }
+        
+        let entities = try Parser(text: contents).parse()
+        self.data = entities
     }
     
     func deleteItem(entryId: String, sectionId: String, itemIndex: Int) async throws {
@@ -106,6 +102,7 @@ final class Model: @unchecked Sendable {
         
         let content = data
             .map(Mapper.map(entity:))
+            .compactMap { $0 }
             .joined(separator: "\n\n")
         
         guard let url = Bundle.main.url(forResource: "password", withExtension: "txt") else { return }

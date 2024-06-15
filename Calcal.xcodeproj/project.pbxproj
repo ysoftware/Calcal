@@ -14,6 +14,7 @@
 		CC5FF3B72BDFB1C500C9DAD3 /* MainViewPhone.swift in Sources */ = {isa = PBXBuildFile; fileRef = CC5FF3B62BDFB1C500C9DAD3 /* MainViewPhone.swift */; };
 		CC5FF3BA2BDFEC2600C9DAD3 /* password.txt in Resources */ = {isa = PBXBuildFile; fileRef = CC5FF3B92BDFEC2600C9DAD3 /* password.txt */; };
 		CC7667512BE3E44F004D004C /* Style.swift in Sources */ = {isa = PBXBuildFile; fileRef = CC7667502BE3E44F004D004C /* Style.swift */; };
+		CC9277FF2C1D738900C37009 /* ErrorView.swift in Sources */ = {isa = PBXBuildFile; fileRef = CC9277FE2C1D738900C37009 /* ErrorView.swift */; };
 		CCFE26102BCBEEB50032FD48 /* CalcalApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = CCFE260F2BCBEEB50032FD48 /* CalcalApp.swift */; };
 		CCFE26122BCBEEB50032FD48 /* MainViewDesktop.swift in Sources */ = {isa = PBXBuildFile; fileRef = CCFE26112BCBEEB50032FD48 /* MainViewDesktop.swift */; };
 		CCFE26142BCBEEB50032FD48 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = CCFE26132BCBEEB50032FD48 /* Assets.xcassets */; };
@@ -46,6 +47,7 @@
 		CC5FF3B62BDFB1C500C9DAD3 /* MainViewPhone.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainViewPhone.swift; sourceTree = "<group>"; };
 		CC5FF3B92BDFEC2600C9DAD3 /* password.txt */ = {isa = PBXFileReference; lastKnownFileType = text; path = password.txt; sourceTree = "<group>"; };
 		CC7667502BE3E44F004D004C /* Style.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Style.swift; sourceTree = "<group>"; };
+		CC9277FE2C1D738900C37009 /* ErrorView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ErrorView.swift; sourceTree = "<group>"; };
 		CCFE260C2BCBEEB50032FD48 /* Calcal.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Calcal.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		CCFE260F2BCBEEB50032FD48 /* CalcalApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CalcalApp.swift; sourceTree = "<group>"; };
 		CCFE26112BCBEEB50032FD48 /* MainViewDesktop.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainViewDesktop.swift; sourceTree = "<group>"; };
@@ -165,6 +167,7 @@
 				CCFE261E2BCBF05B0032FD48 /* EntryView.swift */,
 				CCFE26272BCC12FC0032FD48 /* ButtonView.swift */,
 				CC7667502BE3E44F004D004C /* Style.swift */,
+				CC9277FE2C1D738900C37009 /* ErrorView.swift */,
 			);
 			path = Subviews;
 			sourceTree = "<group>";
@@ -305,6 +308,7 @@
 				CCFE26262BCBF43A0032FD48 /* InputView.swift in Sources */,
 				CCFE26312BCEE2310032FD48 /* Model.swift in Sources */,
 				CC5FF3B72BDFB1C500C9DAD3 /* MainViewPhone.swift in Sources */,
+				CC9277FF2C1D738900C37009 /* ErrorView.swift in Sources */,
 				CCFE261F2BCBF05B0032FD48 /* EntryView.swift in Sources */,
 				CCFE262A2BCC18D40032FD48 /* InputViewModel.swift in Sources */,
 				CCFE26232BCBF1050032FD48 /* MainViewModel.swift in Sources */,
@@ -489,6 +493,8 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_GENERATE_ASSET_SYMBOLS = NO;
+				ASSETCATALOG_COMPILER_GENERATE_SWIFT_ASSET_SYMBOL_EXTENSIONS = NO;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_ENTITLEMENTS = Calcal/Calcal.entitlements;
 				CODE_SIGN_STYLE = Automatic;
@@ -530,6 +536,8 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_GENERATE_ASSET_SYMBOLS = NO;
+				ASSETCATALOG_COMPILER_GENERATE_SWIFT_ASSET_SYMBOL_EXTENSIONS = NO;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_ENTITLEMENTS = Calcal/Calcal.entitlements;
 				CODE_SIGN_STYLE = Automatic;
