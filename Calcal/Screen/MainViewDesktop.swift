@@ -17,13 +17,13 @@ struct MainView: View {
                 ErrorView(presenter: presenter)
             } else {
                 mainView
-            }
-            
-            if let inputViewModel = viewModel.inputViewModel {
-                Divider()
                 
-                InputView(viewModel: inputViewModel)
-                    .frame(width: 350)
+                if let inputViewModel = viewModel.inputViewModel {
+                    Divider()
+                    
+                    InputView(viewModel: inputViewModel)
+                        .frame(width: 350)
+                }
             }
         }
         .padding(.vertical, Style.itemSpacing)

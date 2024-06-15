@@ -13,18 +13,22 @@ struct MainView: View {
     
     var body: some View {
         VStack(alignment: .leading, spacing: Style.itemSpacing) {
-            if viewModel.inputViewModel == nil {
-                mainView
-            }
-            
-            if let inputViewModel = viewModel.inputViewModel {
-                viewModel.inputText
-                    .map { Text($0) }
-                    .foregroundStyle(Color.text)
-                    .multilineTextAlignment(.center)
-                    .frame(maxWidth: .infinity, alignment: .center)
+            if let presenter = viewModel.errorPresenter {
+                ErrorView(presenter: presenter)
+            } else {
+                if viewModel.inputViewModel == nil {
+                    mainView
+                }
                 
-                InputView(viewModel: inputViewModel)
+                if let inputViewModel = viewModel.inputViewModel {
+                    viewModel.inputText
+                        .map { Text($0) }
+                        .foregroundStyle(Color.text)
+                        .multilineTextAlignment(.center)
+                        .frame(maxWidth: .infinity, alignment: .center)
+                    
+                    InputView(viewModel: inputViewModel)
+                }
             }
         }
         .padding(.vertical, Style.padding)
