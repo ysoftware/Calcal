@@ -133,22 +133,57 @@ struct Mapper {
         entries: [EntryEntity],
         dismissButton: ButtonPresenter
     ) -> CalendarPresenter {
+        let empty = CalendarPresenter.Column(color: .clear, text: "")
         let calendar = Calendar(identifier: .gregorian)
         
+        guard !entries.isEmpty,
+              let firstDate = dateFormatter.date(from: entries[0].date)
+        else {
+            return CalendarPresenter(months: [], dismissButton: dismissButton)
+        }
+        
+        var months: [CalendarPresenter.Month] = []
+        var currentMonth = calendar.component(.month, from: firstDate)
         var rows: [[CalendarPresenter.Column]] = []
         
         var i = 0
         while i < entries.count {
-            var row: [CalendarPresenter.Column] = []
+            var columns: [CalendarPresenter.Column] = []
             for w in 1...7 {
-                
                 guard entries.count > i, let date = dateFormatter.date(from: entries[i].date) else {
                     i += 1
-                    row.append(CalendarPresenter.Column(color: .clear, text: ""))
+                    columns.append(empty)
                     continue
                 }
                 
-                let calories = entries[i].sections.map { $0.items.map { $0.calories }.reduce(0, +) }.reduce(0, +)
+                let month = calendar.component(.month, from: date)
+                
+                if currentMonth != month {
+                    let addedColumns = columns.filter { $0.text != "" }
+                    if !rows.isEmpty || !addedColumns.isEmpty {
+                        if !addedColumns.isEmpty {
+                            for _ in 0..<(7-columns.count) {
+                                columns.append(empty)
+                            }
+                            rows.append(columns)
+                            columns = []
+                        }
+                        
+                        months.append(
+                            CalendarPresenter.Month(
+                                title: Self.month(number: currentMonth),
+                                rows: rows
+                            )
+                        )
+                        rows = []
+                    }
+                    currentMonth = month
+                    continue
+                }
+                
+                let calories = entries[i].sections
+                    .map { $0.items.map { $0.calories }.reduce(0, +) }
+                    .reduce(0, +)
                 
                 // weekday adjusted to start on monday
                 var weekday: Int = calendar.component(.weekday, from: date)
@@ -159,17 +194,49 @@ struct Mapper {
                 }
                 
                 if weekday == w {
-                    row.append(CalendarPresenter.Column(color: color(calories: calories), text: "\(Int(calories))"))
+                    columns.append(CalendarPresenter.Column(color: color(calories: calories), text: "\(Int(calories))"))
                     i += 1
                     continue
                 } else {
-                    row.append(CalendarPresenter.Column(color: .clear, text: ""))
+                    columns.append(empty)
                 }
             }
-            rows.append(row)
+            
+            let addedColumns = columns.filter { $0.text != "" }
+            if !addedColumns.isEmpty {
+                rows.append(columns)
+                columns = []
+            }
+        }
+        
+        if !rows.isEmpty {
+            months.append(
+                CalendarPresenter.Month(
+                    title: Self.month(number: currentMonth),
+                    rows: rows
+                )
+            )
         }
 
-        return CalendarPresenter(rows: rows, dismissButton: dismissButton)
+        return CalendarPresenter(months: months, dismissButton: dismissButton)
+    }
+    
+    static func month(number: Int) -> String {
+        switch number {
+        case 1: return "January"
+        case 2: return "February"
+        case 3: return "March"
+        case 4: return "April"
+        case 5: return "May"
+        case 6: return "June"
+        case 7: return "July"
+        case 8: return "August"
+        case 9: return "September"
+        case 10: return "October"
+        case 11: return "November"
+        case 12: return "December"
+        default: return ""
+        }
     }
     
     static func color(calories: Float) -> SwiftUI.Color {
