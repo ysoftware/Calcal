@@ -12,7 +12,6 @@ class Parser {
     
     enum Error: Swift.Error {
         case expectedEntry
-        case expectedMeal
         case expectedEOF
         case expectedFoodItem
         case expectedCalorieValue
@@ -95,8 +94,9 @@ class Parser {
                 
                 guard let sectionSeparatorIndex = textRemainder.firstIndex(of: "-") else {
                     guard !sections.isEmpty else {
-                        printErrorPosition()
-                        throw Error.expectedMeal
+                        eatWhitespaces()
+                        advanceIfPossible(after: i)
+                        continue
                     }
                     break
                 }
