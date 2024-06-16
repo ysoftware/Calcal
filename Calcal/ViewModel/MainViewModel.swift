@@ -23,6 +23,7 @@ final class MainViewModel: ObservableObject, @unchecked Sendable {
     nonisolated init() { } // swift bug
     
     private let model = Model()
+    private var presentAlert: ((AlertPresenter) -> Void)?
     
     // private state
     private var appBackgroundTimestamp = Date()
@@ -44,7 +45,9 @@ final class MainViewModel: ObservableObject, @unchecked Sendable {
     @MainActor private(set) var newSectionInputButton: ButtonPresenter?
     @MainActor private(set) var inputText: String?
     
-    func setupInitialState() {
+    func setupInitialState(presentAlert: @escaping (AlertPresenter) -> Void) {
+        self.presentAlert = presentAlert
+        
         Task { @MainActor in
             setupAppLifecycleEvents()
             setupKeyDownEvents()
@@ -156,19 +159,42 @@ final class MainViewModel: ObservableObject, @unchecked Sendable {
             onDeleteItem: { [weak self] sectionId, itemIndex in
                 guard let self else { return }
                 
-                Task { @MainActor in
-                    do {
-                        try await self.model.deleteItem(
-                            entryId: selectedEntry.date,
-                            sectionId: sectionId,
-                            itemIndex: itemIndex
-                        )
-                        
-                        self.fetchEntries()
-                    } catch {
-                        Logger.main.error("\(error)")
-                    }
-                }
+                guard let sectionIndex = selectedEntry.sections.firstIndex(where: { $0.id == sectionId }),
+                      selectedEntry.sections[sectionIndex].items.count > itemIndex
+                else { return }
+                let selectedSection = selectedEntry.sections[sectionIndex]
+                let selectedItem = selectedSection.items[itemIndex]
+                
+                presentAlert?(
+                    AlertPresenter(
+                        message: "Sure to delete \(selectedItem.title) from \(selectedSection.id)?",
+                        actions: [
+                            AlertPresenter.Action(
+                                title: "Cancel",
+                                buttonRole: .cancel
+                            ) { /* no action */ },
+                            AlertPresenter.Action(
+                                title: "Delete",
+                                buttonRole: .destructive
+                            ) { [weak self] in
+                                guard let self else { return }
+                                Task { @MainActor in
+                                    do {
+                                        try await self.model.deleteItem(
+                                            entryId: selectedEntry.date,
+                                            sectionId: sectionId,
+                                            itemIndex: itemIndex
+                                        )
+                                        
+                                        self.fetchEntries()
+                                    } catch {
+                                        Logger.main.error("\(error)")
+                                    }
+                                }
+                            }
+                        ]
+                    )
+                )
             }
         )
         
