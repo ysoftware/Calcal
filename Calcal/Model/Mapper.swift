@@ -93,10 +93,9 @@ struct Mapper {
         )
     }
     
-    static func map(entity: EntryEntity) -> String? {
+    static func map(entity: EntryEntity) -> String {
         var entryText = ""
         var totalCalories: Float = 0
-        var didAddSections = false
         
         for section in entity.sections {
             var itemsText = ""
@@ -111,14 +110,9 @@ struct Mapper {
                 sectionCalories += item.calories
             }
             
-            if !section.items.isEmpty {
-                entryText.append("\(section.id) - \(sectionCalories.formatted) kcal\n\(itemsText)\n")
-                totalCalories += sectionCalories
-                didAddSections = true
-            }
+            entryText.append("\(section.id) - \(sectionCalories.formatted) kcal\n\(itemsText)\n")
+            totalCalories += sectionCalories
         }
-        
-        guard didAddSections else { return nil }
         
         return """
         Date: \(entity.date)

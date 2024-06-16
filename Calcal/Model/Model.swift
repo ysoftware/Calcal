@@ -102,7 +102,6 @@ final class Model: @unchecked Sendable {
         
         let content = data
             .map(Mapper.map(entity:))
-            .compactMap { $0 }
             .joined(separator: "\n\n")
         
         guard let url = Bundle.main.url(forResource: "password", withExtension: "txt") else { return }
