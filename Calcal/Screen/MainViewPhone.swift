@@ -63,6 +63,7 @@ struct MainView: View {
                     
                     viewModel.newSectionInputButton
                         .map { ButtonView(presenter: $0) }
+                        .padding(.trailing, Style.bigSpacing)
                     
                     viewModel.openInputButton
                         .map { ButtonView(presenter: $0) }
