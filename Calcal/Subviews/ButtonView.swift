@@ -23,10 +23,28 @@ struct ButtonView: View {
     }
     
     var body: some View {
-        Button(action: presenter.action) {
+        Group {
+            #if os(macOS)
             Text(presenter.title)
                 .foregroundStyle(color)
                 .font(Style.content)
+                .padding(.horizontal, 10)
+                .padding(.vertical, 5)
+                .background(Color.buttonBackground.opacity(0.1))
+                .clipShape(RoundedRectangle(cornerRadius: 5))
+            #else
+            Text(presenter.title)
+                .foregroundStyle(color)
+                .font(Style.content)
+                .padding(.horizontal, 5)
+                .padding(.vertical, 10)
+            #endif
         }
+        .gesture(
+            DragGesture(minimumDistance: 0)
+                .onChanged { _ in
+                    presenter.action()
+                }
+        )
     }
 }

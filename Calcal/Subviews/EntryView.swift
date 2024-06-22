@@ -93,8 +93,10 @@ struct EntryView: View {
                                         .frame(height: 20)
                                         .frame(maxWidth: .infinity, alignment: .leading)
                                         .swipeActions(edge: .trailing, allowsFullSwipe: true) {
-                                            ButtonView(presenter: item.deleteButton)
-                                                .tint(Color.deleteButtonBackground)
+                                            Button(action: item.deleteButton.action) {
+                                                Text(item.deleteButton.title)
+                                            }
+                                            .tint(Color.deleteButtonBackground)
                                         }
                                         .setupRowStyle()
                                         .background(itemIndex % 2 == 0 ? Color.evenItemBackground : .clear)

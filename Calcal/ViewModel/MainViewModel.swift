@@ -101,8 +101,25 @@ final class MainViewModel: ObservableObject, @unchecked Sendable {
         NSEvent.addLocalMonitorForEvents(matching: .keyDown, handler: { [weak self] event in
             guard let self else { return event }
             
+            if event.keyCode == Keycode.c,
+               self.calendarPresenter == nil 
+            {
+                self.openCalendar()
+                return nil
+            }
+            
+            if event.keyCode == Keycode.escape,
+               self.calendarPresenter != nil
+            {
+                self.closeCalendar()
+                return nil
+            }
+            
             if event.charactersIgnoringModifiers == " " {
-                guard self.inputViewModel == nil else { return event }
+                guard self.inputViewModel == nil,
+                      self.calendarPresenter == nil
+                else { return event }
+                
                 if event.modifierFlags.contains(.option) {
                     self.openToAddNewSection()
                 } else {
@@ -111,12 +128,18 @@ final class MainViewModel: ObservableObject, @unchecked Sendable {
                 return nil
             }
             
-            if event.keyCode == 124, entries.count > selectedEntryIndex + 1 {
+            if event.keyCode == Keycode.arrowRight,
+               entries.count > selectedEntryIndex + 1,
+               self.calendarPresenter == nil
+            {
                 self.nextButton?.action()
                 return nil
             }
             
-            if event.keyCode == 123, selectedEntryIndex > 0 {
+            if event.keyCode == Keycode.arrowLeft,
+               selectedEntryIndex > 0,
+               self.calendarPresenter == nil
+            {
                 self.previousButton?.action()
                 return nil
             }
@@ -278,8 +301,25 @@ final class MainViewModel: ObservableObject, @unchecked Sendable {
         self.openInput(destination: dest)
     }
     
+    @MainActor
+    private func closeInput() {
+        self.inputViewModel = nil
+        self.updatePresenter()
+    }
+    
+    @MainActor
+    private func closeCalendar() {
+        self.calendarPresenter = nil
+        self.updatePresenter()
+    }
+    
     private func openCalendar() {
         Task { @MainActor in
+            if inputViewModel != nil {
+                closeInput()
+                try? await Task.sleep(for: .milliseconds(10))
+            }
+            
             self.calendarPresenter = Mapper.mapCalendar(
                 entries: entries,
                 dismissButton: ButtonPresenter(title: "Dismiss", action: { [weak self] in
@@ -332,4 +372,11 @@ final class MainViewModel: ObservableObject, @unchecked Sendable {
             self.updatePresenter()
         }
     }
+}
+
+enum Keycode {
+    static let arrowLeft = 123
+    static let arrowRight = 124
+    static let escape = 53
+    static let c = 8
 }

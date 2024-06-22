@@ -10,6 +10,8 @@ import Algorithms
 import OSLog
 import SwiftUI
 
+// todo: optimise calculations on first open
+
 final class InputViewModel: ObservableObject, @unchecked Sendable {
     
     private let model: Model

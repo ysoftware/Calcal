@@ -28,7 +28,6 @@ struct MainView: View {
                 }
             }
         }
-        .padding(.vertical, Style.itemSpacing)
         .frame(minHeight: 500)
         .background(Color.background)
     }
@@ -70,6 +69,7 @@ struct MainView: View {
             }
             .padding(.horizontal, Style.padding)
         }
+        .padding(.vertical, Style.padding)
         .frame(width: 350)
     }
 }

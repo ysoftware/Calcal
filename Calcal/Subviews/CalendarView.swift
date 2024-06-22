@@ -15,6 +15,7 @@ struct CalendarPresenter {
 extension CalendarPresenter {
     struct Month {
         let title: String
+        let subtitle: String
         let rows: [[Column]]
     }
     
@@ -33,27 +34,40 @@ struct CalendarView: View {
     var body: some View {
         VStack(spacing: 10) {
             ScrollView(.vertical) {
-                ForEach(presenter.months.swiftUIEnumerated, id: \.0) { monthIndex, month in
-                    monthView(month: month, index: monthIndex)
-                        .overlay(
-                            Text(month.title)
-                                .font(.system(size: 12, weight: .regular))
-                                .foregroundStyle(Color.button)
-                                .padding(.horizontal, Style.padding)
-                                .frame(maxWidth: .infinity, alignment: .leading)
-                                .frame(maxHeight: .infinity, alignment: .top)
-                        )
+                VStack(spacing: 10) {
+                    ForEach(presenter.months.swiftUIEnumerated, id: \.0) { monthIndex, month in
+                        VStack(spacing: Style.itemSpacing) {
+                            HStack(spacing: Style.itemSpacing) {
+                                Text(month.title)
+                                    .font(.system(size: 13, weight: .regular))
+                                    .foregroundStyle(Color.subtitle)
+                                
+                                Spacer()
+                                
+                                Text(month.subtitle)
+                                    .font(.system(size: 13, weight: .regular))
+                                    .foregroundStyle(Color.subtitle)
+                            }
+                            .padding(.horizontal, Style.padding)
+                            .frame(maxWidth: .infinity, alignment: .leading)
+                            .frame(maxHeight: .infinity, alignment: .top)
+                            
+                            monthCellsView(month: month, index: monthIndex)
+                        }
+                    }
                 }
+                .padding(.top, Style.padding)
             }
             .scrollIndicators(.never)
             
             ButtonView(presenter: presenter.dismissButton)
                 .padding(.horizontal, Style.padding)
                 .frame(maxWidth: .infinity, alignment: .leading)
+                .padding(.bottom, Style.padding)
         }
     }
     
-    private func monthView(month: CalendarPresenter.Month, index: Int) -> some View {
+    private func monthCellsView(month: CalendarPresenter.Month, index: Int) -> some View {
         VStack(spacing: spacing) {
             ForEach(month.rows.swiftUIEnumerated, id: \.0) { _, columns in
                 HStack(spacing: spacing) {
@@ -72,4 +86,42 @@ struct CalendarView: View {
             }
         }
     }
+}
+
+#Preview {
+    let weekRows = [
+        CalendarPresenter.Column(color: .blue, text: "0"),
+        CalendarPresenter.Column(color: .blue, text: "0"),
+        CalendarPresenter.Column(color: .blue, text: "0"),
+        CalendarPresenter.Column(color: .blue, text: "0"),
+        CalendarPresenter.Column(color: .blue, text: "0"),
+        CalendarPresenter.Column(color: .blue, text: "0"),
+        CalendarPresenter.Column(color: .blue, text: "0"),
+    ]
+    
+    return CalendarView(presenter: CalendarPresenter(
+        months: [
+            CalendarPresenter.Month(
+                title: "June",
+                subtitle: "~2120 kcal/day",
+                rows: [
+                    weekRows,
+                    weekRows,
+                    weekRows,
+                    weekRows
+                ]
+            ),
+            CalendarPresenter.Month(
+                title: "July",
+                subtitle: "~2058 kcal/day",
+                rows: [
+                    weekRows,
+                    weekRows,
+                    weekRows,
+                    weekRows
+                ]
+            )
+        ],
+        dismissButton: ButtonPresenter(title: "Dismiss", action: {})
+    ))
 }

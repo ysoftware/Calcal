@@ -163,9 +163,15 @@ struct Mapper {
                             columns = []
                         }
                         
+                        let medianCalories = rows
+                            .flatMap { $0 }
+                            .compactMap { Int($0.text) }
+                            .median
+                        
                         months.append(
                             CalendarPresenter.Month(
                                 title: Self.month(number: currentMonth),
+                                subtitle: "x̄ \(medianCalories)",
                                 rows: rows
                             )
                         )
@@ -204,9 +210,15 @@ struct Mapper {
         }
         
         if !rows.isEmpty {
+            let medianCalories = rows
+                .flatMap { $0 }
+                .compactMap { Int($0.text) }
+                .median
+            
             months.append(
                 CalendarPresenter.Month(
                     title: Self.month(number: currentMonth),
+                    subtitle: "x̄ \(medianCalories)",
                     rows: rows
                 )
             )
@@ -246,6 +258,24 @@ struct Mapper {
             Color.entryBad
         } else {
             Color.entryHorrible
+        }
+    }
+}
+
+extension Array where Element == Int {
+    var median: Int {
+        guard !isEmpty else { return 0 }
+        
+        let sortedNumbers = self.sorted()
+        let count = sortedNumbers.count
+        
+        if count % 2 == 0 {
+            let midIndex1 = count / 2
+            let midIndex2 = midIndex1 - 1
+            return (sortedNumbers[midIndex1] + sortedNumbers[midIndex2]) / 2
+        } else {
+            let midIndex = count / 2
+            return sortedNumbers[midIndex]
         }
     }
 }

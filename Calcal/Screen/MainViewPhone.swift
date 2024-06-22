@@ -33,7 +33,6 @@ struct MainView: View {
                 }
             }
         }
-        .padding(.vertical, Style.padding)
     }
     
     private var mainView: some View {
@@ -70,7 +69,7 @@ struct MainView: View {
                 }
                 .frame(maxWidth: .infinity)
             }
-            .padding(.horizontal, Style.padding)
+            .padding(Style.padding)
         }
     }
 }
