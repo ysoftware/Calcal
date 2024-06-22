@@ -17,6 +17,8 @@ struct ButtonView: View {
     let presenter: ButtonPresenter
     let color: SwiftUI.Color
     
+    @State private var isPressing = false
+    
     init(presenter: ButtonPresenter, color: SwiftUI.Color = Color.button) {
         self.presenter = presenter
         self.color = color
@@ -43,7 +45,13 @@ struct ButtonView: View {
         .gesture(
             DragGesture(minimumDistance: 0)
                 .onChanged { _ in
-                    presenter.action()
+                    if !isPressing {
+                        isPressing = true
+                        presenter.action()
+                    }
+                }
+                .onEnded { _ in
+                    isPressing = false
                 }
         )
     }

@@ -32,7 +32,7 @@ struct CalendarView: View {
     private let spacing: CGFloat = 1
     
     var body: some View {
-        VStack(spacing: 10) {
+        ZStack {
             ScrollView(.vertical) {
                 VStack(spacing: 10) {
                     ForEach(presenter.months.swiftUIEnumerated, id: \.0) { monthIndex, month in
@@ -59,11 +59,17 @@ struct CalendarView: View {
                 .padding(.top, Style.padding)
             }
             .scrollIndicators(.never)
-            
-            ButtonView(presenter: presenter.dismissButton)
-                .padding(.horizontal, Style.padding)
-                .frame(maxWidth: .infinity, alignment: .leading)
-                .padding(.bottom, Style.padding)
+            .safeAreaInset(edge: .bottom) {
+                ButtonView(presenter: presenter.dismissButton)
+                    .padding(.horizontal, Style.padding)
+                    .padding(.bottom, Style.padding)
+                    .background(
+                        Color.background.opacity(0.8)
+                            .clipShape(RoundedRectangle(cornerRadius: 5))
+                            .padding(.horizontal, -10) // extend edges
+                    )
+                    .frame(maxWidth: .infinity, alignment: .leading)
+            }
         }
     }
     

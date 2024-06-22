@@ -33,6 +33,7 @@ struct MainView: View {
                 }
             }
         }
+        .background(Color.background)
     }
     
     private var mainView: some View {
