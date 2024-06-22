@@ -32,44 +32,48 @@ struct CalendarView: View {
     private let spacing: CGFloat = 1
     
     var body: some View {
-        ZStack {
-            ScrollView(.vertical) {
-                VStack(spacing: 10) {
-                    ForEach(presenter.months.swiftUIEnumerated, id: \.0) { monthIndex, month in
-                        VStack(spacing: Style.itemSpacing) {
-                            HStack(spacing: Style.itemSpacing) {
-                                Text(month.title)
-                                    .font(.system(size: 13, weight: .regular))
-                                    .foregroundStyle(Color.subtitle)
-                                
-                                Spacer()
-                                
-                                Text(month.subtitle)
-                                    .font(.system(size: 13, weight: .regular))
-                                    .foregroundStyle(Color.subtitle)
-                            }
-                            .padding(.horizontal, Style.padding)
-                            .frame(maxWidth: .infinity, alignment: .leading)
-                            .frame(maxHeight: .infinity, alignment: .top)
+        ScrollView(.vertical) {
+            VStack(spacing: 10) {
+                ForEach(presenter.months.swiftUIEnumerated, id: \.0) { monthIndex, month in
+                    VStack(spacing: Style.itemSpacing) {
+                        HStack(spacing: Style.itemSpacing) {
+                            Text(month.title)
+                                .font(.system(size: 13, weight: .regular))
+                                .foregroundStyle(Color.subtitle)
                             
-                            monthCellsView(month: month, index: monthIndex)
+                            Spacer()
+                            
+                            Text(month.subtitle)
+                                .font(.system(size: 13, weight: .regular))
+                                .foregroundStyle(Color.subtitle)
                         }
+                        .padding(.horizontal, Style.padding)
+                        .frame(maxWidth: .infinity, alignment: .leading)
+                        .frame(maxHeight: .infinity, alignment: .top)
+                        
+                        monthCellsView(month: month, index: monthIndex)
                     }
                 }
-                .padding(.top, Style.padding)
             }
-            .scrollIndicators(.never)
-            .safeAreaInset(edge: .bottom) {
-                ButtonView(presenter: presenter.dismissButton)
-                    .padding(.horizontal, Style.padding)
-                    .padding(.bottom, Style.padding)
-                    .background(
-                        Color.background.opacity(0.8)
-                            .clipShape(RoundedRectangle(cornerRadius: 5))
-                            .padding(.horizontal, -10) // extend edges
-                    )
-                    .frame(maxWidth: .infinity, alignment: .leading)
-            }
+            .padding(.top, Style.padding)
+        }
+        .scrollIndicators(.never)
+        .safeAreaInset(edge: .bottom) {
+            ButtonView(presenter: presenter.dismissButton)
+#if os(macOS)
+                .background(Color.background.clipShape(RoundedRectangle(cornerRadius: 5)))
+                .padding(.horizontal, Style.padding)
+                .padding(.bottom, Style.padding)
+#else
+                .padding(.horizontal, Style.padding)
+                .padding(.bottom, Style.padding)
+                .background(
+                    Color.background.opacity(0.8)
+                        .clipShape(RoundedRectangle(cornerRadius: 5))
+                        .padding(-5)
+                )
+#endif
+            .frame(maxWidth: .infinity, alignment: .leading)
         }
     }
     
