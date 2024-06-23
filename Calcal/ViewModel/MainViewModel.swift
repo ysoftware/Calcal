@@ -348,6 +348,10 @@ final class MainViewModel: ObservableObject, @unchecked Sendable {
                 )
                 
                 Task { @MainActor in
+                    self.inputViewModel = nil
+                    self.inputDestination = nil
+                    self.updatePresenter()
+                    
                     if let item {
                         do {
                             try await self.model.appendItem(item: item, destination: destination)
@@ -356,10 +360,6 @@ final class MainViewModel: ObservableObject, @unchecked Sendable {
                             Logger.main.error("\(error)")
                         }
                     }
-                    
-                    self.inputViewModel = nil
-                    self.inputDestination = nil
-                    self.updatePresenter()
                 }
             }
         )
