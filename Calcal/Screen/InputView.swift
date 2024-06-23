@@ -110,26 +110,12 @@ struct InputView: View {
             .onChange(of: viewModel.text) { _, newValue in
                 text = newValue
             }
-            .onKeyPress(.downArrow, action: {
-                viewModel.onArrowDownPress()
-                return .handled
-            })
-            .onKeyPress(.upArrow, action: {
-                viewModel.onArrowUpPress()
-                return .handled
-            })
-            .onKeyPress(.return, action: {
-                viewModel.onEnterPress()
-                return .handled
-            })
+#if os(iOS)
             .onSubmit {
                 viewModel.onEnterPress()
                 isTextFieldFocused = true
             }
-            .onKeyPress(.escape, action: {
-                viewModel.onEscapePress()
-                return .handled
-            })
+#endif
             .onAppear {
                 isTextFieldFocused = true
             }

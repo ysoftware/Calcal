@@ -47,6 +47,36 @@ final class InputViewModel: ObservableObject, @unchecked Sendable {
         self.completeInput = completeInput
     }
     
+    @MainActor private func setupKeyDownEvents() {
+#if canImport(AppKit)
+        NSEvent.addLocalMonitorForEvents(matching: .keyDown, handler: { [weak self] event in
+            guard let self else { return event }
+            
+            if event.keyCode == Keycode.arrowDown {
+                onArrowDownPress()
+                return nil
+            }
+            
+            if event.keyCode == Keycode.arrowUp {
+                onArrowUpPress()
+                return nil
+            }
+            
+            if event.keyCode == Keycode.return {
+                onEnterPress()
+                return nil
+            }
+            
+            if event.keyCode == Keycode.escape {
+                onEscapePress()
+                return nil
+            }
+            
+            return event
+        })
+#endif
+    }
+    
     @MainActor func onTextChange(newText: String) {
         self.text = newText
         self.selectedAutocompleteIndex = nil
@@ -71,6 +101,10 @@ final class InputViewModel: ObservableObject, @unchecked Sendable {
     
     @MainActor func setupInitialState() {
         text = ""
+        
+        Task { @MainActor in
+            setupKeyDownEvents()
+        }
         
         allItems = model.getAllEntries()
             .flatMap { $0.sections }

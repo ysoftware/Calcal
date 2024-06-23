@@ -377,6 +377,11 @@ final class MainViewModel: ObservableObject, @unchecked Sendable {
 enum Keycode {
     static let arrowLeft = 123
     static let arrowRight = 124
+    static let arrowDown = 125
+    static let arrowUp = 126
     static let escape = 53
     static let c = 8
+    
+    static let enter = 76
+    static let `return` = 36
 }
