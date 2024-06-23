@@ -119,60 +119,69 @@ final class InputViewModel: ObservableObject, @unchecked Sendable {
             }
         )
         
-        var items: [PopularItem] = []
+        updatePresenter()
         
-        for item in allItems {
-            if let foundItemIndex = items.firstIndex(where: {
-                $0.title == item.title && $0.quantity == item.quantity && $0.measurement == item.measurement
-            }) {
-                items[foundItemIndex] = PopularItem(
-                    title: item.title,
-                    occurencesCount: items[foundItemIndex].occurencesCount + 1,
-                    quantity: item.quantity,
-                    measurement: item.measurement,
-                    calories: item.calories
-                )
-            } else {
-                items.append(
-                    PopularItem(
+        Task { @MainActor in
+            self.popularEntries = await calculatePopularEntries()
+            updatePresenter()
+        }
+    }
+    
+    private func calculatePopularEntries() async -> [ButtonPresenter] {
+        await Task.detached(priority: .userInitiated) {
+            var items: [PopularItem] = []
+            
+            for item in self.allItems {
+                if let foundItemIndex = items.firstIndex(where: {
+                    $0.title == item.title && $0.quantity == item.quantity && $0.measurement == item.measurement
+                }) {
+                    items[foundItemIndex] = PopularItem(
                         title: item.title,
-                        occurencesCount: 1,
+                        occurencesCount: items[foundItemIndex].occurencesCount + 1,
                         quantity: item.quantity,
                         measurement: item.measurement,
                         calories: item.calories
                     )
-                )
-            }
-        }
-        
-        self.popularEntries = Array(
-            items
-                .sorted { $0.occurencesCount > $1.occurencesCount }
-                .prefix(14)
-                .map { item in
-                    let quantityDisplayValue = Mapper.measurementDisplayValue(
-                        quantity: item.quantity,
-                        measurement: item.measurement
-                    )
-                    
-                    return ButtonPresenter(
-                        title: "\(item.title), \(quantityDisplayValue), \(item.calories.formatted) kcal (x\(item.occurencesCount))",
-                        action: { [weak self] in
-                            guard let self else { return }
-                            
-                            let entryItem = EntryEntity.Item(
-                                title: item.title,
-                                quantity: item.quantity,
-                                measurement: item.measurement,
-                                calories: item.calories
-                            )
-                            self.completeInput(entryItem, self.sectionName)
-                        }
+                } else {
+                    items.append(
+                        PopularItem(
+                            title: item.title,
+                            occurencesCount: 1,
+                            quantity: item.quantity,
+                            measurement: item.measurement,
+                            calories: item.calories
+                        )
                     )
                 }
-        )
-        
-        updatePresenter()
+            }
+            
+            return Array(
+                items
+                    .sorted { $0.occurencesCount > $1.occurencesCount }
+                    .prefix(14)
+                    .map { item in
+                        let quantityDisplayValue = Mapper.measurementDisplayValue(
+                            quantity: item.quantity,
+                            measurement: item.measurement
+                        )
+                        
+                        return ButtonPresenter(
+                            title: "\(item.title), \(quantityDisplayValue), \(item.calories.formatted) kcal (x\(item.occurencesCount))",
+                            action: { [weak self] in
+                                guard let self else { return }
+                                
+                                let entryItem = EntryEntity.Item(
+                                    title: item.title,
+                                    quantity: item.quantity,
+                                    measurement: item.measurement,
+                                    calories: item.calories
+                                )
+                                self.completeInput(entryItem, self.sectionName)
+                            }
+                        )
+                    }
+            )
+        }.value
     }
     
     @MainActor private func updatePresenter() {

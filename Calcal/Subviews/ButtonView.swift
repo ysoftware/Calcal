@@ -8,7 +8,7 @@
 import Foundation
 import SwiftUI
 
-struct ButtonPresenter {
+struct ButtonPresenter: @unchecked Sendable {
     let title: String
     let action: () -> Void
 }
