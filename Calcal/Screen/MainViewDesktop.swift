@@ -25,6 +25,7 @@ struct MainView: View {
                     
                     InputView(viewModel: inputViewModel)
                         .frame(width: 350)
+                        .padding(.top, Style.padding)
                 }
             }
         }

@@ -73,44 +73,48 @@ struct EntryView: View {
                             if !section.items.isEmpty {
                                 List {
                                     ForEach(section.items.swiftUIEnumerated, id: \.0) { itemIndex, item in
-                                        HStack(alignment: .center, spacing: Style.textSpacing) {
-                                            Text(item.title)
-                                                .font(Style.content)
-                                                .foregroundStyle(Color.text)
-                                                .frame(maxWidth: .infinity, alignment: .leading)
-                                            
-                                            Text(item.quantity)
-                                                .font(Style.content)
-                                                .foregroundStyle(Color.text)
-                                                .frame(width: 60, alignment: .leading)
-                                            
-                                            Text(item.calories)
-                                                .font(Style.content)
-                                                .foregroundStyle(Color.text)
-                                                .frame(width: 60, alignment: .trailing)
-                                        }
-                                        .padding(.horizontal, Style.padding)
-                                        .frame(height: 20)
-                                        .frame(maxWidth: .infinity, alignment: .leading)
-                                        .swipeActions(edge: .trailing, allowsFullSwipe: true) {
-                                            Button(action: item.deleteButton.action) {
-                                                Text(item.deleteButton.title)
-                                            }
-                                            .tint(Color.deleteButtonBackground)
-                                        }
-                                        .setupRowStyle()
-                                        .background(itemIndex % 2 == 0 ? Color.evenItemBackground : .clear)
+                                        listItemView(item: item, index: itemIndex)
                                     }
                                 }
                                 .setupStyle()
                                 .scrollDisabled(true)
-                                .frame(height: CGFloat(section.items.count) * 20 + CGFloat(section.items.count-1) * Style.textSpacing)
+                                .frame(height: CGFloat(section.items.count) * 20 + CGFloat(section.items.count) * Style.textSpacing)
                             }
                         }
                     }
                 }
             }
         }
+    }
+    
+    private func listItemView(item: EntryPresenter.Item, index: Int) -> some View {
+        HStack(alignment: .center, spacing: Style.textSpacing) {
+            Text(item.title)
+                .font(Style.content)
+                .foregroundStyle(Color.text)
+                .frame(maxWidth: .infinity, alignment: .leading)
+            
+            Text(item.quantity)
+                .font(Style.content)
+                .foregroundStyle(Color.text)
+                .frame(width: 60, alignment: .leading)
+            
+            Text(item.calories)
+                .font(Style.content)
+                .foregroundStyle(Color.text)
+                .frame(width: 60, alignment: .trailing)
+        }
+        .padding(.horizontal, Style.padding)
+        .frame(height: 20)
+        .frame(maxWidth: .infinity, alignment: .leading)
+        .swipeActions(edge: .trailing, allowsFullSwipe: true) {
+            Button(action: item.deleteButton.action) {
+                Text(item.deleteButton.title)
+            }
+            .tint(Color.deleteButtonBackground)
+        }
+        .setupRowStyle()
+        .background(index % 2 == 0 ? Color.evenItemBackground : .clear)
     }
 }
 
