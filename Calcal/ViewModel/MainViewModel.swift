@@ -16,8 +16,6 @@ import UIKit
 import AppKit
 #endif
 
-// todo: bug: ui updates wait for data processing
-
 final class MainViewModel: ObservableObject, @unchecked Sendable {
     
     nonisolated init() { } // swift bug
