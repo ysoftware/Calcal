@@ -60,20 +60,16 @@ struct CalendarView: View {
         .scrollIndicators(.never)
         .safeAreaInset(edge: .bottom) {
             ButtonView(presenter: presenter.dismissButton)
-#if os(macOS)
-                .background(Color.background.clipShape(RoundedRectangle(cornerRadius: 5)))
-                .padding(.horizontal, Style.padding)
-                .padding(.bottom, Style.padding)
-#else
-                .padding(.horizontal, Style.padding)
-                .padding(.bottom, Style.padding)
                 .background(
-                    Color.background.opacity(0.8)
+                    Color.background
                         .clipShape(RoundedRectangle(cornerRadius: 5))
-                        .padding(-5)
+                    #if os(iOS)
+                        .padding(.horizontal, -Style.padding/2)
+                    #endif
                 )
-#endif
-            .frame(maxWidth: .infinity, alignment: .leading)
+                .padding(.horizontal, Style.padding)
+                .padding(.vertical, Style.padding)
+                .frame(maxWidth: .infinity, alignment: .leading)
         }
     }
     

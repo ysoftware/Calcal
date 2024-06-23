@@ -163,15 +163,16 @@ struct Mapper {
                             columns = []
                         }
                         
-                        let medianCalories = rows
+                        let averageCalories = rows
                             .flatMap { $0 }
                             .compactMap { Int($0.text) }
-                            .median
+                            .filter { $0 > 1400 }
+                            .average
                         
                         months.append(
                             CalendarPresenter.Month(
                                 title: Self.month(number: currentMonth),
-                                subtitle: "x̄ \(medianCalories)",
+                                subtitle: "∅ \(averageCalories)",
                                 rows: rows
                             )
                         )
@@ -210,15 +211,16 @@ struct Mapper {
         }
         
         if !rows.isEmpty {
-            let medianCalories = rows
+            let averageCalories = rows
                 .flatMap { $0 }
                 .compactMap { Int($0.text) }
-                .median
+                .filter { $0 > 1400 }
+                .average
             
             months.append(
                 CalendarPresenter.Month(
                     title: Self.month(number: currentMonth),
-                    subtitle: "x̄ \(medianCalories)",
+                    subtitle: "∅ \(averageCalories)",
                     rows: rows
                 )
             )
@@ -263,20 +265,9 @@ struct Mapper {
 }
 
 extension Array where Element == Int {
-    var median: Int {
+    var average: Int {
         guard !isEmpty else { return 0 }
-        
-        let sortedNumbers = self.sorted()
-        let count = sortedNumbers.count
-        
-        if count % 2 == 0 {
-            let midIndex1 = count / 2
-            let midIndex2 = midIndex1 - 1
-            return (sortedNumbers[midIndex1] + sortedNumbers[midIndex2]) / 2
-        } else {
-            let midIndex = count / 2
-            return sortedNumbers[midIndex]
-        }
+        return sorted().reduce(0, +) / count
     }
 }
 
