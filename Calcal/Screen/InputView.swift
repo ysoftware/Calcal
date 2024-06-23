@@ -7,7 +7,7 @@
 
 import SwiftUI
 
-struct AutocompleteItemPresenter {
+struct AutocompleteItemPresenter: @unchecked Sendable {
     let title: String
     let isSelected: Bool
     let onAcceptItem: () -> Void

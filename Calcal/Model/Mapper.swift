@@ -262,6 +262,144 @@ struct Mapper {
             Color.entryHorrible
         }
     }
+    
+    // MARK: - Input View Model
+    
+    static func calculatePopularEntries(
+        allItems: [EntryEntity.Item],
+        completeInput: @escaping @Sendable (EntryEntity.Item?) -> Void
+    ) async -> [ButtonPresenter] {
+        await Task.detached(priority: .userInitiated) {
+            var items: [PopularItem] = []
+            
+            for item in allItems {
+                if let foundItemIndex = items.firstIndex(where: {
+                    $0.title == item.title && $0.quantity == item.quantity && $0.measurement == item.measurement
+                }) {
+                    items[foundItemIndex] = PopularItem(
+                        title: item.title,
+                        occurencesCount: items[foundItemIndex].occurencesCount + 1,
+                        quantity: item.quantity,
+                        measurement: item.measurement,
+                        calories: item.calories
+                    )
+                } else {
+                    items.append(
+                        PopularItem(
+                            title: item.title,
+                            occurencesCount: 1,
+                            quantity: item.quantity,
+                            measurement: item.measurement,
+                            calories: item.calories
+                        )
+                    )
+                }
+            }
+            
+            return Array(
+                items
+                    .sorted { $0.occurencesCount > $1.occurencesCount }
+                    .prefix(14)
+                    .map { item in
+                        let quantityDisplayValue = Mapper.measurementDisplayValue(
+                            quantity: item.quantity,
+                            measurement: item.measurement
+                        )
+                        
+                        return ButtonPresenter(
+                            title: "\(item.title), \(quantityDisplayValue), \(item.calories.formatted) kcal (x\(item.occurencesCount))",
+                            action: {
+                                let entryItem = EntryEntity.Item(
+                                    title: item.title,
+                                    quantity: item.quantity,
+                                    measurement: item.measurement,
+                                    calories: item.calories
+                                )
+                                completeInput(entryItem)
+                            }
+                        )
+                    }
+            )
+        }.value
+    }
+    
+    static func calculateAutocompleteForSectionNameInput(
+        selectedAutocompleteIndex: Int?,
+        onAcceptItem: @escaping (String) -> Void
+    ) -> [AutocompleteItemPresenter] {
+        ["Breakfast", "Lunch", "Dinner", "Snack", "Snack 2"]
+            .enumerated()
+            .map { index, item in
+                AutocompleteItemPresenter(
+                    title: "\(item)",
+                    isSelected: index == selectedAutocompleteIndex,
+                    onAcceptItem: { onAcceptItem(item) }
+                )
+            }
+    }
+    
+    static func calculateAutocompleteForQuantityInput(
+        allItems: [EntryEntity.Item],
+        selectedAutocompleteIndex: Int?,
+        name: String?,
+        onAcceptItem: @escaping @Sendable (String) -> Void
+    ) async -> [AutocompleteItemPresenter] {
+        guard let name else { return [] }
+        
+        return await Task.detached(priority: .userInitiated) {
+            Array(allItems
+                .filter { $0.title.lowercased() == name.lowercased() }
+                .uniqued(on: { $0.quantity })
+                .sorted(by: { $0.quantity < $1.quantity })
+                .enumerated()
+                .map { index, item in
+                    let quantityValue = Mapper.measurementDisplayValue(
+                        quantity: item.quantity,
+                        measurement: item.measurement
+                    )
+                    return AutocompleteItemPresenter(
+                        title: "\(item.title), \(quantityValue) → \(item.calories.formatted) kcal",
+                        isSelected: index == selectedAutocompleteIndex,
+                        onAcceptItem: {
+                            onAcceptItem("\(item.quantity) \(item.measurement)")
+                        }
+                    )
+                }
+            )
+        }.value
+    }
+    
+    static func calculateAutocompleteForNameInput(
+        allItems: [EntryEntity.Item],
+        selectedAutocompleteIndex: Int?,
+        text: String,
+        onAcceptItem: @escaping @Sendable (String, CaloricInformation) -> Void
+    ) async -> [AutocompleteItemPresenter] {
+        await Task.detached(priority: .userInitiated) {
+            Array(allItems
+                .uniqued(on: { "\($0.title.lowercased()) \($0.measurement)" })
+                .filter {
+                    $0.title.lowercased().contains(text.lowercased())
+                }
+                .prefix(10)
+                .enumerated()
+                .map { index, item in
+                    AutocompleteItemPresenter(
+                        title: "\(item.title) (in \(item.measurement))",
+                        isSelected: index == selectedAutocompleteIndex,
+                        onAcceptItem: {
+                            let caloricInformation = CaloricInformation(
+                                value: item.calories / item.quantity,
+                                measurement: item.measurement
+                            )
+                            onAcceptItem(item.title, caloricInformation)
+                        }
+                    )
+                }
+            )
+        }.value
+    }
+    
 }
 
 extension Array where Element == Int {
@@ -279,4 +417,17 @@ extension Float {
     var formatted: String {
         self.formatted(.number.rounded().grouping(.never))
     }
+}
+
+struct CaloricInformation {
+    let value: Float
+    let measurement: EntryEntity.QuantityMeasurement
+}
+
+struct PopularItem {
+    let title: String
+    let occurencesCount: Int
+    let quantity: Float
+    let measurement: EntryEntity.QuantityMeasurement
+    let calories: Float
 }

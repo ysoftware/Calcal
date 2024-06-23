@@ -16,7 +16,7 @@ final class InputViewModel: ObservableObject, @unchecked Sendable {
     
     private let model: Model
     private let shouldInputSectionName: Bool
-    private let completeInput: (EntryEntity.Item?, String?) -> Void
+    private let completeInput: @Sendable (EntryEntity.Item?, String?) -> Void
     
     private var allItems: [EntryEntity.Item] = []
     
@@ -122,164 +122,74 @@ final class InputViewModel: ObservableObject, @unchecked Sendable {
         updatePresenter()
         
         Task { @MainActor in
-            self.popularEntries = await calculatePopularEntries()
+            self.popularEntries = await Mapper.calculatePopularEntries(
+                allItems: allItems,
+                completeInput: { [weak self] item in
+                    guard let self else { return }
+                    self.completeInput(item, self.sectionName)
+                }
+            )
             updatePresenter()
         }
     }
     
-    private func calculatePopularEntries() async -> [ButtonPresenter] {
-        await Task.detached(priority: .userInitiated) {
-            var items: [PopularItem] = []
-            
-            for item in self.allItems {
-                if let foundItemIndex = items.firstIndex(where: {
-                    $0.title == item.title && $0.quantity == item.quantity && $0.measurement == item.measurement
-                }) {
-                    items[foundItemIndex] = PopularItem(
-                        title: item.title,
-                        occurencesCount: items[foundItemIndex].occurencesCount + 1,
-                        quantity: item.quantity,
-                        measurement: item.measurement,
-                        calories: item.calories
-                    )
-                } else {
-                    items.append(
-                        PopularItem(
-                            title: item.title,
-                            occurencesCount: 1,
-                            quantity: item.quantity,
-                            measurement: item.measurement,
-                            calories: item.calories
-                        )
-                    )
-                }
-            }
-            
-            return Array(
-                items
-                    .sorted { $0.occurencesCount > $1.occurencesCount }
-                    .prefix(14)
-                    .map { item in
-                        let quantityDisplayValue = Mapper.measurementDisplayValue(
-                            quantity: item.quantity,
-                            measurement: item.measurement
-                        )
-                        
-                        return ButtonPresenter(
-                            title: "\(item.title), \(quantityDisplayValue), \(item.calories.formatted) kcal (x\(item.occurencesCount))",
-                            action: { [weak self] in
-                                guard let self else { return }
-                                
-                                let entryItem = EntryEntity.Item(
-                                    title: item.title,
-                                    quantity: item.quantity,
-                                    measurement: item.measurement,
-                                    calories: item.calories
-                                )
-                                self.completeInput(entryItem, self.sectionName)
-                            }
-                        )
-                    }
-            )
-        }.value
-    }
-    
     @MainActor private func updatePresenter() {
-        self.refreshAutocompleteItems()
-        self.objectWillChange.send()
+        Task { @MainActor in
+            await self.refreshAutocompleteItems()
+            self.objectWillChange.send()
+        }
     }
     
-    @MainActor private func refreshAutocompleteItems() {
+    @MainActor private func refreshAutocompleteItems() async {
         switch state {
         case .name:
-            setAutocompleteForNameInput()
+            autocompleteSuggestions = await Mapper.calculateAutocompleteForNameInput(
+                allItems: allItems,
+                selectedAutocompleteIndex: selectedAutocompleteIndex,
+                text: text,
+                onAcceptItem: { @Sendable [weak self] text, caloricInformation in
+                    guard let self else { return }
+                    
+                    Task { @MainActor in
+                        self.text = text
+                        self.selectedItemCaloricInformation = caloricInformation
+                        self.processInputState()
+                        self.selectedAutocompleteIndex = nil
+                    }
+                }
+            )
         case .sectionName:
-            setAutocompleteForSectionNameInput()
+            autocompleteSuggestions = Mapper.calculateAutocompleteForSectionNameInput(
+                selectedAutocompleteIndex: selectedAutocompleteIndex,
+                onAcceptItem: { [weak self] text in
+                    guard let self else { return }
+                    
+                    Task { @MainActor in
+                        self.text = text
+                        self.processInputState()
+                        self.selectedAutocompleteIndex = nil
+                    }
+                }
+            )
         case .quantity:
-            setAutocompleteForQuantityInput()
+            autocompleteSuggestions = await Mapper.calculateAutocompleteForQuantityInput(
+                allItems: allItems,
+                selectedAutocompleteIndex: selectedAutocompleteIndex,
+                name: name,
+                onAcceptItem: { @Sendable [weak self] text in
+                    guard let self else { return }
+                    
+                    Task { @MainActor in
+                        self.text = text
+                        self.processInputState()
+                        self.selectedAutocompleteIndex = nil
+                    }
+                }
+            )
         case .calories:
             // todo: feature: maybe list of top-calorie foods?
             autocompleteSuggestions = []
         }
-    }
-    
-    @MainActor private func setAutocompleteForQuantityInput() {
-        guard let name else {
-            self.autocompleteSuggestions = []
-            return
-        }
-        
-        self.autocompleteSuggestions = Array(allItems
-            .filter { $0.title.lowercased() == name.lowercased() }
-            .uniqued(on: { $0.quantity })
-            .sorted(by: { $0.quantity < $1.quantity })
-            .enumerated()
-            .map { index, item in
-                let quantityValue = Mapper.measurementDisplayValue(
-                    quantity: item.quantity,
-                    measurement: item.measurement
-                )
-                return AutocompleteItemPresenter(
-                    title: "\(item.title), \(quantityValue) → \(item.calories.formatted) kcal",
-                    isSelected: index == self.selectedAutocompleteIndex,
-                    onAcceptItem: { [weak self] in
-                        guard let self else { return }
-                        
-                        self.text = "\(item.quantity) \(item.measurement)"
-                        self.processInputState()
-                        self.selectedAutocompleteIndex = nil
-                    }
-                )
-            }
-        )
-    }
-    
-    @MainActor private func setAutocompleteForSectionNameInput() {
-        self.autocompleteSuggestions = [
-            "Breakfast", "Lunch", "Dinner", "Snack", "Snack 2"
-        ]
-            .enumerated()
-            .map { index, item in
-                AutocompleteItemPresenter(
-                    title: "\(item)",
-                    isSelected: index == self.selectedAutocompleteIndex,
-                    onAcceptItem: { [weak self] in
-                        guard let self else { return }
-                        
-                        self.text = item
-                        self.processInputState()
-                        self.selectedAutocompleteIndex = nil
-                    }
-                )
-            }
-    }
-    
-    @MainActor private func setAutocompleteForNameInput() {
-        self.autocompleteSuggestions = Array(allItems
-            .uniqued(on: { "\($0.title.lowercased()) \($0.measurement)" })
-            .filter {
-                $0.title.lowercased().contains(text.lowercased())
-            }
-            .prefix(10)
-            .enumerated()
-            .map { index, item in
-                AutocompleteItemPresenter(
-                    title: "\(item.title) (in \(item.measurement))",
-                    isSelected: index == self.selectedAutocompleteIndex,
-                    onAcceptItem: { [weak self] in
-                        guard let self else { return }
-                        
-                        self.text = item.title
-                        self.selectedItemCaloricInformation = CaloricInformation(
-                            value: item.calories / item.quantity,
-                            measurement: item.measurement
-                        )
-                        self.processInputState()
-                        self.selectedAutocompleteIndex = nil
-                    }
-                )
-            }
-        )
     }
     
     @MainActor func onEscapePress() {
@@ -417,19 +327,6 @@ final class InputViewModel: ObservableObject, @unchecked Sendable {
             calories: caloriesValue.rounded()
         )
         completeInput(item, sectionName)
-    }
-    
-    struct CaloricInformation {
-        let value: Float
-        let measurement: EntryEntity.QuantityMeasurement
-    }
-    
-    struct PopularItem {
-        let title: String
-        let occurencesCount: Int
-        let quantity: Float
-        let measurement: EntryEntity.QuantityMeasurement
-        let calories: Float
     }
     
     enum State {
