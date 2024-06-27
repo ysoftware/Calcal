@@ -44,14 +44,21 @@ struct InputView: View {
             ScrollView(.vertical) {
                 VStack(spacing: 5) {
                     ForEach(viewModel.popularEntries.swiftUIEnumerated, id: \.0) { _, item in
-                        #if os(iOS)
-                        ButtonView(presenter: item, color: Color.suggestionItem)
-                            .frame(maxWidth: .infinity, alignment: .leading)
-                            .frame(height: 40)
-                        #else
-                        ButtonView(presenter: item, color: Color.suggestionItem)
-                            .frame(maxWidth: .infinity, alignment: .leading)
-                        #endif
+#if os(iOS)
+                        ButtonView(
+                            presenter: item,
+                            color: Color.suggestionItem,
+                            isActOnPress: false
+                        )
+                        .frame(maxWidth: .infinity, alignment: .leading)
+                        .frame(height: 40)
+#else
+                        ButtonView(
+                            presenter: item,
+                            color: Color.suggestionItem
+                        )
+                        .frame(maxWidth: .infinity, alignment: .leading)
+#endif
                     }
                 }
                 .padding(.vertical, 1)
@@ -67,11 +74,17 @@ struct InputView: View {
             ScrollView(.vertical) {
                 VStack(spacing: Style.textSpacing) {
                     ForEach(viewModel.autocompleteSuggestions.swiftUIEnumerated, id: \.0) { index, item in
-                        #if os(iOS)
-                        ButtonView(presenter: ButtonPresenter(title: item.title, action: item.onAcceptItem))
-                            .frame(maxWidth: .infinity, alignment: .leading)
-                            .frame(height: 40)
-                        #else
+#if os(iOS)
+                        ButtonView(
+                            presenter: ButtonPresenter(
+                                title: item.title,
+                                action: item.onAcceptItem
+                            ),
+                            isActOnPress: false
+                        )
+                        .frame(maxWidth: .infinity, alignment: .leading)
+                        .frame(height: 40)
+#else
                         Text(item.title)
                             .foregroundStyle(Color.autocompletionItem)
                             .frame(maxWidth: .infinity, alignment: .leading)
@@ -83,7 +96,7 @@ struct InputView: View {
                                         .padding(.trailing, Style.padding)
                                 }
                             }
-                        #endif
+#endif
                     }
                 }
                 .padding(.horizontal, Style.padding)
@@ -137,10 +150,10 @@ struct InputView: View {
 
 extension TextField {
     func isNumpad(_ value: Bool) -> some View {
-        #if os(iOS)
+#if os(iOS)
         self.keyboardType(value ? .numbersAndPunctuation : .default)
-        #else
+#else
         self
-        #endif
+#endif
     }
 }

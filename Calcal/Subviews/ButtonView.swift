@@ -16,10 +16,16 @@ struct ButtonPresenter: @unchecked Sendable {
 struct ButtonView: View {
     let presenter: ButtonPresenter
     let color: SwiftUI.Color
+    let isActOnPress: Bool
     
     @State private var isPressing = false
     
-    init(presenter: ButtonPresenter, color: SwiftUI.Color = Color.button) {
+    init(
+        presenter: ButtonPresenter,
+        color: SwiftUI.Color = Color.button,
+        isActOnPress: Bool = true
+    ) {
+        self.isActOnPress = isActOnPress
         self.presenter = presenter
         self.color = color
     }
@@ -42,17 +48,32 @@ struct ButtonView: View {
                 .padding(.vertical, 10)
             #endif
         }
-        .gesture(
-            DragGesture(minimumDistance: 0)
-                .onChanged { _ in
-                    if !isPressing {
-                        isPressing = true
+        .gesture(gesture)
+    }
+    
+    private var gesture: AnyGesture<Void> {
+        if isActOnPress {
+            AnyGesture(
+                DragGesture(minimumDistance: 0)
+                    .onChanged { _ in
+                        if !isPressing {
+                            isPressing = true
+                            presenter.action()
+                        }
+                    }
+                    .onEnded { _ in
+                        isPressing = false
+                    }
+                    .map { _ in }
+            )
+        } else {
+            AnyGesture(
+                TapGesture()
+                    .onEnded {
                         presenter.action()
                     }
-                }
-                .onEnded { _ in
-                    isPressing = false
-                }
-        )
+                    .map { _ in }
+            )
+        }
     }
 }
