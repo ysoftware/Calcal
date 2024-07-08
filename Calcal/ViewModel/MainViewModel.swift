@@ -100,7 +100,8 @@ final class MainViewModel: ObservableObject, @unchecked Sendable {
             guard let self else { return event }
             
             if event.keyCode == Keycode.c,
-               self.calendarPresenter == nil 
+               self.calendarPresenter == nil,
+               self.inputViewModel == nil
             {
                 self.openCalendar()
                 return nil
@@ -313,11 +314,6 @@ final class MainViewModel: ObservableObject, @unchecked Sendable {
     
     private func openCalendar() {
         Task { @MainActor in
-            if inputViewModel != nil {
-                closeInput()
-                try? await Task.sleep(for: .milliseconds(10))
-            }
-            
             self.calendarPresenter = Mapper.mapCalendar(
                 entries: entries,
                 dismissButton: ButtonPresenter(title: "Dismiss", action: { [weak self] in
