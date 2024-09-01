@@ -56,7 +56,7 @@ final class Model: @unchecked Sendable {
         if Self.TEST_DATA_CHANGES_LOCAL_BACKEND {
             URL(string: "http://192.168.178.30:8000/main.php")!
         } else {
-            URL(string: "https://whoniverse-app.com/calcal/main.php")!
+            URL(string: "http://185.163.118.53:80/main.php")!
         }
     }
     

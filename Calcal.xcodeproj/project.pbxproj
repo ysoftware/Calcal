@@ -48,6 +48,7 @@
 		CC5FF3B62BDFB1C500C9DAD3 /* MainViewPhone.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainViewPhone.swift; sourceTree = "<group>"; };
 		CC5FF3B92BDFEC2600C9DAD3 /* password.txt */ = {isa = PBXFileReference; lastKnownFileType = text; path = password.txt; sourceTree = "<group>"; };
 		CC7667502BE3E44F004D004C /* Style.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Style.swift; sourceTree = "<group>"; };
+		CC872DEF2C84FC34005E8C7A /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
 		CC9277FE2C1D738900C37009 /* ErrorView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ErrorView.swift; sourceTree = "<group>"; };
 		CC9278002C1D89C300C37009 /* CalendarView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CalendarView.swift; sourceTree = "<group>"; };
 		CCFE260C2BCBEEB50032FD48 /* Calcal.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Calcal.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -131,6 +132,7 @@
 		CCFE260E2BCBEEB50032FD48 /* Calcal */ = {
 			isa = PBXGroup;
 			children = (
+				CC872DEF2C84FC34005E8C7A /* Info.plist */,
 				CC5FF3B82BDFB20000C9DAD3 /* ViewModel */,
 				CCFE26202BCBF0F50032FD48 /* Screen */,
 				CCFE262B2BCC49AE0032FD48 /* Model */,
@@ -509,6 +511,7 @@
 				ENABLE_HARDENED_RUNTIME = YES;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = Calcal/Info.plist;
 				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.lifestyle";
 				"INFOPLIST_KEY_UIApplicationSceneManifest_Generation[sdk=iphoneos*]" = YES;
 				"INFOPLIST_KEY_UIApplicationSceneManifest_Generation[sdk=iphonesimulator*]" = YES;
@@ -552,6 +555,7 @@
 				ENABLE_HARDENED_RUNTIME = YES;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = Calcal/Info.plist;
 				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.lifestyle";
 				"INFOPLIST_KEY_UIApplicationSceneManifest_Generation[sdk=iphoneos*]" = YES;
 				"INFOPLIST_KEY_UIApplicationSceneManifest_Generation[sdk=iphonesimulator*]" = YES;
