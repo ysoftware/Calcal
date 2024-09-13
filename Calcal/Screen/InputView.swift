@@ -24,8 +24,11 @@ struct InputView: View {
             HStack(alignment: .center, spacing: Style.itemSpacing) {
                 textField
                 
-                viewModel.closeButton
-                    .map { ButtonView(presenter: $0) }
+                VStack(alignment: .center, spacing: Style.itemSpacing) {
+                    (viewModel.backButton ?? viewModel.closeButton)
+                        .map { ButtonView(presenter: $0) }
+                        .frame(width: 70)
+                }
             }
             .padding(.bottom, Style.itemSpacing)
             .padding(.horizontal, Style.padding)

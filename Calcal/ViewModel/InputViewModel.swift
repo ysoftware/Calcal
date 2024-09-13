@@ -28,6 +28,7 @@ final class InputViewModel: ObservableObject, @unchecked Sendable {
     
     // ui values
     @MainActor private(set) var closeButton: ButtonPresenter?
+    @MainActor private(set) var backButton: ButtonPresenter?
     @MainActor private(set) var inputPlaceholder: String = ""
     @MainActor private(set) var state: State = .name
     @MainActor private(set) var selectedAutocompleteIndex: Int?
@@ -84,10 +85,8 @@ final class InputViewModel: ObservableObject, @unchecked Sendable {
     @MainActor private func resetAllInput() {
         if shouldInputSectionName {
             state = .sectionName
-            inputPlaceholder = "Meal name"
         } else {
             state = .name
-            inputPlaceholder = "Item name"
         }
         
         sectionName = nil
@@ -133,6 +132,26 @@ final class InputViewModel: ObservableObject, @unchecked Sendable {
     
     @MainActor private func updatePresenter() {
         Task { @MainActor in
+            
+            self.backButton = if state == .calories || state == .quantity {
+                ButtonPresenter(title: "Back", action: { [weak self] in
+                    guard let self else { return }
+                    Task { @MainActor in
+                        switch self.state {
+                        case .sectionName, .name: return
+                        case .quantity: self.state = .name
+                        case .calories: self.state = .quantity
+                        }
+                        
+                        self.text = ""
+                        self.updatePresenter()
+                    }
+                })
+            } else {
+                nil
+            }
+            
+            updatePlaceholderText()
             await self.refreshAutocompleteItems()
             self.objectWillChange.send()
         }
@@ -231,6 +250,23 @@ final class InputViewModel: ObservableObject, @unchecked Sendable {
             autocompleteSuggestions[selectedAutocompleteIndex].onAcceptItem()
         } else {
             processInputState() // just press enter with the input
+        }
+    }
+    
+    @MainActor private func updatePlaceholderText() {
+        inputPlaceholder = switch state {
+        case .sectionName:
+            "Meal name"
+        case .name:
+            "Item name"
+        case .quantity:
+            if let selectedItemCaloricInformation {
+                "Quantity (\(selectedItemCaloricInformation.measurement))"
+            } else {
+                "Quantity"
+            }
+        case .calories:
+            "Calories"
         }
     }
     
