@@ -34,7 +34,7 @@ final class Model: @unchecked Sendable {
         entry.sections[sectionIndex].items.append(item)
         
         try await addOrUpdateEntry(entry: entry)
-        try await saveModel()
+        try await saveModel(entries: [entry])
     }
     
     func addOrUpdateEntry(entry: EntryEntity) async throws {
@@ -89,17 +89,17 @@ final class Model: @unchecked Sendable {
             data[entryIndex].sections.remove(at: sectionIndex)
         }
         
-        try await saveModel()
+        try await saveModel(entries: [data[entryIndex]])
     }
     
-    private func saveModel() async throws {
+    private func saveModel(entries: [EntryEntity]) async throws {
         if Self.TEST_DATA_NEVER_UPLOAD {
             return
         }
         
         Logger.main.info("Saving data from \(self.apiUrl)...")
         
-        let content = data
+        let content = entries
             .map(Mapper.map(entity:))
             .joined(separator: "\n\n")
         
