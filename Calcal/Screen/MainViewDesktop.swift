@@ -17,8 +17,8 @@ struct MainView: View {
                 ErrorView(presenter: presenter)
             } else if let presenter = viewModel.calendarPresenter {
                 CalendarView(presenter: presenter)
-            } else {
-                mainView
+            } else if let entryPresenter = viewModel.entryPresenter {
+                mainView(entryPresenter: entryPresenter)
                 
                 if let inputViewModel = viewModel.inputViewModel {
                     Divider()
@@ -27,13 +27,16 @@ struct MainView: View {
                         .frame(width: 350)
                         .padding(.top, Style.padding)
                 }
+            } else {
+                ProgressView()
+                    .frame(width: 350)
             }
         }
         .frame(minHeight: 500)
         .background(Color.background)
     }
     
-    private var mainView: some View {
+    private func mainView(entryPresenter: EntryPresenter) -> some View {
         VStack(spacing: Style.itemSpacing) {
             HStack(spacing: 0) {
                 viewModel.previousButton
@@ -46,8 +49,7 @@ struct MainView: View {
             }
             .padding(.horizontal, Style.padding)
             
-            viewModel.entryPresenter
-                .map { EntryView(presenter: $0) }
+            EntryView(presenter: entryPresenter)
             
             VStack(spacing: Style.itemSpacing) {
                 viewModel.inputText

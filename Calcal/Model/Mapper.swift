@@ -166,7 +166,7 @@ struct Mapper {
                         let averageCalories = rows
                             .flatMap { $0 }
                             .compactMap { Int($0.text) }
-                            .filter { $0 > 1400 }
+                            .filter { $0 > 1100 }
                             .average
                         
                         months.append(
@@ -214,7 +214,7 @@ struct Mapper {
             let averageCalories = rows
                 .flatMap { $0 }
                 .compactMap { Int($0.text) }
-                .filter { $0 > 1400 }
+                .filter { $0 > 1100 }
                 .average
             
             months.append(
@@ -248,7 +248,7 @@ struct Mapper {
     }
     
     static func color(calories: Float) -> SwiftUI.Color {
-        if calories <= 1400 {
+        if calories <= 1100 {
             Color.entryIncomplete
         } else if calories <= 1900 {
             Color.entryBest

@@ -54,7 +54,7 @@ final class Model: @unchecked Sendable {
     
     private var apiUrl: URL {
         if Self.TEST_DATA_CHANGES_LOCAL_BACKEND {
-            URL(string: "http://192.168.178.30:8000/main.php")!
+            URL(string: "http://127.0.0.1:8000/main.php")!
         } else {
             URL(string: "http://185.163.118.53:80/main.php")!
         }

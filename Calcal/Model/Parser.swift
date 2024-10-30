@@ -226,7 +226,6 @@ class Parser {
         }
         
         for measurement in EntryEntity.QuantityMeasurement.allCases {
-            
             let acceptableValues = switch measurement {
             case .liter: ["milliliter", "millilitre", "liter", "litre", "ml", "l"]
             case .kilogram: ["kilogram", "gram", "kg", "gr", "g"]

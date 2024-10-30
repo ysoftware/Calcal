@@ -150,6 +150,9 @@ final class MainViewModel: ObservableObject, @unchecked Sendable {
     
     private func fetchEntries() {
         Task { @MainActor in
+            self.errorPresenter = nil
+            updatePresenter()
+            
             do {
                 try await model.fetchModel()
                 self.entries = model.getAllEntries()
