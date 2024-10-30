@@ -43,7 +43,6 @@ final class Model: @unchecked Sendable {
         } else {
             data.append(entry)
         }
-        try await saveModel()
     }
     
     func getAllEntries() -> [EntryEntity] {
