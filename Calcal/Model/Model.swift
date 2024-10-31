@@ -15,7 +15,15 @@ final class Model: @unchecked Sendable {
     
     /// use another backend url
     static let TEST_DATA_CHANGES_LOCAL_BACKEND = false
-
+    
+    private var apiUrl: URL {
+        if Self.TEST_DATA_CHANGES_LOCAL_BACKEND {
+            URL(string: "http://127.0.0.1:80/main.php")!
+        } else {
+            URL(string: "http://185.163.118.53:80/main.php")!
+        }
+    }
+    
     private var data: [EntryEntity] = []
     
     func appendItem(item: EntryEntity.Item, destination: ItemDestination) async throws {
@@ -34,7 +42,6 @@ final class Model: @unchecked Sendable {
         entry.sections[sectionIndex].items.append(item)
         
         try await addOrUpdateEntry(entry: entry)
-        try await saveModel(entries: [entry])
     }
     
     func addOrUpdateEntry(entry: EntryEntity) async throws {
@@ -43,6 +50,7 @@ final class Model: @unchecked Sendable {
         } else {
             data.append(entry)
         }
+        try await saveModel(entries: [entry])
     }
     
     func getAllEntries() -> [EntryEntity] {
@@ -50,14 +58,6 @@ final class Model: @unchecked Sendable {
     }
     
     // MARK: - Work with Storage
-    
-    private var apiUrl: URL {
-        if Self.TEST_DATA_CHANGES_LOCAL_BACKEND {
-            URL(string: "http://127.0.0.1:8000/main.php")!
-        } else {
-            URL(string: "http://185.163.118.53:80/main.php")!
-        }
-    }
     
     func fetchModel() async throws {
         if Self.TEST_DATA_NEVER_UPLOAD {
