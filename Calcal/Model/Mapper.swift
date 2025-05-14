@@ -369,7 +369,7 @@ struct Mapper {
         }.value
     }
     
-    // todo: optimise performance
+    // todo: optimize performance
     static func calculateAutocompleteForNameInput(
         allItems: [EntryEntity.Item],
         selectedAutocompleteIndex: Int?,

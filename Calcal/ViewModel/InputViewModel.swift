@@ -302,8 +302,19 @@ final class InputViewModel: ObservableObject, @unchecked Sendable {
                         createItem()
                     } else {
                         self.selectedItemCaloricInformation = nil // reset invalid
-                        state = .calories
-                        inputPlaceholder = "Calories"
+
+                        // try to recover in case there exists caloric info for selected measurement
+                        if let item = allItems.first(where: { $0.title == self.name && $0.measurement == measurement }) {
+                            self.selectedItemCaloricInformation = CaloricInformation(
+                                value: item.calories / item.quantity,
+                                measurement: item.measurement
+                            )
+                            self.quantityMeasurement = item.measurement
+                            createItem()
+                        } else {
+                            state = .calories
+                            inputPlaceholder = "Calories"
+                        }
                     }
                 } else {
                     state = .calories
