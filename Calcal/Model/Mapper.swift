@@ -342,7 +342,7 @@ struct Mapper {
         allItems: [EntryEntity.Item],
         selectedAutocompleteIndex: Int?,
         name: String?,
-        onAcceptItem: @escaping @Sendable (String) -> Void
+        onAcceptItem: @escaping @Sendable (String, CaloricInformation) -> Void
     ) async -> [AutocompleteItemPresenter] {
         guard let name else { return [] }
         
@@ -361,7 +361,11 @@ struct Mapper {
                         title: "\(item.title), \(quantityValue) → \(item.calories.formatted) kcal",
                         isSelected: index == selectedAutocompleteIndex,
                         onAcceptItem: {
-                            onAcceptItem("\(item.quantity) \(item.measurement)")
+                            let caloricInformation = CaloricInformation(
+                                value: item.calories / item.quantity,
+                                measurement: item.measurement
+                            )
+                            onAcceptItem("\(item.quantity) \(item.measurement)", caloricInformation)
                         }
                     )
                 }

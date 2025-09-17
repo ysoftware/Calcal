@@ -105,29 +105,31 @@ struct CalendarView: View {
         CalendarPresenter.Column(color: .blue, text: "0"),
     ]
     
-    return CalendarView(presenter: CalendarPresenter(
-        months: [
-            CalendarPresenter.Month(
-                title: "June",
-                subtitle: "~2120 kcal/day",
-                rows: [
-                    weekRows,
-                    weekRows,
-                    weekRows,
-                    weekRows
-                ]
-            ),
-            CalendarPresenter.Month(
-                title: "July",
-                subtitle: "~2058 kcal/day",
-                rows: [
-                    weekRows,
-                    weekRows,
-                    weekRows,
-                    weekRows
-                ]
-            )
-        ],
-        dismissButton: ButtonPresenter(title: "Dismiss", action: {})
-    ))
+    CalendarView(
+        presenter: CalendarPresenter(
+            months: [
+                CalendarPresenter.Month(
+                    title: "June",
+                    subtitle: "~2120 kcal/day",
+                    rows: [
+                        weekRows,
+                        weekRows,
+                        weekRows,
+                        weekRows
+                    ]
+                ),
+                CalendarPresenter.Month(
+                    title: "July",
+                    subtitle: "~2058 kcal/day",
+                    rows: [
+                        weekRows,
+                        weekRows,
+                        weekRows,
+                        weekRows
+                    ]
+                )
+            ],
+            dismissButton: ButtonPresenter(title: "Dismiss", action: {})
+        )
+    )
 }

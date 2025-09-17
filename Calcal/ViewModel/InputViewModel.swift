@@ -193,11 +193,12 @@ final class InputViewModel: ObservableObject, @unchecked Sendable {
                 allItems: allItems,
                 selectedAutocompleteIndex: selectedAutocompleteIndex,
                 name: name,
-                onAcceptItem: { @Sendable [weak self] text in
+                onAcceptItem: { @Sendable [weak self] text, caloricInformation in
                     guard let self else { return }
                     
                     Task { @MainActor in
                         self.text = text
+                        self.selectedItemCaloricInformation = caloricInformation
                         self.processInputState()
                         self.selectedAutocompleteIndex = nil
                     }
