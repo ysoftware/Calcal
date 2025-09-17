@@ -281,13 +281,7 @@ final class InputViewModel: ObservableObject, @unchecked Sendable {
             if text.count > 1 {
                 self.name = text
                 self.text = ""
-                
                 state = .quantity
-                if let selectedItemCaloricInformation {
-                    inputPlaceholder = "Quantity (\(selectedItemCaloricInformation.measurement))"
-                } else {
-                    inputPlaceholder = "Quantity"
-                }
             } else {
                 Logger.main.error("Input: incorrect name: '\(self.text)'")
             }
@@ -314,12 +308,10 @@ final class InputViewModel: ObservableObject, @unchecked Sendable {
                             createItem()
                         } else {
                             state = .calories
-                            inputPlaceholder = "Calories"
                         }
                     }
                 } else {
                     state = .calories
-                    inputPlaceholder = "Calories"
                 }
             } else {
                 Logger.main.error("Input: incorrect quantity: '\(self.text)'")
