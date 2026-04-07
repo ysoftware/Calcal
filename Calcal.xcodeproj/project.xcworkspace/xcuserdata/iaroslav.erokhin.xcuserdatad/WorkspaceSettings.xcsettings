@@ -4,10 +4,14 @@
 <dict>
 	<key>BuildLocationStyle</key>
 	<string>UseAppPreferences</string>
+	<key>CompilationCachingSetting</key>
+	<string>Default</string>
 	<key>CustomBuildLocationType</key>
 	<string>RelativeToDerivedData</string>
+	<key>DerivedDataCustomLocation</key>
+	<string>Build</string>
 	<key>DerivedDataLocationStyle</key>
-	<string>Default</string>
+	<string>WorkspaceRelativePath</string>
 	<key>ShowSharedSchemesAutomaticallyEnabled</key>
 	<true/>
 </dict>
